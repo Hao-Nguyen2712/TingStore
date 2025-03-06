@@ -1,0 +1,41 @@
+syntax = "proto3";
+
+option csharp_namespace = "Discount.Api.Protos";
+
+package Discount;
+import "google/protobuf/wrappers.proto";
+
+service DiscountServicegRPC {
+    rpc GetCoupon(GetCouponRequest) returns (CouponModel);
+    rpc CreateCoupon(CouponModel) returns (CouponModel);
+    rpc UpdateCoupon(CouponModel) returns (UpdateCouponResponse);
+    rpc DeleteCoupon(DeleteCouponRequest) returns (EmptyResponse);
+}
+
+message CouponModel {
+    string id = 1;
+    string couponName = 2;
+    string code = 3;
+    double value = 4;
+    string startDate = 5;
+    string endDate = 6;
+    string description = 7;
+    int32 quantity = 8;
+    int32 usedCount = 9;
+    double minimumAmount = 10; 
+}
+
+message GetCouponRequest {
+    string couponName = 1;
+}
+
+message UpdateCouponResponse {
+    bool success = 1;
+}
+
+message DeleteCouponRequest {
+    string couponName = 1;
+}
+
+message EmptyResponse {
+}
