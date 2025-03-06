@@ -19,6 +19,7 @@ namespace Discount.Api.Services
         }
         public override async Task<CouponModel> CreateCoupon(CouponModel couponModel, ServerCallContext context)
         {
+            couponModel.Id = Guid.NewGuid().ToString();
             var couponDTO = CouponHelper.ToDTO(couponModel) ?? throw new Exception("Error mapper from model to DTO");
             var query = new CreateCouponCommand(couponDTO);
             var coupon = await _mediator.Send(query);
