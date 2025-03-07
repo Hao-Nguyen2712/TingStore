@@ -4,12 +4,31 @@ option csharp_namespace = "Discount.Api.Protos";
 
 package Discount;
 import "google/protobuf/wrappers.proto";
+import "google/api/annotations.proto";
 
 service DiscountServicegRPC {
-    rpc GetCoupon(GetCouponRequest) returns (CouponModel);
-    rpc CreateCoupon(CouponModel) returns (CouponModel);
-    rpc UpdateCoupon(CouponModel) returns (UpdateCouponResponse);
-    rpc DeleteCoupon(DeleteCouponRequest) returns (EmptyResponse);
+   rpc GetCoupon(GetCouponRequest) returns (CouponModel) {
+        option (google.api.http) = {
+            get: "/api/discount/{couponName}"
+        };
+    }
+    rpc CreateCoupon(CouponModel) returns (CouponModel) {
+        option (google.api.http) = {
+            post: "/api/discount"
+            body: "*"
+        };
+    }
+    rpc UpdateCoupon(CouponModel) returns (UpdateCouponResponse) {
+        option (google.api.http) = {
+            put: "/api/discount"
+            body: "*"
+        };
+    }
+    rpc DeleteCoupon(DeleteCouponRequest) returns (EmptyResponse) {
+        option (google.api.http) = {
+            delete: "/api/discount/{couponName}"
+        };
+    }
 }
 
 message CouponModel {
