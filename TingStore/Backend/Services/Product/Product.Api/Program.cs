@@ -35,15 +35,21 @@ builder.Services.AddSwaggerGen(c =>
     c.SwaggerDoc("v1", new OpenApiInfo { Title = "Catalog.API", Version = "v1" });
 });
 
+builder.WebHost.ConfigureKestrel(serverOptions =>
+{
+    serverOptions.ListenAnyIP(80);
+}
+);
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
+//if (app.Environment.IsDevelopment())
+//{
     app.UseDeveloperExceptionPage();
     app.UseSwagger();
     app.UseSwaggerUI();
-}
+ //}
 
 app.UseHttpsRedirection();
 app.UseRouting(); //add
