@@ -14,7 +14,6 @@ namespace User.Api.Controllers
     public class UsersController : ControllerBase
     {
         private readonly IMediator _mediator;
-
         public UsersController(IMediator mediator) => _mediator = mediator;
 
 
@@ -22,24 +21,24 @@ namespace User.Api.Controllers
         [ProducesResponseType(typeof(IEnumerable<UserResponse>), (int)HttpStatusCode.OK)]
         public async Task<IActionResult> GetAllUsers()
         {
-                var response = await _mediator.Send(new GetAllUsersQuery());
-                return Ok(response);
+            var response = await _mediator.Send(new GetAllUsersQuery());
+            return Ok(response);
         }
 
         [HttpGet("GetAllActiveUsers")]
         [ProducesResponseType(typeof(IEnumerable<UserResponse>), (int)HttpStatusCode.OK)]
         public async Task<IActionResult> GetAllActiveUsers()
         {
-                var response = await _mediator.Send(new GetAllActiveUsersQuery());
-                return Ok(response);
+            var response = await _mediator.Send(new GetAllActiveUsersQuery());
+            return Ok(response);
         }
 
         [HttpGet("GetAllInactiveUsers")]
         [ProducesResponseType(typeof(IEnumerable<UserResponse>), (int)HttpStatusCode.OK)]
         public async Task<IActionResult> GetAllInactiveUsers()
         {
-                var response = await _mediator.Send(new GetAllInactiveUsersQuery());
-                return Ok(response);
+            var response = await _mediator.Send(new GetAllInactiveUsersQuery());
+            return Ok(response);
         }
 
 
@@ -71,7 +70,7 @@ namespace User.Api.Controllers
         [ProducesResponseType((int)HttpStatusCode.BadRequest)] // 400 Bad Request nếu lỗi
         public async Task<IActionResult> CreateUser([FromBody] CreateUserCommand userCommand)
         {
-            if(userCommand == null|| !ModelState.IsValid)
+            if (userCommand == null || !ModelState.IsValid)
                 return BadRequest();
             var response = await _mediator.Send(userCommand);
             return Ok(response);
@@ -81,7 +80,7 @@ namespace User.Api.Controllers
         [ProducesResponseType(typeof(bool), (int)HttpStatusCode.OK)]
         public async Task<IActionResult> UpdateUser([FromBody] UpdateUserCommand userCommand)
         {
-            if(userCommand == null || !ModelState.IsValid)
+            if (userCommand == null || !ModelState.IsValid)
                 return BadRequest(ModelState);
             var response = await _mediator.Send(userCommand);
             return Ok(response);

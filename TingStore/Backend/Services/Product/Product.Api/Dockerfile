@@ -15,7 +15,7 @@ COPY ["Product.Api/Product.Api.csproj", "Product.Api/"]
 COPY ["Product.Application/Product.Application.csproj", "Product.Application/"]
 COPY ["Product.Core/Product.Core.csproj", "Product.Core/"]
 COPY ["Product.Infrastructure/Product.Infrastructure.csproj", "Product.Infrastructure/"]
-RUN dotnet restore "./Product.Api/Product.Api.csproj"
+RUN dotnet restore "Product.Api/Product.Api.csproj"
 COPY . .
 WORKDIR "/src/Product.Api"
 RUN dotnet build "./Product.Api.csproj" -c $BUILD_CONFIGURATION -o /app/build

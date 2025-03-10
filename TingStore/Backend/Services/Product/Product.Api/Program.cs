@@ -8,6 +8,7 @@ using Product.Application.Services.ImageCloud;
 using Product.Core.Repositories;
 using Product.Infrastructure.DbContext;
 using Product.Infrastructure.Repositories;
+using User.Api.Middlewares;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -23,6 +24,7 @@ builder.Services.AddAutoMapper(Assembly.GetExecutingAssembly());
 builder.Services.AddMediatR(typeof(CreateProductHandler).GetTypeInfo().Assembly);
 builder.Services.AddScoped<IProductContext, ProductContext>();
 builder.Services.AddScoped<IProductRepository, ProductRepository>();
+builder.Services.AddScoped<IReviewRepository, ReviewRepository>();
 
 builder.Services.Configure<CloudinarySetting>(builder.Configuration.GetSection("CloudinarySettings"));
 builder.Services.AddScoped<IImageManagementService, ImageManagementServices>();
@@ -50,6 +52,9 @@ var app = builder.Build();
     app.UseSwagger();
     app.UseSwaggerUI();
  //}
+
+// Add Global Exception Handler
+app.UseGlobalExceptionMiddleware();
 
 app.UseHttpsRedirection();
 app.UseRouting(); //add

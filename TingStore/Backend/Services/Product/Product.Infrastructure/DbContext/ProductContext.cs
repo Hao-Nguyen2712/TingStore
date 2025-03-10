@@ -16,11 +16,17 @@ namespace Product.Infrastructure.DbContext
     {
         public IMongoCollection<Core.Models.Product> Products { get; set; }
 
+        public IMongoCollection<Review> Reviews { get; set; }
+
+
         public ProductContext(IConfiguration configuration)
         {
             var client = new MongoClient(configuration.GetValue<string>("DatabaseSettings:ConnectionString"));
             var database = client.GetDatabase(configuration.GetValue<string>("DatabaseSettings:DatabaseName"));
+            // Products
             Products = database.GetCollection<Product.Core.Models.Product>(configuration.GetValue<string>("DatabaseSettings:ProductCollectionName"));
+            // Reviews
+            Reviews = database.GetCollection<Review>(configuration.GetValue<string>("DatabaseSettings:ReviewCollectionName"));
         }
     }
 }

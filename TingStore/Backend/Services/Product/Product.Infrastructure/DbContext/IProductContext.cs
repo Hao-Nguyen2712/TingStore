@@ -14,5 +14,6 @@ namespace Product.Infrastructure.DbContext
     public interface IProductContext
     {
         public IMongoCollection<Product.Core.Models.Product> Products { get; set; }
+        public IMongoCollection<Review> Reviews { get; set; }
     }
 }
