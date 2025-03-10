@@ -8,5 +8,6 @@ namespace Order.Application.Services
 {
     public interface IDiscountClientService
     {
+        public Task<decimal> GetValue();
     }
 }

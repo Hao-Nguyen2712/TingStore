@@ -16,7 +16,12 @@ namespace Order.Infrastructure.Repositories
         {
             _context = context;
         }
-        public Task<Core.Entities.Order> AddOrder(Core.Entities.Order order) => throw new NotImplementedException();
+        public async Task<Core.Entities.Order> AddOrder(Core.Entities.Order order)
+        {
+            await _context.AddAsync(order);
+            await _context.SaveChangesAsync();
+            return order;
+        }
         public Task DeleteOrder(Guid orderId) => throw new NotImplementedException();
         public Task<Core.Entities.Order> GetOrderById(Guid orderId) => throw new NotImplementedException();
         public Task<IEnumerable<Core.Entities.Order>> GetOrdersByCustomerId(int customerid) => throw new NotImplementedException();
