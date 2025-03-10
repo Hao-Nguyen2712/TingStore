@@ -75,18 +75,11 @@ namespace Product.Infrastructure.Repositories
             if (string.IsNullOrEmpty(productId))
                 throw new ArgumentNullException(nameof(productId), "Product ID cannot be null or empty");
 
-            var pipeline = new[]
-            {
-                new BsonDocument("$match", new BsonDocument("productId", productId)),
-                new BsonDocument("$group", new BsonDocument
-                {
-                    { "_id", BsonNull.Value },
-                    { "avgRating", new BsonDocument("$avg", "$rating") }
-                })
-            };
+            var avgRating = await _context.Reviews
+            .Find(r => r.ProductId == productId)
+            .Project(r => (double?)r.Rating).ToListAsync();
 
-            var result = await _context.Reviews.Aggregate<BsonDocument>(pipeline).FirstOrDefaultAsync();
-            return result != null && result.Contains("avgRating") ? result["avgRating"].AsDouble : 0.0;
+            return avgRating.Any() ? avgRating.Average() ?? 0.0 : 0.0;
         }
 
 
