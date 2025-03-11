@@ -4,9 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Order.Application.Services
+namespace Order.Application.DTOs
 {
-    public interface ICartClientService
+    public enum OrderStatusDTO
     {
+        Successful,
+        Waiting,
+        Canceled,
     }
 }

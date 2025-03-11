@@ -21,16 +21,19 @@
     </PackageReference>
     <PackageReference Include="Microsoft.AspNetCore.Grpc.JsonTranscoding" Version="8.0.13" />
     <PackageReference Include="Microsoft.AspNetCore.Grpc.Swagger" Version="0.8.13" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.13">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
     <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.21.0" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
   </ItemGroup>
 
   <ItemGroup>
     <Protobuf Include="Protos\discount.proto" GrpcServices="Server" />
-    <Protobuf Include="google\api\annotations.proto" />
-    <Protobuf Include="google\api\http.proto" />
+    <Protobuf Include="google\api\annotations.proto" GrpcServices="Server"/>
+    <Protobuf Include="google\api\http.proto"   GrpcServices="Server"/>
   </ItemGroup>
-
   <ItemGroup>
     <ProjectReference Include="..\Discount.Application\Discount.Application.csproj" />
     <ProjectReference Include="..\Discount.Infrastructure\Discount.Infrastructure.csproj" />

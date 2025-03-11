@@ -1,4 +1,4 @@
-syntax = "proto3";
+﻿syntax = "proto3";
 
 option csharp_namespace = "Discount.Api.Protos";
 
@@ -29,6 +29,18 @@ service DiscountServicegRPC {
             delete: "/api/discount/{couponName}"
         };
     }
+    rpc ApplyCouponVoucher(ApplyCouponVoucherRequest) returns (ApplyCouponVoucherResponse){
+        option (google.api.http) = {
+            post: "/api/discount/apply"
+            body: "*"
+        };
+    };
+    rpc GetCoupons(EmptyRequest) returns (GetCouponResponse) {
+        option (google.api.http) = {
+            get: "/api/discount"
+        };
+    }
+       
 }
 
 message CouponModel {
@@ -57,4 +69,21 @@ message DeleteCouponRequest {
 }
 
 message EmptyResponse {
+}
+
+message ApplyCouponVoucherRequest {
+    string couponCode = 1; // mã code
+    double amount = 2; // tổng đơn hàng 
+}
+
+message ApplyCouponVoucherResponse {
+   double valueDiscount = 1; // kết quả được giảm
+   bool isSuccess = 2;
+   string message = 3;
+}
+
+message GetCouponResponse {
+    repeated CouponModel coupons = 1;
+}
+message EmptyRequest {
 }

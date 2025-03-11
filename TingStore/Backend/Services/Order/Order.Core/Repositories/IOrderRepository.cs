@@ -12,7 +12,12 @@ namespace Order.Core.Repositories
         Task<Order.Core.Entities.Order> AddOrder(Order.Core.Entities.Order order);
         Task<Order.Core.Entities.Order> GetOrderById(Guid orderId);
         Task<IEnumerable<Order.Core.Entities.Order>> GetOrdersByCustomerId(int customerid);
-        Task UpdateOrder(Order.Core.Entities.Order order);
+        Task<bool> UpdateOrder(Order.Core.Entities.Order order);
         Task DeleteOrder(Guid orderId);
+        Task<IEnumerable<Core.Entities.Order>> GetOrders();
+        Task<bool> UpdateOrderStatus(Guid orderId, string newStatus);
+        Task<IEnumerable<Core.Entities.Order>> GetOrdersByDateRange(DateTime startDate, DateTime endDate);
+
+
     }
 }

@@ -40,11 +40,25 @@ namespace Discount.Infrastructure.Repositories
             _context.Coupons.Remove(coupon);
             await _context.SaveChangesAsync();
         }
+
+        public async Task<Coupon> GetCouponByCode(string code)
+        {
+            var coupon =  await _context.Coupons.FirstOrDefaultAsync(c => c.Code == code);
+            if (coupon == null)
+            {
+                throw new Exception("Coupon not find with the code");
+            }
+            return coupon;
+        }
+
         public async Task<Coupon> GetCouponByName(string couponName)
         {
             return await _context.Coupons.FirstOrDefaultAsync(c => c.CouponName == couponName)
                 ?? throw new Exception("Coupon null");
         }
+
+        public async Task<List<Coupon>> GetCoupons() =>  await _context.Coupons.ToListAsync();
+
         public async Task<bool> UpdateCoupon(Coupon coupon)
         {
             var couponExist = await _context.Coupons.FindAsync(coupon.Id);

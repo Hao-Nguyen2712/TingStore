@@ -8,6 +8,7 @@ using Grpc.Core;
 using MediatR;
 using static Discount.Api.Protos.DiscountServicegRPC;
 
+
 namespace Discount.Api.Services
 {
     public class DiscountService : DiscountServicegRPCBase
@@ -23,7 +24,7 @@ namespace Discount.Api.Services
             var couponDTO = CouponHelper.ToDTO(couponModel) ?? throw new Exception("Error mapper from model to DTO");
             var query = new CreateCouponCommand(couponDTO);
             var coupon = await _mediator.Send(query);
-            if(coupon == null)
+            if (coupon == null)
             {
                 throw new Exception("response is null");
             }
@@ -33,9 +34,9 @@ namespace Discount.Api.Services
         public override async Task<CouponModel> GetCoupon(GetCouponRequest request, ServerCallContext context)
         {
             var query = new GetCouponByNameQuery(request.CouponName);
-            var  coupon = await _mediator.Send(query);
-            var response =  CouponHelper.ToModel(coupon);
-            if(response == null)
+            var coupon = await _mediator.Send(query);
+            var response = CouponHelper.ToModel(coupon);
+            if (response == null)
             {
                 throw new RpcException(new Status(StatusCode.NotFound, $"Coupon with Name = {request.CouponName} is not found"));
             }
@@ -56,6 +57,28 @@ namespace Discount.Api.Services
             var query = new DeleteCouponCommand(request.CouponName);
             await _mediator.Send(query);
             return new EmptyResponse();
+        }
+
+        public override async Task<ApplyCouponVoucherResponse> ApplyCouponVoucher(ApplyCouponVoucherRequest request, ServerCallContext context)
+        {
+            var querry = new GetTotalValueForOrderQuerry(request.CouponCode, (decimal)request.Amount);
+            var result = await _mediator.Send(querry);
+
+            if (result == decimal.Zero)
+            {
+                return new ApplyCouponVoucherResponse
+                {
+                    ValueDiscount = 0,
+                    IsSuccess = false,
+                    Message = "Coupon is not valid"
+                };
+            }
+            return new ApplyCouponVoucherResponse
+            {
+                ValueDiscount = Convert.ToDouble(result),
+                IsSuccess = true,
+                Message = "Coupon is valid"
+            };
         }
     }
 }

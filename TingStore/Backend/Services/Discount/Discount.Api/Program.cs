@@ -15,7 +15,6 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddGrpc().AddJsonTranscoding();
-
 builder.Services.AddGrpcSwagger();
 builder.Services.AddSwaggerGen(c =>
 {
@@ -26,11 +25,7 @@ builder.Services.AddGrpcReflection();
 builder.Services.AddApplication();
 builder.Services.AddDbContext<DiscountDbContext>(options =>
 {
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"), sqlOptions =>
-    {
-        sqlOptions.EnableRetryOnFailure(5, TimeSpan.FromSeconds(10), null);
-    });
-
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
 });
 
 builder.Services.AddScoped<ICouponRepository, CouponRepository>();
@@ -60,7 +55,7 @@ using (var scope = app.Services.CreateScope())
     catch (Exception ex)
     {
         var logger = services.GetRequiredService<ILogger<Program>>();
-        logger.LogError(ex, "Lỗi khi khởi tạo database hoặc seed dữ liệu.");
+        logger.LogError(ex, "Error create database");
     }
 }
 

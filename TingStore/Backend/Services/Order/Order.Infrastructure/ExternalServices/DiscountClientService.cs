@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Discount.Api.Protos;
 using Grpc.Core;
+using Order.Application.DTOs;
 using Order.Application.Services;
 using static Discount.Api.Protos.DiscountServicegRPC;
 
@@ -19,10 +20,19 @@ namespace Order.Infrastructure.ExternalServices
             _discountServicegRpcClient = discountServicegRpcClient;
         }
 
-        public Task<decimal> GetValue()
+        public async Task<ValueCouponDTO> GetValue(string code, decimal total)
         {
-            _discountServicegRpcClient.GetCoupon(new GetCouponRequest { CouponName = "test" });
-            throw new Exception();
+            var result = await _discountServicegRpcClient.ApplyCouponVoucherAsync(new ApplyCouponVoucherRequest
+            {
+                CouponCode = code,
+                Amount = (double)total
+            });
+            return new ValueCouponDTO
+            {
+                Value = (decimal)result.ValueDiscount,
+                IsSuccess = result.IsSuccess,
+                ErrorMessage = result.Message
+            };
         }
     }
 }

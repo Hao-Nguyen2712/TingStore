@@ -1,4 +1,4 @@
-syntax = "proto3";
+﻿syntax = "proto3";
 
 option csharp_namespace = "Discount.Api.Protos";
 
@@ -10,6 +10,9 @@ service DiscountServicegRPC {
     rpc CreateCoupon(CouponModel) returns (CouponModel);
     rpc UpdateCoupon(CouponModel) returns (UpdateCouponResponse);
     rpc DeleteCoupon(DeleteCouponRequest) returns (EmptyResponse);
+    rpc ApplyCouponVoucher(ApplyCouponVoucherRequest) returns (ApplyCouponVoucherResponse);
+    rpc GetCoupons(EmptyRequest) returns (GetCouponResponse) ;
+       
 }
 
 message CouponModel {
@@ -38,4 +41,21 @@ message DeleteCouponRequest {
 }
 
 message EmptyResponse {
+}
+
+message ApplyCouponVoucherRequest {
+    string couponCode = 1; // mã code
+    double amount = 2; // tổng đơn hàng 
+}
+
+message ApplyCouponVoucherResponse {
+   double valueDiscount = 1; // kết quả được giảm
+   bool isSuccess = 2;
+   string message = 3;
+}
+
+message GetCouponResponse {
+    repeated CouponModel coupons = 1;
+}
+message EmptyRequest {
 }
