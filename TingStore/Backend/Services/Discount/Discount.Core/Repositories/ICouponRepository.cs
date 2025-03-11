@@ -13,5 +13,7 @@ namespace Discount.Core.Repositories
         public Task<Coupon> GetCouponByName(string coupoName);
         public Task<bool> UpdateCoupon(Coupon coupon);
         public Task DeleteCoupon(string couponName);
+        public Task<Coupon> GetCouponByCode(string code);
+        public Task<List<Coupon>> GetCoupons();
     }
 }

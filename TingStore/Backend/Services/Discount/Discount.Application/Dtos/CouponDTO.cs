@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -19,5 +20,6 @@ namespace Discount.Application.Dtos
         public int Quantity { get; set; } // số lượng coupon
         public int UsedCount { get; set; } = 0; // số lượng coupon đã sử dụng
         public decimal? MinimumAmount { get; set; }
+ 
     }
 }
