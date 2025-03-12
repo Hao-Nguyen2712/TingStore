@@ -1,3 +1,98 @@
 {
-  
+    "Route": [
+        {
+            "DownstreamPathTemplate": "/api/cart/{everything}",
+            "DownstreamScheme": "http",
+            "DownstreamHostAndPorts": [
+                {
+                    "Host": "localhost",
+                    "Port": 80
+                }
+            ],
+            "UpstreamPathTemplate": "/apigateway/cart/{everything}",
+            "UpstreamHttpMethod": ["GET", "POST", "DELETE"]
+        },
+
+        {
+            "DownstreamPathTemplate": "/api/category/{everything}",
+            "DownstreamScheme": "http",
+            "DownstreamHostAndPorts": [
+                {
+                    "Host": "localhost",
+                    "Port": 80
+                }
+            ],
+            "UpstreamPathTemplate": "/apigateway/category/{everything}",
+            "UpstreamHttpMethod": ["GET", "POST", "PUT", "DELETE"]
+        },
+
+        {
+            "DownstreamPathTemplate": "/api/order/{everything}",
+            "DownstreamScheme": "http",
+            "DownstreamHostAndPorts": [
+                {
+                    "Host": "localhost",
+                    "Port": 80
+                }
+            ],
+            "UpstreamPathTemplate": "/apigateway/order/{everything}",
+            "UpstreamHttpMethod": ["POST"]
+        },
+
+        {
+            "DownstreamPathTemplate": "/api/product/{everything}",
+            "DownstreamScheme": "http",
+            "DownstreamHostAndPorts": [
+                {
+                    "Host": "localhost",
+                    "Port": 80
+                }
+            ],
+            "UpstreamPathTemplate": "/apigateway/product/{everything}",
+            "UpstreamHttpMethod": ["GET", "POST", "PUT", "DELETE"]
+        },
+
+        {
+            "DownstreamPathTemplate": "/api/review/{everything}",
+            "DownstreamScheme": "http",
+            "DownstreamHostAndPorts": [
+                {
+                    "Host": "localhost",
+                    "Port": 80
+                }
+            ],
+            "UpstreamPathTemplate": "/apigateway/review/{everything}",
+            "UpstreamHttpMethod": ["GET", "POST", "PUT", "DELETE"]
+        },
+
+        {
+            "DownstreamPathTemplate": "/api/users/{everything}",
+            "DownstreamScheme": "http",
+            "DownstreamHostAndPorts": [
+                {
+                    "Host": "localhost",
+                    "Port": 80
+                }
+            ],
+            "UpstreamPathTemplate": "/apigateway/users/{everything}",
+            "UpstreamHttpMethod": ["GET", "POST", "PUT", "DELETE"]
+        },
+
+        {
+            "DownstreamPathTemplate": "/api/discount/{everything}",
+            "DownstreamScheme": "http",
+            "DownstreamHostAndPorts": [
+                {
+                    "Host": "localhost",
+                    "Port": 80
+                }
+            ],
+            "UpstreamPathTemplate": "/apigateway/discount/{everything}",
+            "UpstreamHttpMethod": ["GET", "POST", "PUT", "DELETE"]
+        }
+    ],
+
+    "GlobalConfiguration": {
+        "BaseUrl": "http://localhost:80"
+    }
 }
