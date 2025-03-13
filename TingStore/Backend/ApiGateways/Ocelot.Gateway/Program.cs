@@ -16,12 +16,6 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-// Configure Kestrel
-builder.WebHost.ConfigureKestrel(serverOptions =>
-{
-    serverOptions.ListenAnyIP(80); // Đảm bảo lắng nghe trên port 80
-});
-
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

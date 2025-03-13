@@ -2,31 +2,30 @@
 
 # This stage is used when running from VS in fast mode (Default for Debug configuration)
 FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS base
-USER $APP_UID
+USER app
 WORKDIR /app
-
 
 
 # This stage is used to build the service project
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
-COPY ["Backend/Services/Cart/Cart.Api/Cart.Api.csproj", "Backend/Services/Cart/Cart.Api/"]
-COPY ["Backend/Services/Cart/Cart.Application/Cart.Application.csproj", "Backend/Services/Cart/Cart.Application/"]
-COPY ["Backend/Services/Cart/Cart.Core/Cart.Core.csproj", "Backend/Services/Cart/Cart.Core/"]
-COPY ["Backend/Services/Cart/Cart.Infrastructure/Cart.Infrastructure.csproj", "Backend/Services/Cart/Cart.Infrastructure/"]
-RUN dotnet restore "./Backend/Services/Cart/Cart.Api/Cart.Api.csproj"
+COPY ["Backend/Services/Order/Order.Api/Order.Api.csproj", "Backend/Services/Order/Order.Api/"]
+COPY ["Backend/Services/Order/Order.Application/Order.Application.csproj", "Backend/Services/Order/Order.Application/"]
+COPY ["Backend/Services/Order/Order.Core/Order.Core.csproj", "Backend/Services/Order/Order.Core/"]
+COPY ["Backend/Services/Order/Order.Infrastructure/Order.Infrastructure.csproj", "Backend/Services/Order/Order.Infrastructure/"]
+RUN dotnet restore "./Backend/Services/Order/Order.Api/Order.Api.csproj"
 COPY . .
-WORKDIR "/src/Backend/Services/Cart/Cart.Api"
-RUN dotnet build "./Cart.Api.csproj" -c $BUILD_CONFIGURATION -o /app/build
+WORKDIR "/src/Backend/Services/Order/Order.Api"
+RUN dotnet build "./Order.Api.csproj" -c $BUILD_CONFIGURATION -o /app/build
 
 # This stage is used to publish the service project to be copied to the final stage
 FROM build AS publish
 ARG BUILD_CONFIGURATION=Release
-RUN dotnet publish "./Cart.Api.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
+RUN dotnet publish "./Order.Api.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
 
 # This stage is used in production or when running from VS in regular mode (Default when not using the Debug configuration)
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
-ENTRYPOINT ["dotnet", "Cart.Api.dll"]
+ENTRYPOINT ["dotnet", "Order.Api.dll"]

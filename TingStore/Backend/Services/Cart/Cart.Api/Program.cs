@@ -18,6 +18,11 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+builder.WebHost.ConfigureKestrel(options =>
+{
+    options.ListenAnyIP(80);
+});
+
 builder.Services.AddStackExchangeRedisCache(options =>
 {
     string redisConnectionString = builder.Configuration.GetConnectionString("Redis") ?? throw new Exception("Can't connect");
