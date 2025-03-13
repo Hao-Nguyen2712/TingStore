@@ -1,11 +1,11 @@
 {
-    "Route": [
+    "Routes": [
         {
             "DownstreamPathTemplate": "/api/cart/{everything}",
             "DownstreamScheme": "http",
             "DownstreamHostAndPorts": [
                 {
-                    "Host": "localhost",
+                    "Host": "cartservicecontainer",
                     "Port": 80
                 }
             ],
@@ -18,7 +18,7 @@
             "DownstreamScheme": "http",
             "DownstreamHostAndPorts": [
                 {
-                    "Host": "localhost",
+                    "Host": "categoryservicecontainer",
                     "Port": 80
                 }
             ],
@@ -31,7 +31,7 @@
             "DownstreamScheme": "http",
             "DownstreamHostAndPorts": [
                 {
-                    "Host": "localhost",
+                    "Host": "orderservicecontainer",
                     "Port": 80
                 }
             ],
@@ -44,7 +44,7 @@
             "DownstreamScheme": "http",
             "DownstreamHostAndPorts": [
                 {
-                    "Host": "localhost",
+                    "Host": "productservicecontainer",
                     "Port": 80
                 }
             ],
@@ -57,7 +57,7 @@
             "DownstreamScheme": "http",
             "DownstreamHostAndPorts": [
                 {
-                    "Host": "localhost",
+                    "Host": "reviewservicecontainer",
                     "Port": 80
                 }
             ],
@@ -70,7 +70,7 @@
             "DownstreamScheme": "http",
             "DownstreamHostAndPorts": [
                 {
-                    "Host": "localhost",
+                    "Host": "userservicecontainer",
                     "Port": 80
                 }
             ],
@@ -83,16 +83,12 @@
             "DownstreamScheme": "http",
             "DownstreamHostAndPorts": [
                 {
-                    "Host": "localhost",
+                    "Host": "discountservicecontainer",
                     "Port": 80
                 }
             ],
             "UpstreamPathTemplate": "/apigateway/discount/{everything}",
             "UpstreamHttpMethod": ["GET", "POST", "PUT", "DELETE"]
         }
-    ],
-
-    "GlobalConfiguration": {
-        "BaseUrl": "http://localhost:80"
-    }
+    ]
 }
