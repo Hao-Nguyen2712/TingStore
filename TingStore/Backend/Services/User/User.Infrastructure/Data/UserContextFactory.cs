@@ -16,7 +16,7 @@ namespace User.Infrastructure.Data
         public UserContext CreateDbContext(string[] args)
         {
             var optionsBuilder = new DbContextOptionsBuilder<UserContext>();
-            optionsBuilder.UseSqlServer("Server=192.168.1.3,1433;Database=TingStore_UserDB;uid=sa;pwd=1234;Encrypt=True;TrustServerCertificate=True");
+            optionsBuilder.UseSqlServer("Server=172.22.144.1,1433;Database=TingStore_UserDB;uid=sa;pwd=1234;Encrypt=True;TrustServerCertificate=True");
             return new UserContext(optionsBuilder.Options);
         }
     }

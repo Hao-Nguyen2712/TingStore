@@ -2,29 +2,29 @@
 
 # This stage is used when running from VS in fast mode (Default for Debug configuration)
 FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS base
-USER $APP_UID
+USER app
 WORKDIR /app
+EXPOSE 8080
+EXPOSE 8081
+
 
 # This stage is used to build the service project
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
-COPY ["Backend/Services/User/User.Api/User.Api.csproj", "Backend/Services/User/User.Api/"]
-COPY ["Backend/Services/User/User.Application/User.Application.csproj", "Backend/Services/User/User.Application/"]
-COPY ["Backend/Services/User/User.Core/User.Core.csproj", "Backend/Services/User/User.Core/"]
-COPY ["Backend/Services/User/User.Infrastructure/User.Infrastructure.csproj", "Backend/Services/User/User.Infrastructure/"]
-RUN dotnet restore "./Backend/Services/User/User.Api/User.Api.csproj"
+COPY ["Backend/ApiGateways/Ocelot.Gateway/Ocelot.Gateway.csproj", "Backend/ApiGateways/Ocelot.Gateway/"]
+RUN dotnet restore "./Backend/ApiGateways/Ocelot.Gateway/Ocelot.Gateway.csproj"
 COPY . .
-WORKDIR "/src/Backend/Services/User/User.Api"
-RUN dotnet build "./User.Api.csproj" -c $BUILD_CONFIGURATION -o /app/build
+WORKDIR "/src/Backend/ApiGateways/Ocelot.Gateway"
+RUN dotnet build "./Ocelot.Gateway.csproj" -c $BUILD_CONFIGURATION -o /app/build
 
 # This stage is used to publish the service project to be copied to the final stage
 FROM build AS publish
 ARG BUILD_CONFIGURATION=Release
-RUN dotnet publish "./User.Api.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
+RUN dotnet publish "./Ocelot.Gateway.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
 
 # This stage is used in production or when running from VS in regular mode (Default when not using the Debug configuration)
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
-ENTRYPOINT ["dotnet", "User.Api.dll"]
+ENTRYPOINT ["dotnet", "Ocelot.Gateway.dll"]
