@@ -1,6 +1,27 @@
 version: '3.4'
 
 services:
+  apigateway-container:
+      image: ${DOCKER_REGISTRY-}apigateway
+      container_name: apigateway-container
+      build:
+        context: .
+        dockerfile: Backend/ApiGateways/Ocelot.Gateway/Dockerfile
+      ports:
+        - "5001:80"  
+      depends_on:
+        - order-container
+        - discount-container
+        - cart-container
+        - product-container
+        - user-container
+        - category-container
+      restart: unless-stopped
+      networks:
+        - app-network
+      volumes:
+        - ./Backend/ApiGateways/Ocelot.Gateway/ocelot.json:/app/ocelot.json 
+
   order-container:
     image: ${DOCKER_REGISTRY-}orderservice
     container_name: order-container

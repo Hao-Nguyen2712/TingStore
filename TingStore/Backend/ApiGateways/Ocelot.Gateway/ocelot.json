@@ -5,85 +5,79 @@
             "DownstreamScheme": "http",
             "DownstreamHostAndPorts": [
                 {
-                    "Host": "cartservicecontainer",
+                    "Host": "cart-container",
                     "Port": 80
                 }
             ],
             "UpstreamPathTemplate": "/apigateway/cart/{everything}",
             "UpstreamHttpMethod": ["GET", "POST", "DELETE"]
         },
-
         {
             "DownstreamPathTemplate": "/api/category/{everything}",
             "DownstreamScheme": "http",
             "DownstreamHostAndPorts": [
                 {
-                    "Host": "categoryservicecontainer",
+                    "Host": "category-container",
                     "Port": 80
                 }
             ],
             "UpstreamPathTemplate": "/apigateway/category/{everything}",
             "UpstreamHttpMethod": ["GET", "POST", "PUT", "DELETE"]
         },
-
         {
             "DownstreamPathTemplate": "/api/order/{everything}",
             "DownstreamScheme": "http",
             "DownstreamHostAndPorts": [
                 {
-                    "Host": "orderservicecontainer",
+                    "Host": "order-container",
                     "Port": 80
                 }
             ],
             "UpstreamPathTemplate": "/apigateway/order/{everything}",
             "UpstreamHttpMethod": ["POST"]
         },
-
         {
             "DownstreamPathTemplate": "/api/product/{everything}",
             "DownstreamScheme": "http",
             "DownstreamHostAndPorts": [
                 {
-                    "Host": "productservicecontainer",
+                    "Host": "product-container",
                     "Port": 80
                 }
             ],
             "UpstreamPathTemplate": "/apigateway/product/{everything}",
             "UpstreamHttpMethod": ["GET", "POST", "PUT", "DELETE"]
         },
-
         {
             "DownstreamPathTemplate": "/api/review/{everything}",
             "DownstreamScheme": "http",
             "DownstreamHostAndPorts": [
                 {
-                    "Host": "reviewservicecontainer",
+                    "Host": "product-container",
                     "Port": 80
                 }
             ],
             "UpstreamPathTemplate": "/apigateway/review/{everything}",
             "UpstreamHttpMethod": ["GET", "POST", "PUT", "DELETE"]
         },
-
         {
             "DownstreamPathTemplate": "/api/users/{everything}",
             "DownstreamScheme": "http",
             "DownstreamHostAndPorts": [
                 {
-                    "Host": "userservicecontainer",
+                    "Host": "user-container",
                     "Port": 80
                 }
             ],
             "UpstreamPathTemplate": "/apigateway/users/{everything}",
             "UpstreamHttpMethod": ["GET", "POST", "PUT", "DELETE"]
         },
-
         {
             "DownstreamPathTemplate": "/api/discount/{everything}",
             "DownstreamScheme": "http",
             "DownstreamHostAndPorts": [
                 {
-                    "Host": "discountservicecontainer",
+                    "Host": "discount-container",
                     "Port": 80
                 }
             ],
