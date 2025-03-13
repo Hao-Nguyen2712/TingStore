@@ -9,7 +9,7 @@ namespace Cart.Application.Dtos
 {
     public class CartShoppingDTO
     {
-        public string Id { get; set; }
+        public int Id { get; set; }
         public List<CartShoppingItemDTO> Items { get; set; } = new List<CartShoppingItemDTO>();
     }
 }

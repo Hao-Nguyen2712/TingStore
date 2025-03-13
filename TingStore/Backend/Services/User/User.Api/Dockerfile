@@ -1,8 +1,9 @@
-FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS base
-USER app
-WORKDIR /app
-EXPOSE 80 443
+# See https://aka.ms/customizecontainer to learn how to customize your debug container and how Visual Studio uses this Dockerfile to build your images for faster debugging.
 
+# This stage is used when running from VS in fast mode (Default for Debug configuration)
+FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS base
+USER $APP_UID
+WORKDIR /app
 
 
 
@@ -10,14 +11,13 @@ EXPOSE 80 443
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
-COPY ["User.Api/User.Api.csproj", "User.Api/"]
-COPY ["User.Application/User.Application.csproj", "User.Application/"]
-COPY ["User.Core/User.Core.csproj", "User.Core/"]
-COPY ["User.Infrastructure/User.Infrastructure.csproj", "User.Infrastructure/"]
-
-RUN dotnet restore "./User.Api/User.Api.csproj"
+COPY ["Backend/Services/User/User.Api/User.Api.csproj", "Backend/Services/User/User.Api/"]
+COPY ["Backend/Services/User/User.Application/User.Application.csproj", "Backend/Services/User/User.Application/"]
+COPY ["Backend/Services/User/User.Core/User.Core.csproj", "Backend/Services/User/User.Core/"]
+COPY ["Backend/Services/User/User.Infrastructure/User.Infrastructure.csproj", "Backend/Services/User/User.Infrastructure/"]
+RUN dotnet restore "./Backend/Services/User/User.Api/User.Api.csproj"
 COPY . .
-WORKDIR "/src/User.Api"
+WORKDIR "/src/Backend/Services/User/User.Api"
 RUN dotnet build "./User.Api.csproj" -c $BUILD_CONFIGURATION -o /app/build
 
 # This stage is used to publish the service project to be copied to the final stage

@@ -8,10 +8,9 @@ namespace Cart.Core.Entities
 {
    public class CartShopping
     {
-        public string Id { get; set; }
-        public List<CartShoppingItem> Items { get; set; } = new List<CartShoppingItem>();
-       
-        public CartShopping(string id)
+        public int Id { get; set; } //  UserId
+        public List<CartShoppingItem> Items { get; set; } = new List<CartShoppingItem>();      
+        public CartShopping(int id)
         {
             Id = id;
         }

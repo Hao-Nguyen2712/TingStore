@@ -67,7 +67,7 @@ namespace Order.Infrastructure.Repositories
                 throw new ArgumentNullException();
             }
             _context.Entry(orderExsit).CurrentValues.SetValues(order);
-            await _context.SaveChangesAsync();
+            return await _context.SaveChangesAsync() > 0;
         }
 
         public async Task<bool> UpdateOrderStatus(Guid orderId, string newStatus)

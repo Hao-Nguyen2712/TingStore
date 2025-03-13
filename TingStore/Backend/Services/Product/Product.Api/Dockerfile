@@ -2,22 +2,22 @@
 
 # This stage is used when running from VS in fast mode (Default for Debug configuration)
 FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS base
-USER app
+USER $APP_UID
 WORKDIR /app
-EXPOSE 80 443
+
 
 
 # This stage is used to build the service project
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
-COPY ["Product.Api/Product.Api.csproj", "Product.Api/"]
-COPY ["Product.Application/Product.Application.csproj", "Product.Application/"]
-COPY ["Product.Core/Product.Core.csproj", "Product.Core/"]
-COPY ["Product.Infrastructure/Product.Infrastructure.csproj", "Product.Infrastructure/"]
-RUN dotnet restore "Product.Api/Product.Api.csproj"
+COPY ["Backend/Services/Product/Product.Api/Product.Api.csproj", "Backend/Services/Product/Product.Api/"]
+COPY ["Backend/Services/Product/Product.Application/Product.Application.csproj", "Backend/Services/Product/Product.Application/"]
+COPY ["Backend/Services/Product/Product.Core/Product.Core.csproj", "Backend/Services/Product/Product.Core/"]
+COPY ["Backend/Services/Product/Product.Infrastructure/Product.Infrastructure.csproj", "Backend/Services/Product/Product.Infrastructure/"]
+RUN dotnet restore "./Backend/Services/Product/Product.Api/Product.Api.csproj"
 COPY . .
-WORKDIR "/src/Product.Api"
+WORKDIR "/src/Backend/Services/Product/Product.Api"
 RUN dotnet build "./Product.Api.csproj" -c $BUILD_CONFIGURATION -o /app/build
 
 # This stage is used to publish the service project to be copied to the final stage

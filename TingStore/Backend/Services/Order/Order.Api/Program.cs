@@ -3,9 +3,11 @@
 
 using Discount.Api.Protos;
 using HealthChecks.UI.Client;
+using MassTransit;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
+using Order.Api.EventBusConsummers;
 using Order.Application;
 using Order.Application.Services;
 using Order.Core.Repositories;
@@ -16,6 +18,11 @@ using Order.Infrastructure.Repositories;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+
+//builder.WebHost.ConfigureKestrel(serverOptions =>
+//{
+//    serverOptions.ListenAnyIP(80);
+//});
 
 builder.Services.AddDbContext<OrderDbContext>(options =>
 {
@@ -30,8 +37,28 @@ builder.Services.AddGrpcClient<DiscountServicegRPC.DiscountServicegRPCClient>(op
     options.Address = new Uri(builder.Configuration.GetValue<string>("GrpcSettings:DiscountUrl"));
 });
 
+builder.Services.AddMassTransit(config =>
+{
+    config.SetKebabCaseEndpointNameFormatter();
+    config.AddConsumer<CardAddOrderConsumer>();
+    config.UsingRabbitMq((context, configurator) =>
+    {
+        
+        configurator.Host(builder.Configuration["EventBusSettings:HostAddress"], c =>
+        {
+            c.Username(builder.Configuration["EventBusSettings:UserName"]!);
+            c.Password(builder.Configuration["EventBusSettings:Password"]!);
+        });
+       // configurator.ConfigureEndpoints(context);
+        configurator.ReceiveEndpoint(EventBus.Messages.Commons.EventBusConstant.CartCheckoutQueue , c =>
+        {
+            c.ConfigureConsumer<CardAddOrderConsumer>(context);
+        });
+    });
+});
 
 builder.Services.AddApplication();
+builder.Services.AddTransient<CardAddOrderConsumer>();
 builder.Services.AddScoped<IOrderRepository, OrderRepository>();
 builder.Services.AddScoped<IOrderItemRepository, OrderItemRepository>();
 builder.Services.AddScoped<IDiscountClientService, DiscountClientService>();
