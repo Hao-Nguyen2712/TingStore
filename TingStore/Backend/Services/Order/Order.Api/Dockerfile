@@ -11,6 +11,7 @@ FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
 COPY ["Backend/Services/Order/Order.Api/Order.Api.csproj", "Backend/Services/Order/Order.Api/"]
+COPY ["Backend/Infrastructure/EventBus.Messages/EventBus.Messages.csproj", "Backend/Infrastructure/EventBus.Messages/"]
 COPY ["Backend/Services/Order/Order.Application/Order.Application.csproj", "Backend/Services/Order/Order.Application/"]
 COPY ["Backend/Services/Order/Order.Core/Order.Core.csproj", "Backend/Services/Order/Order.Core/"]
 COPY ["Backend/Services/Order/Order.Infrastructure/Order.Infrastructure.csproj", "Backend/Services/Order/Order.Infrastructure/"]

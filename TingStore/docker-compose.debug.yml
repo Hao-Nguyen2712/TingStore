@@ -1,0 +1,112 @@
+﻿
+# file debug compose for docker
+# muon chay debug service nao thi copy vo debug
+
+services:
+  order-container:
+    image: ${DOCKER_REGISTRY-}orderservice
+    container_name: order-container
+    build:
+      context: .
+      dockerfile: Backend/Services/Order/Order.Api/Dockerfile
+    environment:
+      - DOTNET_USE_POLLING_FILE_WATCHER=1
+      - DOTNET_RUNNING_IN_CONTAINER=true
+      - DOTNET_HOSTBUILDER__RELOADCONFIGONCHANGE=false
+    ports:
+      - "5000:80"
+    depends_on:
+      - sqlserver-container
+    restart: unless-stopped
+    networks:
+      - app-network
+    command: ["dotnet", "Order.Api.dll", "--launch-profile", "Docker"]
+
+  cart-container:
+    image: ${DOCKER_REGISTRY-}cartservice
+    container_name: cart-container
+    build:
+      context: .
+      dockerfile: Backend/Services/Cart/Cart.Api/Dockerfile
+    environment:
+      - DOTNET_USE_POLLING_FILE_WATCHER=1
+      - DOTNET_RUNNING_IN_CONTAINER=true
+      - DOTNET_HOSTBUILDER__RELOADCONFIGONCHANGE=false
+    ports:
+      - "5004:80"
+    depends_on:
+      - redis-container
+    restart: unless-stopped
+    networks:
+      - app-network
+    command: ["dotnet", "Order.Api.dll", "--launch-profile", "Docker"]
+
+  rabitmq-container:
+    image: rabbitmq:3-management
+    container_name: rabitmq-container
+    ports:
+      - "15672:15672"
+      - "5672:5672"
+    restart: unless-stopped
+    volumes:
+      - rabitmq-data:/var/lib/rabbitmq
+    networks:
+      - app-network
+
+  redis-container:
+    image: redis
+    container_name: redis-container
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis-data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+    networks:
+      - app-network
+
+  mongodb-container:
+    image: mongo
+    container_name: mongodb-container
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo-data:/data/db
+    healthcheck:
+      test: ["CMD", "mongo", "--eval", "db.runCommand('ping').ok"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+    networks:
+      - app-network
+
+  sqlserver-container:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    container_name: sqlserver-container
+    environment:
+      - ACCEPT_EULA=Y
+      - SA_PASSWORD=Admin@27122003!
+      - MSSQL_PID=Express
+    volumes:
+      - sqlserver-data:/var/opt/mssql
+    ports:
+      - "1433:1433"
+    restart: unless-stopped
+    networks:
+      - app-network
+
+volumes:
+  sqlserver-data:  # Định nghĩa volume sqlserver-data
+  mongo-data:      # Định nghĩa volume cho MongoDB
+  redis-data:      # Định nghĩa volume cho Redis
+  rabitmq-data:
+
+
+networks:
+  app-network:
+    driver: bridge

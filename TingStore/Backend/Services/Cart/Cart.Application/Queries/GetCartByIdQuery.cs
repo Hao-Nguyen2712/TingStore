@@ -10,8 +10,8 @@ namespace Cart.Application.Queries
 {
    public class GetCartByIdQuery : IRequest<CartShoppingDTO>
     {
-       public string? Id { get; set; }
-        public GetCartByIdQuery(string id)
+       public int Id { get; set; }
+        public GetCartByIdQuery(int id)
         {
             Id = id;
         }

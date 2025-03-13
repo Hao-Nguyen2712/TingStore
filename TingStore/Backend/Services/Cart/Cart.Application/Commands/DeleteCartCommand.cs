@@ -9,8 +9,8 @@ namespace Cart.Application.Commands
 {
    public class DeleteCartCommand: IRequest<Unit>
     {
-        public string Id { get; set; }
-        public DeleteCartCommand(string id)
+        public int Id { get; set; }
+        public DeleteCartCommand(int id)
         {
             Id = id;
         }
