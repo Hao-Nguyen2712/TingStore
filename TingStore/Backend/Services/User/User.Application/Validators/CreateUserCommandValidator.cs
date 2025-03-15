@@ -27,7 +27,7 @@ namespace User.Application.Validators
                 .NotEmpty().WithMessage("Full name is required")
                 .MaximumLength(100).WithMessage("Full name must not exceed 100 characters");
 
-            RuleFor(x => x.IsActive).Must(x => x == null).WithMessage("IsActive must be flase or null");
+            RuleFor(x => x.IsActive).Must(x => x == true).WithMessage("IsActive must be true or null");
         }
     }
 }

@@ -1,0 +1,149 @@
+@using TingStore.Client.Areas.Admin.Models.Users;
+@model UserResponse;
+@{
+    ViewData["Title"] = "Details";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<div class="row">
+    <div class="col-lg-4">
+        <div class="card overflow-hidden">
+            <div class="card-body">
+                <div class="bg-primary profile-bg rounded-top p-5 position-relative mx-n3 mt-n3">
+                    <img src="~/admin/assets/images/users/dummy-avatar.jpg" alt="" class="avatar-lg border border-light border-3 rounded-circle position-absolute top-100 start-0 translate-middle ms-5">
+                </div>
+                <div class="mt-4 pt-3">
+                    <h4 class="mb-1" title="Fullname" >@Model.FullName<i class="bx bxs-badge-check text-success align-middle"></i></h4>
+                    <div class="mt-2">
+                        <p class="fs-15 mb-1 mt-1"><span class="text-dark fw-semibold">Email : </span> @Model.Email</p>
+                        <p class="fs-15 mb-0 mt-1"><span class="text-dark fw-semibold">Phone : </span> @Model.PhoneNumber</p>
+                        <p class="fs-15 mb-0 mt-1"><span class="text-dark fw-semibold">Password : </span> @Model.Password</p>
+                    </div>
+                </div>
+            </div>
+            <div class="card-footer border-top gap-1 hstack">
+                <a href="#!" class="btn btn-primary w-100">Send Message</a>
+                <a href="#!" class="btn btn-light w-100">Analytics</a>
+                <a href="#!" class="btn btn-soft-dark d-inline-flex align-items-center justify-content-center rounded avatar-sm"><i class='bx bx-edit-alt fs-18'></i></a>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header d-flex align-items-center justify-content-between">
+                <div>
+                    <h4 class="card-title">Customer Details</h4>
+                </div>
+                <div>
+                    <span class="badge @(Model.IsActive ? "bg-success-subtle text-success" : "bg-danger-subtle text-danger") px-2 py-1">
+                        @(Model.IsActive ? "Active User" : "Inactive User")
+                    </span>
+
+                </div>
+
+            </div>
+            <div class="card-body py-2">
+                <div class="table-responsive">
+                    <table class="table mb-0">
+                        <tbody>
+                            <tr>
+                                <td class="px-0">
+                                    <p class="d-flex mb-0 align-items-center gap-1 fw-semibold text-dark">Account ID : </p>
+                                </td>
+                                <td class="text-dark fw-medium px-0">#@Model.Id</td>
+                            </tr>
+                            <tr>
+                                <td class="px-0">
+                                    <p class="d-flex mb-0 align-items-center gap-1 fw-semibold text-dark"> Invoice Email : </p>
+                                </td>
+                                <td class="text-dark fw-medium px-0">@Model.Email</td>
+                            </tr>
+                            <tr>
+                                <td class="px-0">
+                                    <p class="d-flex mb-0 align-items-center gap-1 fw-semibold text-dark"> Delivery Address : </p>
+                                </td>
+                                <td class="text-dark fw-medium px-0">@Model.Address</td>
+                            </tr>
+                            <tr>
+                                <td class="px-0">
+                                    <p class="d-flex mb-0 align-items-center gap-1 fw-semibold text-dark"> Create At : </p>
+                                </td>
+                                <td class="text-dark fw-medium px-0">@Model.CreatedAt</td>
+                            </tr>
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-8">
+        <div class="row">
+            <div class="col-lg-4">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="d-flex align-items-center justify-content-between">
+                            <div>
+                                <h4 class="card-title mb-2 d-flex align-items-center gap-2">Total Order</h4>
+                                <p class="text-muted fw-medium fs-22 mb-0">219</p>
+                            </div>
+                            <div>
+                                <div class="avatar-md bg-primary bg-opacity-10 rounded">
+                                    <iconify-icon icon="solar:box-bold-duotone" class="fs-32 text-primary avatar-title"></iconify-icon>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="d-flex align-items-center justify-content-between">
+                            <div>
+                                <h4 class="card-title mb-2 d-flex align-items-center gap-2">Total Expense</h4>
+                                <p class="text-muted fw-medium fs-22 mb-0">$2,189</p>
+                            </div>
+                            <div>
+                                <div class="avatar-md bg-primary bg-opacity-10 rounded">
+                                    <iconify-icon icon="solar:chat-round-money-bold-duotone" class="fs-32 text-primary avatar-title"></iconify-icon>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header">
+                <h4 class="card-title">Transaction History</h4>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table align-middle mb-0 table-hover table-centered">
+                        <thead class="bg-light-subtle">
+                            <tr>
+                                <th>Invoice ID</th>
+                                <th>Status</th>
+                                <th>Total Amount</th>
+                                <th>Due Date</th>
+                                <th>Payment Method</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><a href="javascript: void(0);" class="text-body">#INV2540</a> </td>
+                                <td> <span class="badge bg-success-subtle text-success py-1 px-2">Completed</span> </td>
+                                <td> $421.00 </td>
+                                <td> 07 Jan, 2023</td>
+                                <td> Mastercard </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

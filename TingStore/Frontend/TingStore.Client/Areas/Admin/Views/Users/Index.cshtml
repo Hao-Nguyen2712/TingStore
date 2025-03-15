@@ -1,4 +1,5 @@
 @using TingStore.Client.Areas.Admin.Models.Users;
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
 @model IEnumerable<UserResponse>;
 @{
     ViewData["Title"] = "Index";
@@ -7,7 +8,7 @@
 
 
 <div class="row">
-    <div class="col-md-6 col-xl-3">
+    <div class="col-md-6 col-xl-4">
         <div class="card">
             <div class="card-body">
                 <div class="d-flex align-items-center gap-2 mb-3">
@@ -20,83 +21,44 @@
                     </div>
                 </div>
                 <div class="d-flex align-items-center justify-content-between">
-                    <p class="text-muted fw-medium fs-22 mb-0">+22.63k</p>
-                    <div>
-                        <span class="badge text-success bg-success-subtle fs-12">
-                            <i class="bx bx-up-arrow-alt"></i>34.4%
-                        </span>
-                    </div>
+                    <p class="text-muted fw-medium fs-22 mb-0">@ViewBag.TotalUsers</p>
                 </div>
             </div>
         </div>
     </div>
-    <div class="col-md-6 col-xl-3">
+    <div class="col-md-6 col-xl-4">
         <div class="card">
             <div class="card-body">
                 <div class="d-flex align-items-center gap-2 mb-3">
                     <div class="avatar-md bg-primary bg-opacity-10 rounded">
-                        <iconify-icon icon="solar:box-bold-duotone"
+                        <iconify-icon icon="solar:user-check-rounded-bold"
                                       class="fs-32 text-primary avatar-title"></iconify-icon>
                     </div>
                     <div>
-                        <h4 class="mb-0">Orders</h4>
+                        <h4 class="mb-0">Active Users</h4>
                     </div>
                 </div>
                 <div class="d-flex align-items-center justify-content-between">
-                    <p class="text-muted fw-medium fs-22 mb-0">+4.5k</p>
-                    <div>
-                        <span class="badge text-danger bg-danger-subtle fs-12">
-                            <i class="bx bx-down-arrow-alt"></i>8.1%
-                        </span>
-                    </div>
+                    <p class="text-muted fw-medium fs-22 mb-0">@ViewBag.ActiveUsers</p>
                 </div>
             </div>
         </div>
     </div>
 
-    <div class="col-md-6 col-xl-3">
+    <div class="col-md-6 col-xl-4">
         <div class="card">
             <div class="card-body">
                 <div class="d-flex align-items-center gap-2 mb-3">
                     <div class="avatar-md bg-primary bg-opacity-10 rounded">
-                        <iconify-icon icon="solar:headphones-round-sound-bold-duotone"
+                        <iconify-icon icon="solar:user-block-rounded-bold"
                                       class="fs-32 text-primary avatar-title"></iconify-icon>
                     </div>
                     <div>
-                        <h4 class="mb-0">Services Request</h4>
+                        <h4 class="mb-0">Inactive Users</h4>
                     </div>
                 </div>
                 <div class="d-flex align-items-center justify-content-between">
-                    <p class="text-muted fw-medium fs-22 mb-0">+1.03k</p>
-                    <div>
-                        <span class="badge text-success bg-success-subtle fs-12">
-                            <i class="bx bx-up-arrow-alt"></i>12.6%
-                        </span>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="col-md-6 col-xl-3">
-        <div class="card">
-            <div class="card-body">
-                <div class="d-flex align-items-center gap-2 mb-3">
-                    <div class="avatar-md bg-primary bg-opacity-10 rounded">
-                        <iconify-icon icon="solar:bill-list-bold-duotone"
-                                      class="fs-32 text-primary avatar-title"></iconify-icon>
-                    </div>
-                    <div>
-                        <h4 class="mb-0">Invoice & Payment</h4>
-                    </div>
-                </div>
-                <div class="d-flex align-items-center justify-content-between">
-                    <p class="text-muted fw-medium fs-22 mb-0">$38,908.00</p>
-                    <div>
-                        <span class="badge text-success bg-success-subtle fs-12">
-                            <i class="bx bx-up-arrow-alt"></i>45.9%
-                        </span>
-                    </div>
+                    <p class="text-muted fw-medium fs-22 mb-0">@ViewBag.InactiveUsers</p>
                 </div>
             </div>
         </div>
@@ -109,21 +71,20 @@
         <div class="card">
             <div class="d-flex card-header justify-content-between align-items-center">
                 <div>
-                    <h4 class="card-title">All Customers List</h4>
+                    <h4 class="card-title">All Customers List </h4>
                 </div>
                 <div class="dropdown">
-                    <a href="#" class="dropdown-toggle btn btn-sm btn-outline-light rounded"
-                       data-bs-toggle="dropdown" aria-expanded="false">
-                        This Month
+                    <button class="btn btn-primary dropdown-toggle" type="button" id="statusDropdown" data-bs-toggle="dropdown">
+                        Filter Status
+                    </button>
+                    <ul class="dropdown-menu" style="cursor: pointer">
+                        <li style="cursor: pointer"><a class="dropdown-item filter-status" data-url="/Admin/Users/Index">All</a></li>
+                        <li style="cursor: pointer"><a class="dropdown-item filter-status" data-url="/Admin/Users/Active">Active</a></li>
+                        <li style="cursor: pointer"><a class="dropdown-item filter-status" data-url="/Admin/Users/Inactive">Inactive</a></li>
+                    </ul>
+                    <a asp-area="Admin" asp-controller="Users" asp-action="Create" class="btn btn-light btn-sm">
+                        <iconify-icon icon="solar-add-circle-bold" class="align-middle fs-18" title="Create"></iconify-icon>
                     </a>
-                    <div class="dropdown-menu dropdown-menu-end">
-                        <!-- item-->
-                        <a href="#!" class="dropdown-item">Download</a>
-                        <!-- item-->
-                        <a href="#!" class="dropdown-item">Export</a>
-                        <!-- item-->
-                        <a href="#!" class="dropdown-item">Import</a>
-                    </div>
                 </div>
             </div>
             <div>
@@ -133,10 +94,8 @@
                             <tr>
                                 <th style="width: 20px;">
                                     <div class="form-check">
-                                        <input type="checkbox" class="form-check-input"
-                                               id="customCheck1">
-                                        <label class="form-check-label"
-                                               for="customCheck1"></label>
+                                        <input type="checkbox" class="form-check-input" id="customCheck1">
+                                        <label class="form-check-label" for="customCheck1"></label>
                                     </div>
                                 </th>
                                 <th>Customer Name</th>
@@ -144,53 +103,11 @@
                                 <th>Create At</th>
                                 <th>Status</th>
                                 <th>Action</th>
+
                             </tr>
                         </thead>
-                        <tbody>
-                            @if (!Model.Any())
-                            {
-                                <tr>
-                                    <td colspan="6">No users found.</td>
-                                </tr>
-                            }
-                            else
-                            {
-                                @foreach (var user in Model)
-                                {
-                                    <tr>
-                                        <td>
-                                            <div class="form-check">
-                                                <input type="checkbox" class="form-check-input" id="customCheck2">
-                                                <label class="form-check-label" for="customCheck2">�</label>
-                                            </div>
-                                        </td>
-                                        <td>
-                                            <img src="~/admin/assets/images/users/dummy-avatar.jpg" class="avatar-sm rounded-circle me-2" alt="...">
-                                            @user.FullName
-                                        </td>
-                                        <td>@user.Email</td>
-                                        <td>@user.CreatedAt.ToString("dd/MM/yyyy")</td>
-                                        <td>
-                                            <span class="badge bg-@(user.IsActive ? "success" : "danger")-subtle text-@(user.IsActive ? "success" : "danger") py-1 px-2">
-                                                @(user.IsActive ? "Active" : "Inactive")
-                                            </span>
-                                        </td>
-                                        <td>
-                                            <div class="d-flex gap-2">
-                                                <a asp-action="Details" asp-route-id="@user.Id" class="btn btn-light btn-sm">
-                                                    <iconify-icon icon="solar:eye-broken" class="align-middle fs-18"></iconify-icon>
-                                                </a>
-                                                <a asp-action="Edit" asp-route-id="@user.Id" class="btn btn-soft-primary btn-sm">
-                                                    <iconify-icon icon="solar:pen-2-broken" class="align-middle fs-18"></iconify-icon>
-                                                </a>
-                                                <a asp-action="Delete" asp-route-id="@user.Id" class="btn btn-soft-danger btn-sm">
-                                                    <iconify-icon icon="solar:trash-bin-minimalistic-2-broken" class="align-middle fs-18"></iconify-icon>
-                                                </a>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                }
-                            }
+                        <tbody id="userTableBody">
+                            @await Html.PartialAsync("_UserListPartial", Model)
                         </tbody>
                     </table>
                 </div>
@@ -199,4 +116,37 @@
         </div>
     </div>
 </div>
-<!-- End Container Fluid -->
+
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            $(".filter-status").click(function (event) {
+                event.preventDefault();
+                let url = $(this).data("url");
+                $("#statusDropdown").text($(this).text());
+
+                $.ajax({
+                    url: url,
+                    type: "GET",
+                    success: function (data) {
+                        // Tìm phần tử #userTableBody trong dữ liệu trả về và chỉ lấy nội dung của nó
+                        const parser = new DOMParser();
+                        const doc = parser.parseFromString(data, "text/html");
+                        const tableBody = doc.getElementById("userTableBody");
+                        if (tableBody) {
+                            $("#userTableBody").html(tableBody.innerHTML);
+                        } else {
+                            $("#userTableBody").html("<tr><td colspan='6'>No data found.</td></tr>");
+                        }
+                    },
+                    error: function (xhr, status, error) {
+                        console.error("Error fetching data: ", status, error);
+                        $("#userTableBody").html("<tr><td colspan='6'>Error: " + error + "</td></tr>");
+                    }
+                });
+            });
+        });
+    </script>
+}
+
