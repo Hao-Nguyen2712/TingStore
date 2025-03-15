@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Drawing;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
@@ -11,7 +12,7 @@ using TingStore.Client.Areas.Admin.Services.Users;
 namespace TingStore.Client.Areas.Admin.Controllers
 {
     [Area("Admin")]
-    [Route("Admin/Users/[action]")]
+    [Route("Admin/Users/[action]/{id?}")]
     public class UsersController : Controller
     {
         private readonly IUserService _userService;
@@ -25,6 +26,9 @@ namespace TingStore.Client.Areas.Admin.Controllers
         public async Task<IActionResult> Index()
         {
             var users = await _userService.GetAllUsers();
+            ViewBag.TotalUsers = await _userService.GetAllUsersCount();
+            ViewBag.ActiveUsers = await _userService.GetAllActiveUsersCount();
+            ViewBag.InactiveUsers = await _userService.GetAllInactiveUsersCount();
             return View(users);
         }
 
@@ -32,14 +36,20 @@ namespace TingStore.Client.Areas.Admin.Controllers
         public async Task<IActionResult> Active()
         {
             var usersActive = await _userService.GetAllActiveUsers();
-            return View(usersActive);
+            ViewBag.TotalUsers = await _userService.GetAllUsersCount();
+            ViewBag.ActiveUsers = await _userService.GetAllActiveUsersCount();
+            ViewBag.InactiveUsers = await _userService.GetAllInactiveUsersCount();
+            return View("Index", usersActive);
         }
 
         // GET: Admin/Users/Inactive
         public async Task<IActionResult> Inactive()
         {
             var usersInactive = await _userService.GetAllInactiveUsers();
-            return View(usersInactive);
+            ViewBag.TotalUsers = await _userService.GetAllUsersCount();
+            ViewBag.ActiveUsers = await _userService.GetAllActiveUsersCount();
+            ViewBag.InactiveUsers = await _userService.GetAllInactiveUsersCount();
+            return View("Index", usersInactive);
         }
 
 
@@ -75,8 +85,9 @@ namespace TingStore.Client.Areas.Admin.Controllers
                 var userResponse = await _userService.CreateUser(user);
                 return RedirectToAction("Index");
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
+                ViewBag.Error = $"Error fetching users: {ex.Message}";
                 return View(user);
             }
         }
@@ -87,10 +98,15 @@ namespace TingStore.Client.Areas.Admin.Controllers
             try
             {
                 var user = await _userService.GetUserById(id);
+                if (user == null)
+                {
+                    return RedirectToAction("Index");
+                }
                 var updateRequest = new UpdateUserRequest
                 {
                     Id = user.Id,
                     Email = user.Email,
+                    Password = user.Password,
                     FullName = user.FullName,
                     PhoneNumber = user.PhoneNumber,
                     Address = user.Address,
@@ -98,8 +114,8 @@ namespace TingStore.Client.Areas.Admin.Controllers
                 };
                 return View(updateRequest);
             }
-            catch (Exception ex)
-            {
+            catch (Exception ex){
+                ViewBag.Error = $"Error fetching users: {ex.Message}";
                 return RedirectToAction("Index");
             }
         }
@@ -121,6 +137,7 @@ namespace TingStore.Client.Areas.Admin.Controllers
             }
             catch (Exception ex)
             {
+                ViewBag.Error = $"Error fetching users: {ex.Message}";
                 return View(user);
             }
         }
@@ -140,12 +157,16 @@ namespace TingStore.Client.Areas.Admin.Controllers
             try
             {
                 await _userService.DeleteUser(id);
-                return RedirectToAction("Index");
+                //return RedirectToAction("Index");
+                return Json(new { success = true, message = "User banned successfully" });
             }
             catch (Exception ex)
             {
-                return View();
+                //ViewBag.Error = $"Error fetching users: {ex.Message}";
+                //return View();
+                return Json(new { success = false, message = $"Error banning user: {ex.Message}" });
             }
+        
         }
 
         // GET: Admin/Users/Restore
@@ -163,12 +184,16 @@ namespace TingStore.Client.Areas.Admin.Controllers
             try
             {
                 await _userService.RestoreUser(id);
-                return RedirectToAction("Index");
+                //return RedirectToAction("Index");
+                return Json(new { success = true, message = "User unbanned successfully" });
             }
             catch (Exception ex)
             {
-                return View();
+                //ViewBag.Error = $"Error fetching users: {ex.Message}";
+                //return View();
+                return Json(new { success = false, message = $"Error unbanning user: {ex.Message}" });
             }
         }
+
     }
 }

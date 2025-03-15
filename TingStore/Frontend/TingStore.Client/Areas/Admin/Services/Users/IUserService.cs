@@ -12,10 +12,14 @@ namespace TingStore.Client.Areas.Admin.Services.Users
         Task<IEnumerable<UserResponse>> GetAllActiveUsers();
         Task<IEnumerable<UserResponse>> GetAllInactiveUsers();
         Task<UserResponse> GetUserById(int id);
-        Task<UserResponse> GetUserByEmailAsync(string email);
+        Task<UserResponse> GetUserByEmail(string email);
         Task<UserResponse> CreateUser(CreateUserRequest user);
         Task<bool> UpdateUser(UpdateUserRequest user);
         Task<bool> DeleteUser(int id);
         Task<bool> RestoreUser(int id);
+
+        Task<int> GetAllUsersCount();
+        Task<int> GetAllActiveUsersCount();
+        Task<int> GetAllInactiveUsersCount();
     }
 }
