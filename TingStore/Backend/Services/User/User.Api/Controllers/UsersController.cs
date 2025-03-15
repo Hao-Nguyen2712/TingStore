@@ -95,7 +95,7 @@ namespace User.Api.Controllers
             return Ok(response);
         }
 
-        [HttpDelete("RestoreUser/{id}", Name = "RestoreUser")]
+        [HttpPut("RestoreUser/{id}", Name = "RestoreUser")]
         [ProducesResponseType(typeof(bool), (int)HttpStatusCode.OK)]
         public async Task<IActionResult> RestoreUser(int id)
         {
