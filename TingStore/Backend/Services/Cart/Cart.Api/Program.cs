@@ -24,10 +24,6 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-builder.WebHost.ConfigureKestrel(options =>
-{
-    options.ListenAnyIP(80);
-});
 
 builder.Services.AddStackExchangeRedisCache(options =>
 {
@@ -40,13 +36,22 @@ builder.Services.AddStackExchangeRedisCache(options =>
 
 builder.Services.AddMassTransit(config =>
 {
-    config.SetKebabCaseEndpointNameFormatter();
+    //config.SetKebabCaseEndpointNameFormatter();
     config.UsingRabbitMq((context , configurator) =>
     {
         configurator.Host(builder.Configuration["EventBusSettings:HostAddress"], c =>
         {
             c.Username(builder.Configuration["EventBusSettings:UserName"]!);
             c.Password(builder.Configuration["EventBusSettings:Password"]!);
+        });
+
+
+        configurator.ConfigureJsonSerializerOptions(options =>
+        {
+            options.PropertyNameCaseInsensitive = true;
+            options.NumberHandling = System.Text.Json.Serialization.JsonNumberHandling.AllowReadingFromString;
+            options.DefaultIgnoreCondition =  System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull;
+            return options;
         });
         configurator.ConfigureEndpoints(context);
     });

@@ -16,13 +16,8 @@ namespace Cart.Application.Mappers
         {
             CreateMap<CartShopping, CartShoppingDTO>().ReverseMap();
             CreateMap<CartShoppingItem, CartShoppingItemDTO>().ReverseMap();
-            CreateMap<CartShoppingDTO, CartCheckoutEvent>()
-                .ForMember(dest => dest.CustomerId, opt => opt.MapFrom(src => src.Id)) // Giả sử CustomerId lấy từ Id
-                .ForMember(dest => dest.Items, opt => opt.MapFrom(src => src.Items));
+            CreateMap<CartShoppingDTO, CartCheckoutEvent>().ReverseMap();
 
-            // Mapping từ CartShoppingItemDTO sang CartItemCheckoutEvent
-            CreateMap<CartShoppingItemDTO, CartItemCheckoutEvent>()
-                .ConstructUsing(src => new CartItemCheckoutEvent(src.ProductId, src.ProductName, src.Quantity, src.Price));
 
         }
     }

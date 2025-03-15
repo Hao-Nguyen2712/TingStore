@@ -17,7 +17,7 @@ namespace Order.Infrastructure.Repositories
         {
             _context = context;
         }
-        public async Task<bool> DeleteOrderItem(Guid orderItemId)
+        public async Task<bool> DeleteOrderItem(int orderItemId)
         {
             var orderItem = await _context.OrderItems.FindAsync(orderItemId);
             if (orderItem == null)
@@ -42,7 +42,7 @@ namespace Order.Infrastructure.Repositories
             _context.Entry(orderItemExist).CurrentValues.SetValues(orderItem);
             return await _context.SaveChangesAsync() > 0;
         }
-        public async Task<bool> UpdateOrderItemQuantity(Guid orderItemId, int newQuantity)
+        public async Task<bool> UpdateOrderItemQuantity(int orderItemId, int newQuantity)
         {
             var orderItem = await _context.OrderItems.FindAsync(orderItemId);
             if (orderItem == null)

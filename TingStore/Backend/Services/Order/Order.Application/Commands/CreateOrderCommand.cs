@@ -12,11 +12,30 @@ namespace Order.Application.Commands
     public class CreateOrderCommand : IRequest<OrderDTO>
     {
         public string? Code { get; set; }
-        public OrderDTO OrderDTO { get; set; }
-        public CreateOrderCommand(OrderDTO orderDTO, string? code)
+        public int CustomerId { get; set; }
+        public decimal TotalAmount { get; set; }
+        public List<Item> Items { get; set; } = new List<Item>();
+
+
+        public CreateOrderCommand()
         {
-            OrderDTO = orderDTO;
-            this.Code = code;
+            
         }
+
+        public CreateOrderCommand(string? Code, int CustomerId, decimal TotalAmout, List<Item> Item)
+        {
+            this.Code = Code;
+            this.CustomerId = CustomerId;
+            this.TotalAmount = TotalAmout;
+            this.Items = Items;
+        }
+    }
+
+    public class Item
+    {
+        public string ProductId { get; set; }
+        public string ProductName { get; set; }
+        public int Quantity { get; set; }
+        public decimal Price { get; set; }
     }
 }

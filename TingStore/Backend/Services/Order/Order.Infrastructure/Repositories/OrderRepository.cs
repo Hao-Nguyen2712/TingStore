@@ -37,7 +37,16 @@ namespace Order.Infrastructure.Repositories
             await _context.SaveChangesAsync();
             return await GetOrderById(order.Id);
         }
-        public Task DeleteOrder(Guid orderId) => throw new NotImplementedException();
+        public async Task<bool> DeleteOrder(Guid orderId)
+        {
+            var order = await _context.Orders.FindAsync(orderId);
+            if (order == null)
+            {
+                throw new ArgumentNullException();
+            }
+            _context.Orders.Remove(order);
+            return await _context.SaveChangesAsync() > 0;
+        }
         public async Task<Core.Entities.Order> GetOrderById(Guid orderId)
         {
             return await _context.Orders.Include(x => x.OrderItems).FirstOrDefaultAsync(x => x.Id == orderId);
@@ -59,15 +68,17 @@ namespace Order.Infrastructure.Repositories
             return orders;
         }
 
-        public async Task<bool> UpdateOrder(Core.Entities.Order order)
+        public async Task<Core.Entities.Order> UpdateOrder(Core.Entities.Order order)
         {
-            var orderExsit = _context.Orders.Find(order.Id);
+            var orderExsit = await _context.Orders.Include(x => x.OrderItems).FirstOrDefaultAsync(x => x.Id == order.Id);
+
             if (orderExsit == null)
             {
                 throw new ArgumentNullException();
             }
             _context.Entry(orderExsit).CurrentValues.SetValues(order);
-            return await _context.SaveChangesAsync() > 0;
+            await _context.SaveChangesAsync();
+            return orderExsit;
 
         }
 
