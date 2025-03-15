@@ -7,6 +7,8 @@ using MassTransit;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using Order.Application.Commands;
+using Order.Application.DTOs;
+using Order.Application.Mappers;
 
 namespace Order.Api.EventBusConsummers
 {
@@ -16,19 +18,26 @@ namespace Order.Api.EventBusConsummers
         private readonly IMapper _mapper;
         private readonly ILogger<CardAddOrderConsumer> _logger;
 
-        public CardAddOrderConsumer(IMediator mediator , IMapper mapper,ILogger<CardAddOrderConsumer> logger)
+        public CardAddOrderConsumer(IMediator mediator, IMapper mapper, ILogger<CardAddOrderConsumer> logger)
         {
             _mediator = mediator;
             _mapper = mapper;
             _logger = logger;
         }
         public async Task Consume(ConsumeContext<CartCheckoutEvent> context)
-        {
-            var command = _mapper.Map<CreateOrderCommand>(context.Message);
-            var result = await _mediator.Send(command);
-            if(result != null)
             {
-                _logger.LogInformation("Order added Successfull");
+            _logger.LogInformation("Create Order Event Consumed");
+            try
+            {
+                var consume = context.Message;
+                var command =_mapper.Map<CreateOrderCommand>(consume);
+                var result = await _mediator.Send(command);
+
+                _logger.LogInformation("Order created successfully. Order Id : {OrderId}", result.Id);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
             }
         }
     }

@@ -9,5 +9,8 @@ namespace EventBus.Messages.Commons
     public static class EventBusConstant
     {
         public const string CartCheckoutQueue = "cartcheckout-queue";
+        public const string PaymentRequestQueue = "paymentrequest-queue";
+        public const string UpdatePaymentStatusQueue = "updatepaymentstatus-queue";
+        public const string UpadateDiscountQuantityQueue = "updatediscountquantity-queue";
     }
 }

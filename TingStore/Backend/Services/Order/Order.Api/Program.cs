@@ -8,7 +8,9 @@ using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Order.Api.EventBusConsummers;
+using Order.Api.Middlewares;
 using Order.Application;
+using Order.Application.Extensions;
 using Order.Application.Services;
 using Order.Core.Repositories;
 using Order.Infrastructure.Data;
@@ -19,9 +21,9 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
-//builder.WebHost.ConfigureKestrel(serverOptions =>
+//builder.WebHost.ConfigureKestrel(options =>
 //{
-//    serverOptions.ListenAnyIP(80);
+//    options.ListenAnyIP(80);
 //});
 
 builder.Services.AddDbContext<OrderDbContext>(options =>
@@ -39,11 +41,10 @@ builder.Services.AddGrpcClient<DiscountServicegRPC.DiscountServicegRPCClient>(op
 
 builder.Services.AddMassTransit(config =>
 {
-    config.SetKebabCaseEndpointNameFormatter();
+    
     config.AddConsumer<CardAddOrderConsumer>();
     config.UsingRabbitMq((context, configurator) =>
-    {
-        
+    {   
         configurator.Host(builder.Configuration["EventBusSettings:HostAddress"], c =>
         {
             c.Username(builder.Configuration["EventBusSettings:UserName"]!);
@@ -67,10 +68,6 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-builder.WebHost.ConfigureKestrel(options =>
-{
-    options.ListenAnyIP(80);
-});
 
 
 builder.Services.AddHealthChecks()
@@ -113,6 +110,7 @@ app.MapHealthChecks("/health", new HealthCheckOptions
 
 app.UseHttpsRedirection();
 
+app.UseMiddleware<GlobalExceptionMiddleware>();
 
 app.UseAuthorization();
 

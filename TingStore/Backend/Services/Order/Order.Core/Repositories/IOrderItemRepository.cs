@@ -10,8 +10,8 @@ namespace Order.Core.Repositories
     public interface IOrderItemRepository
     {
         public Task<bool> Update(OrderItem orderItem);
-        public Task<bool> DeleteOrderItem(Guid orderItemId);
-        Task<bool> UpdateOrderItemQuantity(Guid orderItemId, int newQuantity);
+        public Task<bool> DeleteOrderItem(int orderItemId);
+        Task<bool> UpdateOrderItemQuantity(int orderItemId, int newQuantity);
         Task<int> GetTotalQuantitySoldByProductId(string productId);
 
 

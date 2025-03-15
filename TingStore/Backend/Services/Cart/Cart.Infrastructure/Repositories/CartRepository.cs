@@ -29,8 +29,10 @@ namespace Cart.Infrastructure.Repositories
             var cart = await _distributedCache.GetStringAsync(key + id.ToString());
             if (!string.IsNullOrEmpty(cart))
             {
-                var response = JsonConvert.DeserializeObject<CartShopping>(cart) ?? throw new Exception("ErrorConver");
-                return response;
+                var response = JsonConvert.DeserializeObject<List<CartShoppingItem>>(cart) ?? throw new Exception("ErrorConver");
+                var result = new CartShopping(id);
+                result.Items = response;
+                return result;
             }
             throw new Exception("Cart not found");
 

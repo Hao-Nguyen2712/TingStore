@@ -1,5 +1,6 @@
 ﻿using System.IO.Pipes;
 using System.Net;
+using System.Net.Security;
 using System.Threading.Tasks;
 using Cart.Application.Commands;
 using Cart.Application.Dtos;
@@ -19,10 +20,12 @@ namespace Cart.Api.Controllers
     {
         private readonly IMediator _mediator;
         private readonly IPublishEndpoint _publishEndpoint;
-        public CartController(IMediator mediator, IPublishEndpoint publishEndpoint)
+        private readonly ILogger<CartController> _logger;
+        public CartController(IMediator mediator, IPublishEndpoint publishEndpoint, ILogger<CartController> logger)
         {
             _mediator = mediator;
             _publishEndpoint = publishEndpoint;
+            _logger = logger;
         }
 
         [HttpGet("{id}")]
@@ -72,9 +75,17 @@ namespace Cart.Api.Controllers
             {
                 return BadRequest();
             }
-            var msg = CartMapper.Mapper.Map<CartCheckoutEvent>(result);
-            await _publishEndpoint.Publish(msg);
+            var msg = new CartCheckoutEvent();
+            msg.Code = "";
+            msg.CustomerId = result.Id;
+            msg.Items = result.Items.ConvertAll(x => new Item { ProductId = x.ProductId, ProductName = x.ProductName, Quantity = x.Quantity, Price = x.Price });
 
+
+
+            _logger.LogInformation("Publishing event to RabbitMQ");
+         
+            await _publishEndpoint.Publish(msg);
+            _logger.LogInformation("Publiching successfuk");
             var ListOfProductIds = result.Items.ConvertAll(x => x.ProductId);
             var deleteCommand = new DeleteProductFromCartCommand(result.Id, ListOfProductIds);
             await _mediator.Send(deleteCommand);

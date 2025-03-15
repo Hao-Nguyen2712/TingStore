@@ -11,13 +11,11 @@ namespace Order.Application.DTOs
 {
     public class OrderItemDTO
     {
-        [JsonIgnore]
-        public int Id { get; set; }
+        public int Id { get; set; } 
         public string ProductId { get; set; }
         public string ProductName { get; set; }
         public int Quantity { get; set; }
-        public decimal Price { get; set; }
-        [JsonIgnore]
+        public decimal Price { get; set; }    
         public Guid OrderId { get; set; }
 
     }
