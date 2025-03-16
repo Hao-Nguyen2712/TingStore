@@ -114,7 +114,7 @@
                 <div class="container-fluid">
                     <div class="header-center">
                         <a href="index-2.html" class="header-logo">
-                            <img src="assets/media/logo.png" alt="">
+                            <img src="~/user/assets/media/logoweb.png" alt="">
                         </a>
                         <div class="mixin-container d-xl-flex d-none">
                             <div class="drop-container">
@@ -149,17 +149,17 @@
                         </div>
                         <div class="header-buttons">
                             <a href="register.html" class="button-block align-items-sm-unset align-items-end">
-                                <img src="assets/media/users/user-3.png" alt="" class="user">
+                                <img src="~/user/assets/media/users/user-3.png" alt="" class="user">
                                 <div>
                                     <p>Login</p>
                                     <h6>Account</h6>
                                 </div>
                             </a>
                             <a href="wishlist.html" class="button-block d-sm-flex d-none">
-                                <img src="assets/media/icons/wishlist.png" alt="">
+                                <img src="~/user/assets/media/icons/wishlist.png" alt="">
                             </a>
                             <a href="#" class="button-block d-sm-flex d-none cart-button">
-                                <img src="assets/media/icons/cart.png" alt="">
+                                <img src="~/user/assets/media/icons/cart.png" alt="">
                                 <div>
                                     <p>Your Cart</p>
                                     <h6>$120.00</h6>
@@ -429,46 +429,12 @@
                                             <a href="index-2.html" class="active">Home Page</a>
                                         </li>
                                         <li>
-                                            <a href="about.html">About Us</a>
+                                            <a asp-area="User" asp-controller="Dasboard" asp-action="AboutUs">About Us</a>
                                         </li>
                                         <!--  -->
-                                        <li class="dropdown">
+                                        <li>
                                             <a href="javascript:void(0);">Shop</a>
-                                            <ul class="sub-menu">
-                                                <li class="dropdown">
-                                                    <a href="javascript:void(0);">Shop Grid</a>
-                                                    <ul class="sub-menu">
-                                                        <li><a href="shop-grid-1.html">Shop Grid 1</a></li>
-                                                        <li><a href="shop-grid-2.html">Shop Grid 2</a></li>
-                                                        <li><a href="shop-grid-3.html">Shop Grid 3</a></li>
-                                                        <li><a href="shop-grid-4.html">Shop Grid 4</a></li>
-                                                    </ul>
-                                                </li>
-                                                <li class="dropdown">
-                                                    <a href="javascript:void(0);">Shop Grid with Sidebar</a>
-                                                    <ul class="sub-menu">
-                                                        <li><a href="shop-grid-sidebar-1.html">Shop Grid Sidebar 1</a></li>
-                                                        <li><a href="shop-grid-sidebar-2.html">Shop Grid Sidebar 2</a></li>
-                                                    </ul>
-                                                </li>
-                                                <li class="dropdown">
-                                                    <a href="javascript:void(0);">Shop List</a>
-                                                    <ul class="sub-menu">
-                                                        <li><a href="shop-list-1.html">Shop List 1</a></li>
-                                                    </ul>
-                                                </li>
-                                                <li class="dropdown">
-                                                    <a href="javascript:void(0);">Shop List with Sidebar</a>
-                                                    <ul class="sub-menu">
-                                                        <li><a href="shop-list-sidebar-1.html">Shop List Sidebar 1</a></li>
-                                                    </ul>
-                                                </li>
-                                                <li><a href="shop-detail.html">Shop Detail 1</a></li>
-                                                <li><a href="shop-detail-2.html">Shop Detail 2</a></li>
-                                                <li><a href="wishlist.html">Wishlist</a></li>
-                                                <li><a href="cart.html">Cart</a></li>
-                                                <li><a href="checkout.html">Checkout</a></li>
-                                            </ul>
+
                                         </li>
 
                                         <!--  -->
@@ -492,7 +458,7 @@
                                             </ul>
                                         </li>
                                         <li>
-                                            <a href="contact.html">Contact Us</a>
+                                            <a asp-area="User" asp-controller="Dasboard" asp-action="ContactUs">Contact Us</a>
                                         </li>
                                     </ul>
                                 </div>
@@ -515,7 +481,7 @@
                                     <p class="black fw-500">Sale $20 off Your First Order</p>
                                 </div>
                                 <a href="#" class="main-menu__toggler mobile-nav__toggler">
-                                    <img src="assets/media/icons/menu-2.png" alt="">
+                                    <img src="~/user/assets/media/icons/menu-2.png" alt="">
                                     Menu
                                 </a>
                             </div>
@@ -542,7 +508,7 @@
                                     <div class="col-xl-2 col-md-4 col-6">
                                         <div class="benefit-block">
                                             <div class="image-box mb-12">
-                                                <img src="assets/media/icons/icon-1-sm.png" alt="">
+                                                <img src="~/user/assets/media/icons/icon-1-sm.png" alt="">
                                             </div>
                                             <div class="content-box">
                                                 <p class="fw-500 mb-4p">Easy Returns</p>
@@ -553,7 +519,7 @@
                                     <div class="col-xl-2 col-md-4 col-6">
                                         <div class="benefit-block">
                                             <div class="image-box mb-12">
-                                                <img src="assets/media/icons/icon-2-sm.png" alt="">
+                                                <img src="~/user/assets/media/icons/icon-2-sm.png" alt="">
                                             </div>
                                             <div class="content-box">
                                                 <p class="fw-500 mb-4p">Fast Delivery</p>
@@ -564,7 +530,7 @@
                                     <div class="col-xl-2 col-md-4 col-6">
                                         <div class="benefit-block">
                                             <div class="image-box mb-12">
-                                                <img src="assets/media/icons/icon-3-sm.png" alt="">
+                                                <img src="~/user/assets/media/icons/icon-3-sm.png" alt="">
                                             </div>
                                             <div class="content-box">
                                                 <p class="fw-500 mb-4p">Safe Payment</p>
@@ -575,7 +541,7 @@
                                     <div class="col-xl-2 col-md-4 col-6">
                                         <div class="benefit-block">
                                             <div class="image-box mb-12">
-                                                <img src="assets/media/icons/icon-4-sm.png" alt="">
+                                                <img src="~/user/assets/media/icons/icon-4-sm.png" alt="">
                                             </div>
                                             <div class="content-box">
                                                 <p class="fw-500 mb-4p">Online Discount</p>
@@ -586,7 +552,7 @@
                                     <div class="col-xl-2 col-md-4 col-6">
                                         <div class="benefit-block">
                                             <div class="image-box mb-12">
-                                                <img src="assets/media/icons/icon-5-sm.png" alt="">
+                                                <img src="~/user/assets/media/icons/icon-5-sm.png" alt="">
                                             </div>
                                             <div class="content-box">
                                                 <p class="fw-500 mb-4p">Need Help</p>
@@ -597,7 +563,7 @@
                                     <div class="col-xl-2 col-md-4 col-6">
                                         <div class="benefit-block">
                                             <div class="image-box mb-12">
-                                                <img src="assets/media/icons/icon-6-sm.png" alt="">
+                                                <img src="~/user/assets/media/icons/icon-6-sm.png" alt="">
                                             </div>
                                             <div class="content-box">
                                                 <p class="fw-500 mb-4p">Curated Items</p>
@@ -613,10 +579,9 @@
                     <div class="hr-line"></div>
                     <div class="footer-wrapper pt-40 mb-32">
                         <div class="store-desc">
-                            <a href="index-2.html"><img src="assets/media/logo.png" alt="" class="mb-16"></a>
+                            <a href="index-2.html"><img src="~/user/assets/media/logoweb.png" alt="" class="mb-16"></a>
                             <p class="light-gray mb-xl-32 mb-lg-0 mb-32">
-                                Lorem ipsum dolor sit amet consectetur. Eu dolor faucibus <br>
-                                sit fames elit ac. Hendrerit ultrices morbi faucibus.
+                                Discover the best smartphones at your trusted store <br>  with unbeatable prices, fast delivery, and top-notch support.
                             </p>
                             <p class="d-xl-none d-lg-block d-none light-gray mb-32">
                                 amet consectetur. Eu dolor faucibus <br>
@@ -624,7 +589,7 @@
                             </p>
                             <a href="tel:123456789" class="d-flex align-items-center gap-3">
                                 <div class="icon-box">
-                                    <img src="assets/media/icons/user-icon.png" alt="">
+                                    <img src="~/user/assets/media/icons/user-icon.png" alt="">
                                 </div>
                                 <div>
                                     <p class="light-gray mb-4p">
@@ -637,12 +602,12 @@
                         <div class="footer-link-block">
                             <h6 class="fw-600 mb-24">Find It Fast</h6>
                             <ul class="list-unstyled m-0">
-                                <li class="mb-8"><a href="#" class="light-gray">Laptop & Computer</a></li>
-                                <li class="mb-8"><a href="#" class="light-gray">Camera & Photo</a></li>
-                                <li class="mb-8"><a href="#" class="light-gray">Smartphone & Tablet</a></li>
-                                <li class="mb-8"><a href="#" class="light-gray">TV & Audio</a></li>
-                                <li class="mb-8"><a href="#" class="light-gray">Home & Electronic</a></li>
-                                <li class="mb-8"><a href="#" class="light-gray">Headphone & Speakers</a></li>
+                                <li class="mb-8"><a href="#" class="light-gray">Smartphones</a></li>
+                                <li class="mb-8"><a href="#" class="light-gray">Phone Brands</a></li>
+                                <li class="mb-8"><a href="#" class="light-gray">Price Range</a></li>
+                                 <li class="mb-8"><a href="#" class="light-gray"></a></li>
+                                  <li class="mb-8"><a href="#" class="light-gray"></a></li>
+                                   <li class="mb-8"><a href="#" class="light-gray"></a></li>
                             </ul>
                         </div>
                         <div class="footer-link-block">
@@ -672,15 +637,15 @@
                                 <li class="mb-12 footer-link">
                                     <a href="#" class="d-flex align-items-center gap-2">
                                         <div class="img-box">
-                                            <img src="assets/media/icons/location.png" alt="">
+                                            <img src="~/user/assets/media/icons/location.png" alt="">
                                         </div>
-                                        <p class="light-gray">26 South Street, New York, NY 98, USA.</p>
+                                        <p class="light-gray">An Bình, Bình Thủy, Cần Thơ 900000, Vietnam</p>
                                     </a>
                                 </li>
                                 <li class="mb-12 footer-link">
                                     <a href="mailto:info@example.com" class="d-flex align-items-center gap-2">
                                         <div class="img-box">
-                                            <img src="assets/media/icons/mail-sm.png" alt="">
+                                            <img src="~/user/assets/media/icons/mail-sm.png" alt="">
                                         </div>
                                         <p class="color-primary">exampleinfo@gmail.com</p>
                                     </a>
@@ -713,44 +678,7 @@
                                         </svg>
                                     </a>
                                 </li>
-                                <li>
-                                    <a href="#">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 25 25" fill="none">
-                                            <g clip-path="url(#clip0_5950_10659)">
-                                                <path
-                                                    d="M14.5746 10.762L23.3171 0.599609H21.2454L13.6543 9.42345L7.5914 0.599609H0.598511L9.76688 13.9428L0.598511 24.5996H2.6703L10.6866 15.2813L17.0896 24.5996H24.0825L14.5741 10.762H14.5746ZM11.737 14.0604L10.8081 12.7317L3.4168 2.15922H6.59895L12.5638 10.6915L13.4928 12.0202L21.2464 23.1109H18.0642L11.737 14.0609V14.0604Z"
-                                                    fill="#0C0C0D" />
-                                            </g>
-                                            <defs>
-                                                <clipPath id="clip0_5950_10659">
-                                                    <rect width="24" height="24" fill="white" transform="translate(0.333374 0.599609)" />
-                                                </clipPath>
-                                            </defs>
-                                        </svg>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="#">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 25 25" fill="none">
-                                            <g clip-path="url(#clip0_5950_10662)">
-                                                <path
-                                                    d="M5.97705 8.13074H1.45837C1.07001 8.13074 0.755249 8.44568 0.755249 8.83386V23.8965C0.755249 24.2849 1.07001 24.5996 1.45837 24.5996H5.97705C6.36542 24.5996 6.68018 24.2849 6.68018 23.8965V8.83386C6.68018 8.44568 6.36542 8.13074 5.97705 8.13074ZM5.27393 23.1934H2.1615V9.53699H5.27393V23.1934Z"
-                                                    fill="#0C0C0D" />
-                                                <path
-                                                    d="M3.7179 0.599609C2.08423 0.599609 0.755249 1.92859 0.755249 3.56189C0.755249 5.19556 2.08423 6.52435 3.7179 6.52435C5.35138 6.52435 6.68018 5.19537 6.68018 3.56189C6.68018 1.92859 5.35138 0.599609 3.7179 0.599609ZM3.7179 5.1181C2.85968 5.1181 2.1615 4.4201 2.1615 3.56189C2.1615 2.70386 2.85968 2.00586 3.7179 2.00586C4.57593 2.00586 5.27393 2.70386 5.27393 3.56189C5.27393 4.4201 4.57593 5.1181 3.7179 5.1181Z"
-                                                    fill="#0C0C0D" />
-                                                <path
-                                                    d="M17.2745 8.03131C16.2057 8.03131 15.1523 8.28894 14.2089 8.77087C14.1769 8.41217 13.8757 8.13074 13.5085 8.13074H8.9895C8.60132 8.13074 8.28638 8.44568 8.28638 8.83386V23.8965C8.28638 24.2849 8.60132 24.5996 8.9895 24.5996H13.5085C13.8969 24.5996 14.2117 24.2849 14.2117 23.8965V15.6121C14.2117 14.5464 15.0789 13.6794 16.1445 13.6794C17.2102 13.6794 18.077 14.5464 18.077 15.6121V23.8965C18.077 24.2849 18.392 24.5996 18.7802 24.5996H23.299C23.6874 24.5996 24.0021 24.2849 24.0021 23.8965V14.759C24.0021 11.0493 20.9842 8.03131 17.2745 8.03131ZM22.5959 23.1934H19.4835V15.6121C19.4835 13.7709 17.9857 12.2731 16.1447 12.2731C14.3034 12.2731 12.8054 13.7709 12.8054 15.6121V23.1934H9.69281V9.53699H12.8054V10.0565C12.8054 10.3269 12.9605 10.5734 13.2044 10.6904C13.4481 10.8074 13.7374 10.774 13.9485 10.605C14.9007 9.84131 16.051 9.43756 17.2745 9.43756C20.2087 9.43756 22.5959 11.8247 22.5959 14.759V23.1934Z"
-                                                    fill="#0C0C0D" />
-                                            </g>
-                                            <defs>
-                                                <clipPath id="clip0_5950_10662">
-                                                    <rect width="24" height="24" fill="white" transform="translate(0.333374 0.599609)" />
-                                                </clipPath>
-                                            </defs>
-                                        </svg>
-                                    </a>
-                                </li>
+
                             </ul>
                         </div>
                     </div>
@@ -760,19 +688,19 @@
                         <div class="payment-cards d-flex align-items-center gap-16">
                             <p class="fw-500 light-gray d-sm-flex d-none">Payment Mathods:</p>
                             <div class="card-block">
-                                <img src="assets/media/icons/card-1.png" alt="">
+                                <img src="~/user/assets/media/icons/card-1.png" alt="">
                             </div>
                             <div class="card-block">
-                                <img src="assets/media/icons/card-2.png" alt="">
+                                <img src="~/user/assets/media/icons/card-2.png" alt="">
                             </div>
                             <div class="card-block">
-                                <img src="assets/media/icons/card-3.png" alt="">
+                                <img src="~/user/assets/media/icons/card-3.png" alt="">
                             </div>
                             <div class="card-block">
-                                <img src="assets/media/icons/card-4.png" alt="">
+                                <img src="~/user/assets/media/icons/card-4.png" alt="">
                             </div>
                             <div class="card-block">
-                                <img src="assets/media/icons/card-5.png" alt="">
+                                <img src="~/user/assets/media/icons/card-5.png" alt="">
                             </div>
                         </div>
                     </div>
@@ -796,7 +724,7 @@
                             <div class="row">
                                 <div class="col-lg-6">
                                     <div class="quick-image-box">
-                                        <img src="assets/media/products/quick-view-image.png" alt="">
+                                        <img src="~/user/assets/media/products/quick-view-image.png" alt="">
                                     </div>
                                 </div>
                                 <div class="col-lg-6">
@@ -868,7 +796,7 @@
                     <div class="prod-title mb-16">
                         <h6>Gaming Headphone</h6>
                         <a href="javascript:;" class="cancel">
-                            <img src="assets/media/images/cancel.png" alt="">
+                            <img src="~/user/assets/media/images/cancel.png" alt="">
                         </a>
                     </div>
                     <div class="prod-desc">
@@ -890,13 +818,13 @@
             <li class="hr-line mb-24"></li>
             <li class="product-item mb-24">
                 <span class="item-image">
-                    <img src="assets/media/images/cart-image-2.png" alt="Product Photo">
+                    <img src="~/user/assets/media/images/cart-image-2.png" alt="Product Photo">
                 </span>
                 <div class="product-text">
                     <div class="prod-title mb-16">
                         <h6>Samsung S21 Ultra</h6>
                         <a href="javascript:;" class="cancel">
-                            <img src="assets/media/images/cancel.png" alt="">
+                            <img src="~/user/assets/media/images/cancel.png" alt="">
                         </a>
                     </div>
                     <div class="prod-desc">
