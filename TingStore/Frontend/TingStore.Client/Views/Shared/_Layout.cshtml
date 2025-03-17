@@ -28,10 +28,10 @@
                 <div class="header-section">
                 <div class="header-top bg-color-primary">
                     <div class="header-start d-lg-block d-none">
-                        <p class="fw-500 white">Welcome to Worldwide Electronic Store</p>
+                        <p class="fw-500 white">Welcome to Electronic Store</p>
                     </div>
                     <div class="header-end">
-                        <a href="contact.html" class="top-bar-links d-sm-flex d-none align-items-center gap-2">
+                        <a asp-area="User" asp-controller="Home" asp-action="ContactUs" class="top-bar-links d-sm-flex d-none align-items-center gap-2">
                             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none">
                                 <path
                                     d="M9.51246 19.7391C9.62113 19.9021 9.8041 20 10 20C10.1959 20 10.3789 19.9021 10.4875 19.7391C11.8742 17.6591 13.9167 15.0903 15.34 12.4778C16.478 10.3889 17.0312 8.60727 17.0312 7.03125C17.0312 3.15422 13.877 0 10 0C6.12297 0 2.96875 3.15422 2.96875 7.03125C2.96875 8.60727 3.52199 10.3889 4.66004 12.4778C6.08227 15.0883 8.12863 17.6634 9.51246 19.7391ZM10 1.17188C13.2309 1.17188 15.8594 3.80039 15.8594 7.03125C15.8594 8.40641 15.3529 10.0046 14.3109 11.9171C13.0841 14.1691 11.3334 16.4534 10 18.3738C8.66684 16.4537 6.91602 14.1692 5.6891 11.9171C4.64715 10.0046 4.14062 8.40641 4.14062 7.03125C4.14062 3.80039 6.76914 1.17188 10 1.17188Z"
@@ -44,35 +44,8 @@
                                 <p class="fw-500 white">Store Locator</p>
                             </div>
                         </a>
-                        <a href="tracking.html" class="top-bar-links d-flex align-items-center gap-2">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none">
-                                <g clip-path="url(#clip0_7765_205)">
-                                    <path
-                                        d="M5.95035 13.125H5.95008C5.73434 13.125 5.55957 13.2999 5.55957 13.5156C5.55957 13.7313 5.73461 13.9063 5.95035 13.9063C6.16609 13.9063 6.34097 13.7313 6.34097 13.5156C6.34097 13.2999 6.16609 13.125 5.95035 13.125Z"
-                                        fill="#FAFAFA" />
-                                    <path
-                                        d="M15.7945 13.125H15.7942C15.5784 13.125 15.4037 13.2999 15.4037 13.5156C15.4037 13.7313 15.5787 13.9063 15.7945 13.9063C16.0102 13.9063 16.1851 13.7313 16.1851 13.5156C16.1851 13.2999 16.0102 13.125 15.7945 13.125Z"
-                                        fill="#FAFAFA" />
-                                    <path
-                                        d="M18.9191 8.43752H18.7649L17.5204 5.54862C17.4587 5.40534 17.3177 5.31253 17.1617 5.31253H14.2318V4.53128C14.2318 4.31558 14.0569 4.14066 13.8412 4.14066H2.82543C2.62227 4.14066 2.45301 4.29636 2.43617 4.49886L2.30731 6.04499H1.0675C0.851761 6.04499 0.676879 6.21991 0.676879 6.43561C0.676879 6.65131 0.851761 6.82624 1.0675 6.82624H2.24219L2.14859 7.94928H1.65344C1.4377 7.94928 1.26282 8.1242 1.26282 8.33991C1.26282 8.55561 1.4377 8.73053 1.65344 8.73053H2.08352L1.98992 9.85354H0.481567C0.265825 9.85354 0.0909424 10.0285 0.0909424 10.2442C0.0909424 10.4599 0.265825 10.6348 0.481567 10.6348H1.92481L1.65488 13.8738C1.64582 13.9827 1.68274 14.0904 1.75668 14.1708C1.83067 14.2512 1.93488 14.2969 2.04414 14.2969H3.74031C4.06277 15.2063 4.93164 15.8594 5.95019 15.8594C6.96874 15.8594 7.83761 15.2063 8.16007 14.2969H13.5844C13.9069 15.2063 14.7758 15.8594 15.7943 15.8594C16.8129 15.8594 17.6817 15.2063 18.0042 14.2969H19.7004C19.9161 14.2969 20.091 14.122 20.091 13.9063V9.60943C20.0909 8.94131 19.5872 8.43752 18.9191 8.43752ZM15.9899 6.09378H16.9046L17.9142 8.43752H15.9899V6.09378ZM3.18035 9.85354H2.77387L2.86746 8.73053H5.91472C6.13046 8.73053 6.30534 8.55561 6.30534 8.33991C6.30534 8.1242 6.13046 7.94928 5.91472 7.94928H2.93258L3.02617 6.82624H4.15691C4.37265 6.82624 4.54754 6.65131 4.54754 6.43561C4.54754 6.21991 4.37265 6.04499 4.15691 6.04499H3.09125L3.18484 4.9219H13.4506V11.7578H7.49882C7.08558 11.3933 6.54323 11.1719 5.95019 11.1719C5.35714 11.1719 4.8148 11.3933 4.40156 11.7578H2.6152L2.70879 10.6348H3.18035C3.39609 10.6348 3.57097 10.4599 3.57097 10.2442C3.57097 10.0285 3.39609 9.85354 3.18035 9.85354ZM2.46871 13.5156L2.55008 12.5391H3.81969C3.68281 12.8365 3.60644 13.1673 3.60644 13.5156H2.46871ZM5.95019 15.0781C5.08863 15.0781 4.38769 14.3772 4.38769 13.5156C4.38769 12.6541 5.08863 11.9531 5.95019 11.9531C6.81175 11.9531 7.51269 12.6541 7.51269 13.5156C7.51269 14.3772 6.81175 15.0781 5.95019 15.0781ZM8.29393 13.5156C8.29393 13.1673 8.21757 12.8365 8.08069 12.5391H13.6638C13.5269 12.8365 13.4506 13.1673 13.4506 13.5156H8.29393ZM15.7943 15.0781C14.9327 15.0781 14.2318 14.3772 14.2318 13.5156C14.2318 12.6541 14.9327 11.9531 15.7943 11.9531C16.6558 11.9531 17.3568 12.6541 17.3568 13.5156C17.3568 14.3772 16.6558 15.0781 15.7943 15.0781ZM19.3097 13.5156H18.138C18.138 13.1673 18.0617 12.8365 17.9248 12.5391H19.3097V13.5156H19.3097ZM19.3097 11.7578H17.3429C16.9297 11.3933 16.3873 11.1719 15.7943 11.1719C15.2012 11.1719 14.6589 11.3933 14.2456 11.7578H14.2318V6.09378H15.2086V8.82815C15.2086 9.04385 15.3835 9.21877 15.5993 9.21877H18.9191C19.16 9.21877 19.3097 9.36846 19.3097 9.6094V11.7578Z"
-                                        fill="#FAFAFA" />
-                                    <path
-                                        d="M7.75232 6.43561C7.75232 6.21991 7.57744 6.04499 7.3617 6.04499H5.91467C5.69893 6.04499 5.52405 6.21991 5.52405 6.43561C5.52405 6.65132 5.69893 6.82624 5.91467 6.82624H7.3617C7.57744 6.82624 7.75232 6.65132 7.75232 6.43561Z"
-                                        fill="#FAFAFA" />
-                                    <path
-                                        d="M7.28186 8.33991C7.28186 8.55561 7.45674 8.73053 7.67248 8.73053H8.396C8.61174 8.73053 8.78662 8.55561 8.78662 8.33991C8.78662 8.1242 8.61174 7.94928 8.396 7.94928H7.67248C7.45674 7.94928 7.28186 8.12416 7.28186 8.33991Z"
-                                        fill="#FAFAFA" />
-                                </g>
-                                <defs>
-                                    <clipPath id="clip0_7765_205">
-                                        <rect width="20" height="20" fill="white" transform="translate(0.0909424)" />
-                                    </clipPath>
-                                </defs>
-                            </svg>
-                            <p class="fw-500 white"> Order Tracking</p>
-                        </a>
                         <div class="d-sm-block d-none">
-                            <a href="about.html"><span class="fw-500 top-bar-links">FAQs</span></a>
+                            <a asp-area="User" asp-controller="Home" asp-action="AboutUs"><span class="fw-500 top-bar-links">FAQs</span></a>
                         </div>
                         <div class="vr-line d-sm-block d-none">
                         </div>
@@ -89,22 +62,6 @@
                                     <li class="item dark-black">Spanish</li>
                                     <li class="item dark-black">Italian</li>
                                     <li class="item dark-black">Arabic</li>
-                                </ul>
-                            </div>
-                        </div>
-                        <div class="drop-container">
-                            <div class="wrapper-dropdown white" id="dropdown2">
-                                <span class="selected-display" id="destination2">USD</span>
-                                <svg id="drp-arrow2" width="24" height="24" viewBox="0 0 24 24" fill="none"
-                                    xmlns="http://www.w3.org/2000/svg" class="arrow transition-all ml-auto rotate-180">
-                                    <path d="M7 14.5l5-5 5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
-                                        stroke-linejoin="round"></path>
-                                </svg>
-                                <ul class="topbar-dropdown bg-lightest-gray">
-                                    <li class="item dark-black">USD</li>
-                                    <li class="item dark-black">AED </li>
-                                    <li class="item dark-black">EUR</li>
-                                    <li class="item dark-black">GBP</li>
                                 </ul>
                             </div>
                         </div>
@@ -433,23 +390,9 @@
                                         </li>
                                         <!--  -->
                                         <li>
-                                            <a >Shop</a>
-
+                                            <a asp-area="User" asp-controller="Product" asp-action="Shop">Shop</a>
                                         </li>
 
-                                        <!--  -->
-                                        <li>
-                                            <a>Blogs</a>
-                                        </li>
-                                        <li class="dropdown">
-                                            <a href="javascript:void(0);">Pages</a>
-                                            <ul>
-                                                <li><a href="tracking.html" >Tracking</a></li>
-                                                <li><a href="register.html">Register</a></li>
-                                                <li><a href="404.html">404</a></li>
-                                                <li><a href="coming-soon.html">Coming Soon</a></li>
-                                            </ul>
-                                        </li>
                                         <li>
                                             <a asp-area="User" asp-controller="Home" asp-action="ContactUs">Contact Us</a>
                                         </li>
@@ -707,73 +650,6 @@
     <!-- Back To Top Start -->
     <a href="#main-wrapper" id="backto-top" class="back-to-top"><i class="fas fa-angle-up"></i></a>
 
-    <!-- Modal -->
-    <div class="modal fade" id="productQuickView" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-body">
-                    <div class="shop-detail">
-                        <div class="detail-wrapper">
-                            <div class="row">
-                                <div class="col-lg-6">
-                                    <div class="quick-image-box">
-                                        <img src="~/user/assets/media/products/quick-view-image.png" alt="">
-                                    </div>
-                                </div>
-                                <div class="col-lg-6">
-                                    <div class="product-text-container bg-white br-20">
-                                        <div class="close-content text-end">
-                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                        </div>
-                                        <h3 class="fw-600 mb-16">Nexus Mobile Pro 256GB</h3>
-                                        <div class="d-flex align-items-center flex-wrap gap-16 mb-24">
-                                            <h5 class="color-sec">★★★★<span class="light-gray">★</span>&nbsp;&nbsp;<span
-                                                    class="text-16 fw-400 dark-black">(02 Reviews)</span></h5>
-                                            <div class="vr-line vr-line-2"></div>
-                                            <p class="light-gray">Brand: <span class="color-primary">Beast</span></p>
-                                        </div>
-                                        <div class="d-flex align-items-center gap-16 mb-24">
-                                            <p class="light-gray text-decoration-line-through">$450.00</p>
-                                            <h5>$400.00</h5>
-                                            <span class="label white">-12%</span>
-                                        </div>
-                                        <p class="light-gray mb-24">
-                                            Lorem ipsum dolor sit amet consectetur. Purus nulla nec in ac malesuada et nisi ipsum. Massa scelerisque...
-                                        </p>
-                                        <div class="hr-line mb-24"></div>
-                                        <div class="function-bar mb-16">
-                                            <div class="quantity quantity-wrap">
-                                                <div class="input-area quantity-wrap">
-                                                    <input class="decrement" type="button" value="-">
-                                                    <input type="text" name="quantity" value="1" maxlength="2" size="1"
-                                                        class="number">
-                                                    <input class="increment" type="button" value="+">
-                                                </div>
-                                            </div>
-                                            <div class="cart-btn w-100">
-                                                <a href="cart.html" class="cus-btn-2 w-100">ADD TO CART</a>
-                                            </div>
-                                        </div>
-                                        <div class="hr-line mb-24"></div>
-                                        <div class="d-flex align-items-center gap-16 mb-16">
-                                            <h6>Category:</h6>
-                                            <p class="light-gray">Mobile Phone , Android , Flagship</p>
-                                        </div>
-                                        <div class="d-flex align-items-center gap-16 mb-16">
-                                            <h6>Tags:</h6>
-                                            <p class="light-gray">5G Compatible , <span>256GB Storage , </span> Student Phone</p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- Modal -->
-
     <!-- Shopping Cart Popup Start -->
     <aside id="sidebar-cart">
         <div class="title-cart-block mb-32 bg-lightest-gray">
@@ -987,5 +863,6 @@
     <script src="~/user/assets/js/app.js"></script>
 
     @await RenderSectionAsync("Scripts", required: false)
+    @RenderSection("Styles", required: false)
 </body>
 </html>
