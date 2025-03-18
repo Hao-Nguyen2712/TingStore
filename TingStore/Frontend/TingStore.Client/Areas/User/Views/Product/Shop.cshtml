@@ -113,7 +113,15 @@
                                         <span class="text-decoration-line-through light-gray"> @* $@(product.Price * 1.2) *@</span>  @product.Price.ToString("#,##0 VND")
                                     </h6>
                                 </div>
-                                <a href="cart.html" class="cus-btn-2 w-100">Add to Cart</a>
+
+                                @* form add cart *@
+                                <form asp-area="User" asp-controller="Product" asp-action="AddCart" method="post">
+                                    <input type="hidden" name="ProductId" value="@product.Id" />
+                                    <input type="hidden" name="ProductName" value="@product.Name" />
+                                    <input type="hidden" name="Price" value="@product.Price" />
+                                    <input type="hidden" name="ProductImage" value="@product.ProductImage" />
+                                    <button type="submit" class="cus-btn-2 w-100">Add to Cart</button>
+                                </form>
                             </div>
                         </div>
                     </div>
