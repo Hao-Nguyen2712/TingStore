@@ -4,7 +4,9 @@
 using System.Drawing.Printing;
 using Microsoft.AspNetCore.Mvc;
 using Product.Core.Specs;
+using TingStore.Client.Areas.User.Models.Cart;
 using TingStore.Client.Areas.User.Models.Products;
+using TingStore.Client.Areas.User.Services.Cart;
 using TingStore.Client.Areas.User.Services.Products;
 
 namespace TingStore.Client.Areas.User.Controllers
@@ -14,10 +16,12 @@ namespace TingStore.Client.Areas.User.Controllers
     public class ProductController : Controller
     {
         private readonly IProductService _productService;
+        private readonly ICartService _cartService;
 
-        public ProductController(IProductService productService)
+        public ProductController(IProductService productService, ICartService cartService)
         {
             _productService = productService;
+            _cartService = cartService;
         }
 
         public async Task<IActionResult> Shop(int pageIndex = 1, int pageSize = 10, string brandId = null, string sort = null, string search = null)
@@ -47,6 +51,29 @@ namespace TingStore.Client.Areas.User.Controllers
         {
             var product = await _productService.GetProductById(id);
             return View(product);
+        }
+
+        // add to cart
+        public async Task<IActionResult> AddCart(CartItem item)
+        {
+            item.Quantity = 1; // mặc định với cart là 1
+            var idUser = 1; // Lấy bằng context sau khi đã đăng nhập
+
+            CartRequest cartRequest = new()
+            {
+                Id = idUser,
+                Items = new List<CartItem> { item }
+            };
+            var result = await _cartService.AddToCart(cartRequest);
+            if (result)
+            {
+                TempData["SuccessMessage"] = "Add to cart successfully";
+            }
+            else
+            {
+                TempData["ErrorMessage"] = "Add to cart failed";
+            }
+            return RedirectToAction("Shop");
         }
     }
 

@@ -4,6 +4,7 @@
 using TingStore.Client.Areas.Admin.Services.Users;
 using TingStore.Client.Areas.Admin.Services;
 using TingStore.Client.Areas.User.Services.Products;
+using TingStore.Client.Areas.User.Services.Cart;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -13,7 +14,8 @@ builder.Services.AddControllersWithViews();
 builder.Services.AddScoped<IUserService, UserService>();
 // Đăng ký IProductService
 builder.Services.AddScoped<IProductService, ProductService>();
-
+// đăng ký DI cho CartService
+builder.Services.AddScoped<ICartService, CartService>();
 
 // Cấu hình HttpClient để gọi API Gateway
 builder.Services.AddHttpClient("ApiGateway", client =>
@@ -24,13 +26,8 @@ builder.Services.AddHttpClient("ApiGateway", client =>
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
-if (!app.Environment.IsDevelopment())
-{
-    app.UseExceptionHandler("/Home/Error");
-    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
-    app.UseHsts();
-}
+
+
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
