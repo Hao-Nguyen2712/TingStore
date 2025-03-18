@@ -43,7 +43,7 @@ namespace Product.Application.Services.ImageCloud
                 var uploadParams = new ImageUploadParams
                 {
                     File = new FileDescription(file.FileName, stream),
-                    PublicId = $"{Id}"
+                    //PublicId = $"{Id}"
                 };
                 uploadResult = await _cloudinary.UploadAsync(uploadParams);
             }
