@@ -1,0 +1,60 @@
+﻿
+/* Tiêu đề */
+.title-cart-block {
+    padding: 16px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+/* Danh sách sản phẩm có chiều cao cố định và cuộn nếu quá dài */
+.product-list {
+    flex-grow: 1;
+    overflow-y: auto; /* Tạo thanh cuộn nếu danh sách dài */
+    max-height: 55vh; /* Giới hạn chiều cao */
+    padding: 16px;
+}
+
+/* Định dạng sản phẩm */
+.product-item {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    min-height: 80px; /* Đảm bảo tất cả sản phẩm có chiều cao tối thiểu */
+}
+
+/* Định dạng ảnh sản phẩm */
+.item-image img {
+    width: 60px;
+    height: 60px;
+    object-fit: cover;
+}
+
+/* Nội dung sản phẩm */
+.product-text {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Nút hủy sản phẩm */
+.cancel img {
+    width: 16px;
+    height: 16px;
+}
+
+/* Khu vực tổng tiền */
+.price-total {
+    display: flex;
+    justify-content: space-between;
+    padding: 16px;
+    background: #f8f8f8;
+}
+
+/* Khu vực nút bấm */
+.action-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding: 16px;
+}
