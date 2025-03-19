@@ -1,11 +1,29 @@
 ﻿@using Product.Core.Specs;
 @addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@using System.Text.Json
+@using System.Globalization
 @using TingStore.Client.Areas.User.Models.Products
 @model Pagination<ProductResponse>;
 @{
     ViewData["Title"] = "Shop";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
+@{
+    IReadOnlyList<ProductResponse> productResponsesList = Model.Data ?? new List<ProductResponse>();
+
+    ProductDescription getDescription(string id)
+    {
+        foreach (var item in productResponsesList)
+        {
+            if(item.Id == id)
+            {
+                return JsonSerializer.Deserialize<ProductDescription>(item.Description, new JsonSerializerOptions{PropertyNameCaseInsensitive = true});
+            }
+        }
+        return null;
+    }
+}
+
 <!-- Title Banner Start -->
 <section class="title-banner">
     <div class="container-fluid">
@@ -17,6 +35,7 @@
     </div>
 </section>
 <!-- Title Banner End -->
+
 <!-- Featured Product Start -->
 <section class="featured-product-sec py-40 bg-lightest-gray">
     <div class="container-fluid">
@@ -30,7 +49,11 @@
                         </a>
                     </div>
                     <div class="results d-xl-block d-none">
-                        <p class="dark-gray">Showing @(Model.PageIndex * Model.PageSize - Model.PageSize + 1) - @(Model.PageIndex * Model.PageSize > Model.Count ? Model.Count : Model.PageIndex * Model.PageSize) of @Model.Count Results</p>
+                        @{
+                            int startIndex = Model.PageIndex * Model.PageSize - Model.PageSize + 1;
+                            int endIndex = startIndex + Model.Data.Count() - 1;
+                        }
+                        <p class="dark-gray">Showing @startIndex - @endIndex of @Model.Count Results</p>
                     </div>
                 </div>
 
@@ -91,7 +114,7 @@
                                             </a>
                                         </li>
                                         <li>
-                                            <a href="#" class="btn" data-bs-toggle="modal" data-bs-target="#productQuickView">
+                                            <a asp-area="User" asp-controller="Product"  asp-action="Details" asp-route-itemid="=@product.Id" class="btn" data-bs-toggle="modal" data-bs-target="#productQuickView_@product.Id">
                                                 <img src="~/user/assets/media/icons/eye.png" alt="">
                                             </a>
                                         </li>
@@ -102,15 +125,43 @@
                                 <h6 class="product-title mb-8"><a asp-area="User" asp-controller="Product" asp-action="Details" asp-route-id="@product.Id">@product.Name</a></h6>
                                 <div class="text mb-16">
                                     <p class="light-gray">
-                                        @product.Description
+                                        @getDescription(product.Id).Description;
                                     </p>
                                 </div>
                                 <div class="rating-star mb-16 bg-white">
-                                    <h5 class="color-sec mb-24">
-                                        ★★★★<span class="light-gray">★</span>  <span class="text-16 fw-400 dark-black">(80)</span>
+                                    @{
+                                        double averageRating = ViewBag.AverageRatings != null && ViewBag.AverageRatings.ContainsKey(product.Id) ? Convert.ToDouble(ViewBag.AverageRatings[product.Id]) : 0.0;
+                                        int fullStars = (int)Math.Floor(averageRating);
+                                        bool hasHalfStar = (averageRating - fullStars) >= 0.5;
+                                        int emptyStars = 5 - fullStars - (hasHalfStar ? 1 : 0);
+
+                                        // Lấy số lượng review từ ViewBag.ReviewCounts
+                                        int reviewCount = ViewBag.ReviewCounts != null && ViewBag.ReviewCounts.ContainsKey(product.Id)
+                                        ? ViewBag.ReviewCounts[product.Id]
+                                        : 0;
+                                    }
+
+                                    <h5 class="color-sec">
+                                        @for (int i = 0; i < fullStars; i++)
+                                        {
+                                            <span class="text-warning">★</span>
+                                        }
+                                        @if (hasHalfStar)
+                                        {
+                                            <span class="text-warning half-star">★</span>
+                                        }
+                                        @for (int i = 0; i < emptyStars; i++)
+                                        {
+                                            <span class="text-secondary">★</span>
+                                        }
+                                        <span class="text-16 fw-400 dark-black">(@reviewCount Reviews)</span>
                                     </h5>
-                                    <h6>
-                                        <span class="text-decoration-line-through light-gray"> @* $@(product.Price * 1.2) *@</span>  @product.Price.ToString("#,##0 VND")
+                                    <h6 class="text-center">
+                                        <span class="text-decoration-line-through light-gray text-danger">
+                                            @((product.Price * 1.2m).ToString("C", new CultureInfo("vi-VN")))
+                                        </span>
+                                        <br />
+                                        @product.Price.ToString("C", new CultureInfo("vi-VN"))
                                     </h6>
                                 </div>
 
@@ -125,6 +176,91 @@
                             </div>
                         </div>
                     </div>
+                    <!-- Modal -->
+                    <div class="modal fade" id="productQuickView_@product.Id" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-body">
+                                    <div class="shop-detail">
+                                        <div class="detail-wrapper">
+                                            <div class="row">
+                                                <div class="col-lg-6">
+                                                    <div class="quick-image-box">
+                                                        <img src="@product.ProductImage" alt="Image product">
+                                                    </div>
+                                                </div>
+                                                <div class="col-lg-6">
+                                                    <div class="product-text-container bg-white br-20">
+                                                        <div class="close-content text-end">
+                                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                        </div>
+                                                        <h3 class="fw-600 mb-16">@product.Name</h3>
+                                                        <div class="d-flex align-items-center flex-wrap gap-16 mb-24">
+                                                            <h5 class="color-sec">
+                                                                @for (int i = 0; i < fullStars; i++)
+                                                                {
+                                                                    <span class="text-warning">★</span>
+                                                                }
+                                                                @if (hasHalfStar)
+                                                                {
+                                                                    <span class="text-warning half-star">★</span>
+                                                                }
+                                                                @for (int i = 0; i < emptyStars; i++)
+                                                                {
+                                                                    <span class="text-secondary">★</span>
+                                                                }
+                                                                <span class="text-16 fw-400 dark-black">
+                                                                    (@($"{reviewCount} Reviews"))
+                                                                </span>
+                                                            </h5>
+
+                                                            <div class="vr-line vr-line-2"></div>
+                                                            <p class="light-gray">Brand: <span class="color-primary">@getDescription(product.Id).Brand</span></p>
+                                                        </div>
+                                                        <div class="d-flex align-items-center gap-16 mb-24">
+                                                            <p class="light-gray text-decoration-line-through">@((product.Price * 1.2m).ToString("C", new CultureInfo("vi-VN")))</p>
+                                                            <h5>@product.Price.ToString("C", new CultureInfo("vi-VN"))</h5>
+                                                            <span class="label white">-12%</span>
+                                                        </div>
+                                                        @{
+                                                            var description = getDescription(product.Id).Description;
+                                                            var shortDescription = string.Join(" ", description.Split().Take(20)) + (description.Split().Length > 20 ? "..." : "");
+                                                        }
+                                                        <p class="light-gray mb-24">
+                                                            @shortDescription
+                                                        </p>
+                                                        <div class="hr-line mb-24"></div>
+                                                        <div class="function-bar mb-16">
+                                                            <div class="quantity quantity-wrap">
+                                                                <div class="input-area quantity-wrap">
+                                                                    <input class="decrement" type="button" value="-">
+                                                                    <input type="text" name="quantity" value="1" maxlength="2" size="1"
+                                                                        class="number">
+                                                                    <input class="increment" type="button" value="+">
+                                                                </div>
+                                                            </div>
+                                                            <div class="cart-btn w-100">
+                                                                <a href="cart.html" class="cus-btn-2 w-100">ADD TO CART</a>
+                                                            </div>
+                                                        </div>
+                                                        <div class="hr-line mb-24"></div>
+                                                        <div class="d-flex align-items-center gap-16 mb-16">
+                                                            <h6>Category:</h6>
+                                                            <p class="light-gray">Mobile Phone , Android , Flagship</p>
+                                                        </div>
+                                                        <div class="d-flex align-items-center gap-16 mb-16">
+                                                            <h6>Tags:</h6>
+                                                            <p class="light-gray">5G Compatible , <span>256GB Storage , </span> Student Phone</p>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 }
             }
             else
@@ -135,26 +271,86 @@
         <div class="pagination pt-40">
             <ul id="border-pagination">
                 @{
-                    // Tính toán tổng số trang
-                    var totalPages = (int)Math.Ceiling((double)Model.Count / Model.PageSize);
-                    var currentPage = Model.PageIndex;
+                    var totalItems = Model.Count > 0 ? Model.Count : 0;
+                    var pageSize = Model.PageSize > 0 ? Model.PageSize : 10;
+                    var currentPage = Model.PageIndex > 0 ? Model.PageIndex : 1;
+                    var totalPages = (int)Math.Ceiling((double)totalItems / pageSize);
 
-                    // Hiển thị nút Previous
+                    int maxPagesToShow = 5;
+                    int startPage = Math.Max(1, currentPage - maxPagesToShow / 2);
+                    int endPage = Math.Min(totalPages, startPage + maxPagesToShow - 1);
+
+                    if (endPage == totalPages)
+                    {
+                        startPage = Math.Max(1, endPage - maxPagesToShow + 1);
+                    }
+
                     if (currentPage > 1)
                     {
-                        <li><a asp-area="User" asp-controller="Product" asp-action="Index" asp-route-pageIndex="@(currentPage - 1)" asp-route-pageSize="@Model.PageSize">Previous</a></li>
+                        <li>
+                            <a asp-area="User"
+                            asp-controller="Product"
+                            asp-action="Shop"
+                            asp-route-pageIndex="@(currentPage - 1)"
+                            asp-route-pageSize="@pageSize"
+                            asp-all-route-data="@ViewBag.FilterParams">Previous</a>
+                        </li>
                     }
 
-                    // Hiển thị các trang
-                    for (int i = 1; i <= totalPages; i++)
+                    if (startPage > 1)
                     {
-                        <li><a asp-area="User" asp-controller="Product" asp-action="Index" asp-route-pageIndex="@i" asp-route-pageSize="@Model.PageSize" class="@(i == currentPage ? "active" : "")">@i</a></li>
+                        <li>
+                            <a asp-area="User"
+                            asp-controller="Product"
+                            asp-action="Shop"
+                            asp-route-pageIndex="1"
+                            asp-route-pageSize="@pageSize"
+                            asp-all-route-data="@ViewBag.FilterParams">1</a>
+                        </li>
+                        if (startPage > 2){
+                            <li><span>...</span></li>
+                        }
+
                     }
 
-                    // Hiển thị nút Next
+                    for (int i = startPage; i <= endPage; i++)
+                    {
+                        <li>
+                            <a asp-area="User"
+                            asp-controller="Product"
+                            asp-action="Shop"
+                            asp-route-pageIndex="@i"
+                            asp-route-pageSize="@pageSize"
+                            asp-all-route-data="@ViewBag.FilterParams"
+                            class="@(i == currentPage ? "active" : "")">@i</a>
+                        </li>
+                    }
+
+                    if (endPage < totalPages)
+                    {
+                        if (endPage < totalPages - 1) {
+                            <li><span>...</span></li>
+                        }
+                        <li>
+                            <a asp-area="User"
+                            asp-controller="Product"
+                            asp-action="Shop"
+                            asp-route-pageIndex="@totalPages"
+                            asp-route-pageSize="@pageSize"
+                            asp-all-route-data="@ViewBag.FilterParams">@totalPages</a>
+                        </li>
+                    }
+
                     if (currentPage < totalPages)
                     {
-                        <li><a asp-area="User" asp-controller="Product" asp-action="Index" asp-route-pageIndex="@(currentPage + 1)" asp-route-pageSize="@Model.PageSize">Next</a></li>
+                        <li>
+                            <a asp-area="User"
+                            asp-controller="Product"
+                            asp-action="Shop"
+                            asp-route-pageIndex="@(currentPage + 1)"
+                            asp-route-pageSize="@pageSize"
+                            asp-all-route-data="@ViewBag.FilterParams">Next</a>
+                        </li>
                     }
                 }
             </ul>
@@ -162,6 +358,8 @@
     </div>
 </section>
 <!-- Featured Product End -->
+
+
 <!-- Filter Sidebar -->
 <div class="sidebar toggle-sidebar bg-white">
     <form action="https://uiparadox.co.uk/templates/gadgetize/shop-grid-1.html" class="mb-24">
@@ -353,118 +551,6 @@
         </div>
     </div>
     <div class="hr-line mb-24"></div>
-    <div class="category-block box-3 mb-24">
-        <div class="title mb-32" data-count="3">
-            <h6>Filter By Storage</h6>
-            <span>
-                <i class="far fa-horizontal-rule"></i>
-            </span>
-        </div>
-        <div class="content-block">
-            <ul class="list-unstyled">
-                <li class="d-flex align-items-center justify-content-between mb-12">
-                    <div class="check-block">
-                        <input type="checkbox" id="check-64">
-                        <label for="check-64">64GB</label>
-                    </div>
-                    <p class="light-gray fw-400">(20)</p>
-                </li>
-                <li class="d-flex align-items-center justify-content-between mb-12">
-                    <div class="check-block">
-                        <input type="checkbox" id="check-128">
-                        <label for="check-128">128GB</label>
-                    </div>
-                    <p class="light-gray fw-400">(20)</p>
-                </li>
-                <li class="d-flex align-items-center justify-content-between mb-12">
-                    <div class="check-block">
-                        <input type="checkbox" id="check-256">
-                        <label for="check-256">256GB</label>
-                    </div>
-                    <p class="light-gray fw-400">(20)</p>
-                </li>
-                <li class="d-flex align-items-center justify-content-between mb-12">
-                    <div class="check-block">
-                        <input type="checkbox" id="check-512">
-                        <label for="check-512">512GB</label>
-                    </div>
-                    <p class="light-gray fw-400">(20)</p>
-                </li>
-                <li class="d-flex align-items-center justify-content-between mb-12">
-                    <div class="check-block">
-                        <input type="checkbox" id="check-1tb">
-                        <label for="check-1tb">1TB</label>
-                    </div>
-                    <p class="light-gray fw-400">(20)</p>
-                </li>
-                <li class="d-flex align-items-center justify-content-between mb-12">
-                    <div class="check-block">
-                        <input type="checkbox" id="check-2tb">
-                        <label for="check-2tb">2TB Cables</label>
-                    </div>
-                    <p class="light-gray fw-400">(20)</p>
-                </li>
-            </ul>
-        </div>
-    </div>
-    <div class="hr-line mb-24"></div>
-    <div class="category-block box-4 mb-24">
-        <div class="title mb-32" data-count="4">
-            <h6>Filter By Colors</h6>
-            <span>
-                <i class="far fa-horizontal-rule"></i>
-            </span>
-        </div>
-        <div class="content-block">
-            <div class="product-color">
-                <ul class="unstyled list">
-                    <li>
-                        <label for="muhRadio9"
-                               class="d-flex align-items-center h-21 light-black font-sec fw-500">
-                            <input type="radio" id="muhRadio9" name="muhRadio" class="radio-1" value="muhRadio1">
-                        </label>
-                    </li>
-                    <li>
-                        <label for="muhRadio8"
-                               class="d-flex align-items-center h-21 light-black font-sec fw-500">
-                            <input type="radio" id="muhRadio8" name="muhRadio" class="radio-2" value="muhRadio2">
-                        </label>
-                    </li>
-                    <li>
-                        <label for="muhRadio7"
-                               class="d-flex align-items-center h-21 light-black font-sec fw-500">
-                            <input type="radio" id="muhRadio7" name="muhRadio" class="radio-3" value="muhRadio3">
-                        </label>
-                    </li>
-                    <li>
-                        <label for="muhRadio1"
-                               class="d-flex align-items-center h-21 light-black font-sec fw-500">
-                            <input type="radio" id="muhRadio1" name="muhRadio" class="radio-4" value="muhRadio1">
-                        </label>
-                    </li>
-                    <li>
-                        <label for="muhRadio2"
-                               class="d-flex align-items-center h-21 light-black font-sec fw-500">
-                            <input type="radio" id="muhRadio2" name="muhRadio" class="radio-5" value="muhRadio2">
-                        </label>
-                    </li>
-                    <li>
-                        <label for="muhRadio3"
-                               class="d-flex align-items-center h-21 light-black font-sec fw-500">
-                            <input type="radio" id="muhRadio3" name="muhRadio" class="radio-6" value="muhRadio3">
-                        </label>
-                    </li>
-                    <li>
-                        <label for="muhRadio4"
-                               class="d-flex align-items-center h-21 light-black font-sec fw-500">
-                            <input type="radio" id="muhRadio4" name="muhRadio" class="radio-7" value="muhRadio4">
-                        </label>
-                    </li>
-                </ul>
-            </div>
-        </div>
-    </div>
-    <div class="hr-line mb-24"></div>
     <div class="category-block box-5 mb-24">
         <div class="title mb-24" data-count="5">
             <h6>Filter By Storage</h6>
@@ -648,70 +734,4 @@
 </div>
 <div class="overlay"></div>
 <!-- Filter Sidebar -->
-<!-- Modal -->
-<div class="modal fade" id="productQuickView" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-body">
-                <div class="shop-detail">
-                    <div class="detail-wrapper">
-                        <div class="row">
-                            <div class="col-lg-6">
-                                <div class="quick-image-box">
-                                    <img src="" alt="">
-                                </div>
-                            </div>
-                            <div class="col-lg-6">
-                                <div class="product-text-container bg-white br-20">
-                                    <div class="close-content text-end">
-                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                    </div>
-                                    <h3 class="fw-600 mb-16">Nexus Mobile Pro 256GB</h3>
-                                    <div class="d-flex align-items-center flex-wrap gap-16 mb-24">
-                                        <h5 class="color-sec">
-                                            ★★★★<span class="light-gray">★</span>&nbsp;&nbsp;<span class="text-16 fw-400 dark-black">(02 Reviews)</span>
-                                        </h5>
-                                        <div class="vr-line vr-line-2"></div>
-                                        <p class="light-gray">Brand: <span class="color-primary">Beast</span></p>
-                                    </div>
-                                    <div class="d-flex align-items-center gap-16 mb-24">
-                                        <p class="light-gray text-decoration-line-through">$450.00</p>
-                                        <h5>$400.00</h5>
-                                        <span class="label white">-12%</span>
-                                    </div>
-                                    <p class="light-gray mb-24">
-                                        Lorem ipsum dolor sit amet consectetur. Purus nulla nec in ac malesuada et nisi ipsum. Massa scelerisque...
-                                    </p>
-                                    <div class="hr-line mb-24"></div>
-                                    <div class="function-bar mb-16">
-                                        <div class="quantity quantity-wrap">
-                                            <div class="input-area quantity-wrap">
-                                                <input class="decrement" type="button" value="-">
-                                                <input type="text" name="quantity" value="1" maxlength="2" size="1"
-                                                       class="number">
-                                                <input class="increment" type="button" value="+">
-                                            </div>
-                                        </div>
-                                        <div class="cart-btn w-100">
-                                            <a href="cart.html" class="cus-btn-2 w-100">ADD TO CART</a>
-                                        </div>
-                                    </div>
-                                    <div class="hr-line mb-24"></div>
-                                    <div class="d-flex align-items-center gap-16 mb-16">
-                                        <h6>Category:</h6>
-                                        <p class="light-gray">Mobile Phone , Android , Flagship</p>
-                                    </div>
-                                    <div class="d-flex align-items-center gap-16 mb-16">
-                                        <h6>Tags:</h6>
-                                        <p class="light-gray">5G Compatible , <span>256GB Storage , </span> Student Phone</p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-<!-- Modal -->
+
