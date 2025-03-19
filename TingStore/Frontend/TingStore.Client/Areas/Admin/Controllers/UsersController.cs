@@ -166,7 +166,7 @@ namespace TingStore.Client.Areas.Admin.Controllers
                 //return View();
                 return Json(new { success = false, message = $"Error banning user: {ex.Message}" });
             }
-        
+
         }
 
         // GET: Admin/Users/Restore
