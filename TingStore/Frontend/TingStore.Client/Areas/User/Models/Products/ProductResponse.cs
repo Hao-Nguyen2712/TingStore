@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using Product.Core.Models;
+using TingStore.Client.Areas.User.Models.Reviews;
 
 namespace TingStore.Client.Areas.User.Models.Products
 {
@@ -18,6 +19,8 @@ namespace TingStore.Client.Areas.User.Models.Products
         public DateTime CreateAt { get; set; }
         public DateTime UpdateAt { get; set; }
         public List<ProductImage> Images { get; set; }
+        public List<ReviewResponse> Reviews { get; set; }
+        public double? AverageRating { get; set; }
     }
     public class ProductImage
     {

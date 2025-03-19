@@ -6,24 +6,29 @@ using Microsoft.AspNetCore.Mvc;
 using Product.Core.Specs;
 using TingStore.Client.Areas.User.Models.Products;
 using TingStore.Client.Areas.User.Services.Products;
+using TingStore.Client.Areas.User.Services.Reviews;
 
 namespace TingStore.Client.Areas.User.Controllers
 {
     [Area("User")]
     [Route("[area]/[controller]/[action]/{id?}")]
+    [Route("[area]/[controller]")]
     public class ProductController : Controller
     {
         private readonly IProductService _productService;
+        private readonly IReviewProductService _reviewProductService;
 
-        public ProductController(IProductService productService)
+        public ProductController(IProductService productService, IReviewProductService reviewProductService)
         {
             _productService = productService;
+            _reviewProductService = reviewProductService;
         }
 
         public async Task<IActionResult> Shop(int pageIndex = 1, int pageSize = 10, string brandId = null, string sort = null, string search = null)
         {
             try
             {
+                // Tạo ProductSpecParams
                 var productSpecParams = new ProductSpecParams
                 {
                     PageIndex = pageIndex,
@@ -32,7 +37,49 @@ namespace TingStore.Client.Areas.User.Controllers
                     Sort = sort,
                     Search = search
                 };
+
                 var productList = await _productService.GetAllProducts(productSpecParams);
+
+                var totalItems = productList.Count; 
+                var totalPages = (int)Math.Ceiling((double)totalItems / pageSize);
+
+                if (pageIndex < 1) pageIndex = 1;
+                if (pageIndex > totalPages && totalPages > 0) pageIndex = totalPages;
+                else if (totalPages == 0) pageIndex = 1; 
+
+                productSpecParams.PageIndex = pageIndex;
+                productList = await _productService.GetAllProducts(productSpecParams);
+
+                // averageRatings
+                var averageRatings = new Dictionary<string, double>();
+                foreach ( var product in productList.Data)
+                {
+                    var averageRating = await _reviewProductService.GetAverageRatingByProductId(product.Id);
+                    averageRatings[product.Id] = averageRating;
+                }
+                ViewBag.AverageRatings = averageRatings;
+
+                // Review Count
+                var reviewCounts = new Dictionary<string, int>();
+                foreach (var product in productList.Data)
+                {
+                    var reviewCount = await _reviewProductService.GetReviewCountByProductId(product.Id);
+                    reviewCounts[product.Id] = reviewCount;
+                }
+                ViewBag.ReviewCounts     = reviewCounts;
+
+                var filterParams = new Dictionary<string, string>   
+                {   
+                    { "brandId", brandId },
+                    { "sort", sort },
+                    { "search", search }
+                };
+
+                ViewBag.FilterParams = filterParams;
+                ViewBag.BrandId = brandId;
+                ViewBag.Sort = sort;
+                ViewBag.Search = search;
+
                 return View(productList);
             }
             catch (HttpRequestException ex)
@@ -45,10 +92,30 @@ namespace TingStore.Client.Areas.User.Controllers
 
         public async Task<IActionResult> Details(string id)
         {
-            var product = await _productService.GetProductById(id);
-            return View(product);
+            if (string.IsNullOrEmpty(id))
+            {
+                return NotFound();
+            }
+
+            try
+            {
+                var product = await _productService.GetProductById(id);
+                if (product == null)
+                {
+                    return NotFound();
+                }
+
+                // Lấy danh sách review và gán vào thuộc tính Reviews
+                product.Reviews = (await _reviewProductService.GetReviewsByProductId(id)).ToList();
+                var averageRating = await _reviewProductService.GetAverageRatingByProductId(id);
+                ViewBag.AverageRating = averageRating;
+                return View(product);
+            }
+            catch (HttpRequestException ex)
+            {
+                ViewBag.Error = $"Error fetching product details: {ex.Message}";
+                return View(new ProductResponse());
+            }
         }
     }
-
-
 }

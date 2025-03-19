@@ -4,6 +4,7 @@
 using TingStore.Client.Areas.Admin.Services.Users;
 using TingStore.Client.Areas.Admin.Services;
 using TingStore.Client.Areas.User.Services.Products;
+using TingStore.Client.Areas.User.Services.Reviews;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -14,6 +15,8 @@ builder.Services.AddScoped<IUserService, UserService>();
 // Đăng ký IProductService
 builder.Services.AddScoped<IProductService, ProductService>();
 
+// Đăng ký IReviewProductService
+builder.Services.AddScoped<IReviewProductService, ReviewProductService>();
 
 // Cấu hình HttpClient để gọi API Gateway
 builder.Services.AddHttpClient("ApiGateway", client =>
@@ -40,7 +43,7 @@ app.UseRouting();
 app.UseAuthorization();
 
 app.MapControllerRoute(
-    name: "default",
+    name: "areaRoute",
     pattern: "{area=User}/{controller=Home}/{action=Index}/{id?}");
 app.MapControllerRoute(
     name: "default",
