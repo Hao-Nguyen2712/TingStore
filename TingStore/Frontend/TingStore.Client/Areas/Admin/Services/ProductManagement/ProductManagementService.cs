@@ -78,14 +78,27 @@ namespace TingStore.Client.Areas.Admin.Services.ProductManagement
             }
         }
 
-        public async Task<bool> DeleteProduct(string id) {
-            var response = await _httpClient.DeleteAsync(this.productAPi+"DeleteProduct/"+id);
+        public async Task<bool> DeleteProduct(string id)
+        {
+            var response = await _httpClient.DeleteAsync(this.productAPi + "DeleteProduct/" + id);
             return response.IsSuccessStatusCode;
         }
 
-        public async Task<Pagination<ProductResponse>> GetAllProducts(int indexPage, string sort)
+        public async Task<IEnumerable<ProductResponse>> GetAllProductNoFilter()
         {
-            var response = await this._httpClient.GetAsync(this.productAPi + "GetAllProducts?PageIndex=" + indexPage + "&Sort=" + sort);
+            var response = await this._httpClient.GetAsync(this.productAPi + "GetAllNFProductsNoFilter");
+            if (response.IsSuccessStatusCode)
+            {
+                var data = await response.Content.ReadAsStringAsync();
+                var option = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
+                return JsonSerializer.Deserialize<IEnumerable<ProductResponse>>(data, option) ?? new List<ProductResponse>();
+            }
+            throw new HttpRequestException("Unable to fetch inactive users.");
+        }
+
+        public async Task<Pagination<ProductResponse>> GetAllProducts(int indexPage, string sort, string cateName)
+        {
+            var response = await this._httpClient.GetAsync(this.productAPi + "GetAllProducts?PageIndex=" + indexPage + "&BrandId=" + cateName + "&Sort=" + sort);
             if (response.IsSuccessStatusCode)
             {
                 var contentType = await response.Content.ReadAsStringAsync();
@@ -98,12 +111,15 @@ namespace TingStore.Client.Areas.Admin.Services.ProductManagement
             }
         }
 
-        public async Task<ProductResponse> GetProductById(string id) {
-            if(string.IsNullOrEmpty(id)) {
+        public async Task<ProductResponse> GetProductById(string id)
+        {
+            if (string.IsNullOrEmpty(id))
+            {
                 throw new HttpRequestException("Product id is null");
             }
-            var response = await this._httpClient.GetAsync(this.productAPi+"GetProductById/"+ id);
-            if(response.IsSuccessStatusCode) {
+            var response = await this._httpClient.GetAsync(this.productAPi + "GetProductById/" + id);
+            if (response.IsSuccessStatusCode)
+            {
                 var data = await response.Content.ReadAsStringAsync();
                 var options = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
                 return JsonSerializer.Deserialize<ProductResponse>(data, options) ?? new ProductResponse();
@@ -111,11 +127,13 @@ namespace TingStore.Client.Areas.Admin.Services.ProductManagement
             throw new HttpRequestException("Unable to fetch inactive product.");
         }
 
-        public async Task<bool> UpdateProduct(UpdateProductResquest updateProduct) {
+        public async Task<bool> UpdateProduct(UpdateProductResquest updateProduct)
+        {
             string data = JsonSerializer.Serialize(updateProduct);
             var content = new StringContent(data, System.Text.Encoding.UTF8, "application/json");
-            var response = await this._httpClient.PutAsync(this.productAPi+"UpdateProduct", content);
-            if(response.IsSuccessStatusCode) {
+            var response = await this._httpClient.PutAsync(this.productAPi + "UpdateProduct", content);
+            if (response.IsSuccessStatusCode)
+            {
                 return true;
             }
             return false;

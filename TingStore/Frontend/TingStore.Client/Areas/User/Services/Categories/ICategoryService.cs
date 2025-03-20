@@ -10,5 +10,7 @@ namespace TingStore.Client.Areas.User.Services.Categories
         Task<IEnumerable<CategoryResponse>> GetCategories();
         Task<CategoryResponse> GetCategoryById(string id);
         Task<CategoryResponse> GetCategoryByName(string name);
+        Task<IEnumerable<CategoryResponse>> GeAllActiveCategories();
+        Task<List<string>> GeAllActiveCategoriesListString();
     }
 }

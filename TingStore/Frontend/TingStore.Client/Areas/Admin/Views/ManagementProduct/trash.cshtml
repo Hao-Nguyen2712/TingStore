@@ -1,14 +1,10 @@
-﻿@using TingStore.Client.Areas.Admin.Models.Products
-@using TingStore.Client.Areas.Admin.Models.Products.Specs
+@using TingStore.Client.Areas.Admin.Models.Products
 @addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
-
-
-@model Pagination<ProductResponse>
+@model IEnumerable<ProductResponse>
 @{
     Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "trash";
 }
-
 @{
     string sortPage = @ViewBag.sortPage;
     string vbCategory = @ViewBag.vbCategory;
@@ -18,40 +14,7 @@
     <div class="col-xl-12">
         <div class="card">
             <div class="card-header d-flex justify-content-between align-items-center gap-1">
-                <h4 class="card-title flex-grow-1">All Product List</h4>
-                <a asp-area="Admin" asp-controller="ManagementProduct" asp-action="trash"
-                    class="btn btn-sm btn-primary">Trash</a>
-                <a asp-area="Admin" asp-controller="ManagementProduct" asp-action="CreateProduct"
-                    class="btn btn-sm btn-primary">Add Product</a>
-                <h5 style="margin-top: 10px; padding-left: 10px;">Category:</h5>
-                <div class="dropdown">
-                    <a href="#" class="dropdown-toggle btn btn-sm btn-outline-light" data-bs-toggle="dropdown"
-                        aria-expanded="false">
-                        @categoryText
-                    </a>
-                    <div class="dropdown-menu dropdown-menu-end">
-                        <!-- item-->
-                        <a class="dropdown-item" href="@Url.Action("Index", new { indexpag = 1 })">Default</a>
-                        @foreach(var item in ViewBag.CategoryList) {
-                            <a class="dropdown-item" href="@Url.Action("Index", new { catname = @item.Name })">@item.Name</a>
-                        }
-                    </div>
-                </div>
-                <h5 style="margin-top: 10px; padding-left: 10px;">Sort:</h5>
-                <div class="dropdown">
-                    <a href="#" class="dropdown-toggle btn btn-sm btn-outline-light" data-bs-toggle="dropdown"
-                        aria-expanded="false">
-                        @sortPage
-                    </a>
-                    <div class="dropdown-menu dropdown-menu-end">
-                        <!-- item-->
-                        <a class="dropdown-item" href="@Url.Action("Index", new { indexpag = 1 })">Default</a>
-                        <a class="dropdown-item" href="@Url.Action("Index", new { sort = "priceDesc" , catname = vbCategory})">Price
-                            decrease</a>
-                        <a class="dropdown-item" href="@Url.Action("Index", new { sort = "priceAsc" , catname = vbCategory})">Price
-                            increase</a>
-                    </div>
-                </div>
+                <h4 class="card-title flex-grow-1">All Product List Has been deleted</h4>
             </div>
             <div>
                 <div class="table-responsive">
@@ -72,7 +35,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach (var item in Model.Data)
+                            @foreach (var item in Model)
                             {
                                 <tr>
                                     <td>
@@ -105,12 +68,7 @@
                                     <td> @item.CategoryId</td>
                                     <td>
                                         <div class="d-flex gap-2">
-                                            <a asp-action="ProductDetail" asp-route-id="@item.Id" class="btn btn-light btn-sm"><iconify-icon icon="solar:eye-broken" class="align-middle fs-18"></iconify-icon></a>
-                                            <a asp-action="UpdateProduct" asp-route-id="@item.Id" class="btn btn-soft-primary btn-sm"><iconify-icon
-                                                    icon="solar:pen-2-broken" class="align-middle fs-18"></iconify-icon></a>
-                                            <a asp-action="DeleteProduct" asp-route-id="@item.Id" class="btn btn-soft-danger btn-sm"><iconify-icon
-                                                    icon="solar:trash-bin-minimalistic-2-broken"
-                                                    class="align-middle fs-18"></iconify-icon></a>
+                                            <a asp-action="RestoreProduct" asp-route-id="@item.Id" class="btn btn-light btn-sm"><i class="fa-solid fa-trash-arrow-up"></i></a>
                                         </div>
                                     </td>
                                 </tr>
@@ -119,21 +77,6 @@
                     </table>
                 </div>
                 <!-- end table-responsive -->
-            </div>
-            <div class="card-footer border-top">
-                <nav aria-label="Page navigation example">
-                    <ul class="pagination justify-content-end mb-0">
-                        <li class="page-item"><a class="page-link" href="javascript:void(0);">Previous</a></li>
-                        @for (int i = 1; i <= ViewBag.NumberOfPage; i++)
-                        {
-                            <li class="page-item @(Model.PageIndex == i ? "active" : "")">
-                                <a class="page-link"
-                                    href="@Url.Action("Index", new { indexpag = i, sort = sortPage , catname = vbCategory})">@i</a>
-                            </li>
-                        }
-                        <li class="page-item"><a class="page-link" href="javascript:void(0);">Next</a></li>
-                    </ul>
-                </nav>
             </div>
         </div>
     </div>
