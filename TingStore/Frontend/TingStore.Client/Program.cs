@@ -8,6 +8,7 @@ using TingStore.Client.Areas.User.Services.Products;
 using TingStore.Client.Areas.User.Services.Reviews;
 using TingStore.Client.Areas.Admin.Services.ProductManagement;
 using TingStore.Client.Areas.User.Services.Cart;
+using TingStore.Client.Areas.User.Services.Categories;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -24,6 +25,8 @@ builder.Services.AddScoped<IProductService, ProductService>();
 // đăng ký DI cho CartService
 builder.Services.AddScoped<ICartService, CartService>();
 
+// Đăng ký ICategoryUserService
+builder.Services.AddScoped<ICategoryUserService, CategoryUserService>();
 
 // admin/productmanagement
 builder.Services.AddScoped<IProductManagementService, ProductManagementService>();

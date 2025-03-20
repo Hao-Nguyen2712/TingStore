@@ -165,7 +165,7 @@
                                     </h6>
                                 </div>
 
-                                @* form add cart *@
+                                @* form add cart *@ 
                                 <form asp-area="User" asp-controller="Product" asp-action="AddCart" method="post">
                                     <input type="hidden" name="ProductId" value="@product.Id" />
                                     <input type="hidden" name="ProductName" value="@product.Name" />
@@ -265,7 +265,7 @@
             }
             else
             {
-                <p class="text-center w-100">No products available.</p>
+                    
             }
         </div>
         <div class="pagination pt-40">
