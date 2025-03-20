@@ -1,4 +1,4 @@
-@using TingStore.Client.Areas.Admin.Models.Products
+﻿@using TingStore.Client.Areas.Admin.Models.Products
 @using TingStore.Client.Areas.Admin.Models.Products.Specs
 @addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
 
@@ -79,7 +79,7 @@
                                             </div>
                                         </div>
                                     </td>
-                                    <td>$@string.Format(new System.Globalization.CultureInfo("vi-VN"), "{0:N0}", item.Price)
+                                    <td>@string.Format(new System.Globalization.CultureInfo("vi-VN"), "{0:N0}", item.Price)đ
                                     </td>
                                     <td>
                                         <p class="mb-1 text-muted"><span class="text-dark fw-medium">@item.Stock Item</span>
@@ -121,3 +121,29 @@
         </div>
     </div>
 </div>
+
+
+@section Scripts {
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+        @if (TempData["SuccessMessage"] != null)
+        {
+            @:Swal.fire({
+            @:    icon: 'success',
+            @:    title: 'Success!',
+            @:    text: '@TempData["SuccessMessage"]',
+            @:    confirmButtonText: 'OK'
+            @:});
+        }
+        @if (TempData["ErrorMessage"] != null)
+        {
+            @:Swal.fire({
+            @:icon: 'error',
+            @:title: 'Oops...',
+            @:text: '@TempData["ErrorMessage"]',
+            @:confirmButtonText: 'OK'
+            @:});
+        }
+        });
+    </script>
+}
