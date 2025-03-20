@@ -34,5 +34,13 @@ namespace Order.Infrastructure.ExternalServices
                 ErrorMessage = result.Message
             };
         }
+
+        public async Task ReturnCoupon(string id)
+        {
+            await _discountServicegRpcClient.ReturnCouponAsync(new ReturnCouponRequest
+            {
+                Id = id
+            });
+        }
     }
 }

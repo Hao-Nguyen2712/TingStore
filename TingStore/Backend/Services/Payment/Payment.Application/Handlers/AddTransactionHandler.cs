@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using MediatR;
 using Payment.Application.Commands;
 using Payment.Application.Dtos;
+using Payment.Application.Mappers;
 using Payment.Core.Repositories;
 
 namespace Payment.Application.Handlers
@@ -19,6 +20,22 @@ namespace Payment.Application.Handlers
         {
             _paymentTransactionRepository = paymentTransactionRepository;
         }
-        public Task<PaymentTransactionDTO> Handle(AddTransactionCommand request, CancellationToken cancellationToken) => throw new NotImplementedException();
+        public async Task<PaymentTransactionDTO> Handle(AddTransactionCommand request, CancellationToken cancellationToken)
+        {
+            request.Status = PaymentStatusDTO.Waiting.ToString();
+            request.CreatedAt = DateTime.Now;
+            request.PaymentMethod = "VNPAY";
+            var model = PaymentMapper.Mapper.Map<Core.Entities.PaymentTransaction>(request);
+            var result = await _paymentTransactionRepository.AddAsync(model);
+            if (result != null)
+            {
+
+                return PaymentMapper.Mapper.Map<PaymentTransactionDTO>(result);
+            }
+            else
+            {
+                return null;
+            }
+        }
     }
 }

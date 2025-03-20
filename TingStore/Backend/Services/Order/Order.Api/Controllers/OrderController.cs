@@ -1,4 +1,6 @@
-﻿using MediatR;
+﻿using EventBus.Messages.Events;
+using MassTransit;
+using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Order.Application.Commands;
@@ -13,10 +15,16 @@ namespace Order.Api.Controllers
     public class OrderController : ControllerBase
     {
         private readonly IMediator _mediator;
+        private readonly IPublishEndpoint _publishEndpoint;
+        private readonly ILogger<OrderController> _logger;
+        private readonly IHttpClientFactory _httpClientFactory;
 
-        public OrderController(IMediator mediator)
+        public OrderController(IMediator mediator, ILogger<OrderController> logger , IPublishEndpoint publishEndpoint, IHttpClientFactory httpClientFactory)
         {
             _mediator = mediator;
+            _logger = logger;
+            _publishEndpoint = publishEndpoint;
+            _httpClientFactory = httpClientFactory;
         }
 
         [HttpGet]
@@ -78,6 +86,41 @@ namespace Order.Api.Controllers
             return Ok(result);
         }
 
+        [HttpPost]
+        [Route("PayOrder")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> PayOrder([FromBody] Guid OrderId )
+        {
+            var command = new PayOrderCommand
+            {
+                OrderId = OrderId
+            };
+            var result = await _mediator.Send(command);
+            if (result == null)
+            {
+                return BadRequest();
+            }
+           
+            // gọi đối tượng trên service payment
+            var request = _httpClientFactory.CreateClient();
+            // cổng http của payment
+            var response = await request.PostAsJsonAsync("http://localhost:5007/api/Payment", new
+            {
+                OrderID = OrderId,
+                Amount = result.Amount
+            });
+
+            if(!response.IsSuccessStatusCode)
+            {
+                return BadRequest();
+            }
+            var paymentUrl = await response.Content.ReadAsStringAsync();
+            return Ok(new
+            {
+                PaymentUrl = paymentUrl
+            });
+        }
 
     }
 }

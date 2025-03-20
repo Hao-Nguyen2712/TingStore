@@ -10,5 +10,6 @@ namespace Order.Application.Services
     public interface IDiscountClientService
     {
         public Task<ValueCouponDTO> GetValue(string code , decimal total);
+        public Task ReturnCoupon(string id);
     }
 }

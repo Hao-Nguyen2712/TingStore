@@ -108,6 +108,21 @@ services:
     networks:
       - app-network
 
+  payment-container:
+    image: ${DOCKER_REGISTRY-}paymentservice
+    container_name: payment-container
+    build:
+      context: .
+      dockerfile: Backend/Services/Payment/Payment.Api/Dockerfile
+    ports:
+      - "5007:80"
+    depends_on:
+      - sqlserver-container
+      - rabitmq-container
+    restart: unless-stopped
+    networks:
+      - app-network
+
   rabitmq-container:
     image: rabbitmq:3-management
     container_name: rabitmq-container

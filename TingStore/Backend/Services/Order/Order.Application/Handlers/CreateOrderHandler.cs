@@ -26,16 +26,18 @@ namespace Order.Application.Handlers
         {
             // khởi tạo giá trị cho coupon
             decimal couponValue = 0;
-
+            string orderId = "";
             if (!string.IsNullOrEmpty(request.Code))
             {
                 // check the coupon value
                 var couponResponse = await _discountClientService.GetValue(request.Code, request.TotalAmount);
                 couponValue = couponResponse.Value;
+                orderId = couponResponse.Id ?? string.Empty;
             }
 
             var orderDTO = OrderMapper.Mapper.Map<OrderDTO>(request);
             orderDTO.DiscountAmount = couponValue;
+            orderDTO.DiscountId = orderId;
             var orderModel = OrderMapper.Mapper.Map<Core.Entities.Order>(orderDTO);
 
             if (orderModel == null)
