@@ -6,17 +6,18 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Category.Application.Responses;
+using Category.Core.Specs;
 using MediatR;
 
 namespace Category.Application.Queries
 {
-    public class DeleteCategoryByIdQuery : IRequest<bool>
+    public class GetCategoriesQuery : IRequest<Pagination<CategoryResponse>>
     {
-        public string Id { get; set; }
-
-        public DeleteCategoryByIdQuery(string id)
+        public CategorySpecParams CategorySpecParams { get; set; }
+        public GetCategoriesQuery(CategorySpecParams categorySpecParams)
         {
-            Id = id;
+            CategorySpecParams = categorySpecParams;
         }
     }
 }

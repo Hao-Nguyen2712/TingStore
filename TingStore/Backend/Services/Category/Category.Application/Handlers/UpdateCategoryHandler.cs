@@ -25,8 +25,7 @@ namespace Category.Application.Handlers
             var updateCategory = await _categoryRepository.UpdateCategory(new Core.Entities.Category
             {
                 Id = request.Id,
-                Name = request.Name,
-                Description = request.Description,
+                Name = request.Name
             });
             return updateCategory;
         }

@@ -14,19 +14,25 @@ using MediatR;
 
 namespace Category.Application.Handlers
 {
-    public class GetCategoryByNameHandler : IRequestHandler<GetCategoryByNameQuery, IEnumerable<CategoryResponse>>
+    public class GetCategoryByNameInactiveHandler : IRequestHandler<GetCategoryByNameInactiveQuery, CategoryResponse>
     {
         private readonly ICategoryRepository _categoryRepository;
 
-        public GetCategoryByNameHandler(ICategoryRepository categoryRepository)
+        public GetCategoryByNameInactiveHandler(ICategoryRepository categoryRepository)
         {
             _categoryRepository = categoryRepository;
         }
-        public async Task<IEnumerable<CategoryResponse>> Handle(GetCategoryByNameQuery request, CancellationToken cancellationToken)
+        public async Task<CategoryResponse> Handle(GetCategoryByNameInactiveQuery request, CancellationToken cancellationToken)
         {
-            var categoryByName = await _categoryRepository.GetCategoryByName(request.Name);
-            var categoryResponse = CategoryMapper.Mapper.Map<IEnumerable<CategoryResponse>>(categoryByName);
-            return categoryResponse;
+            var categoryByName = await _categoryRepository.GetCategoryByNameInactive(request.Name);
+
+            if (categoryByName == null)
+            {
+                return null; 
+            }
+
+            return CategoryMapper.Mapper.Map<CategoryResponse>(categoryByName);
         }
+
     }
 }
