@@ -1,0 +1,376 @@
+@using System.Text.Json
+@using TingStore.Client.Areas.Admin.Models.Products
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+
+@model ProductResponse
+
+@{
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+    ViewData["Title"] = "ProductDetail";
+}
+@{
+    var options = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
+    ProductDescription? productDescription = JsonSerializer.Deserialize<ProductDescription>(Model.Description, options);
+}
+<script src="https://kit.fontawesome.com/8143c9cd7e.js" crossorigin="anonymous"></script>
+
+<div class="row">
+    <div class="col-lg-4">
+        <div class="card">
+            <div class="card-body">
+                <!-- Crossfade -->
+                <div id="carouselExampleFade" class="carousel slide carousel-fade" data-bs-ride="carousel">
+                    <div class="carousel-inner" role="listbox">
+                        @{
+                            int countActive = -1;
+                        }
+                        @foreach (var item in Model.Images)
+                        {
+                            countActive++;
+                            if (countActive == 0)
+                            {
+                                <div class="carousel-item active">
+                                    <img src="@item.ImageUrl" alt="" class="img-fluid bg-light rounded">
+                                </div>
+                            }
+                            else
+                            {
+                                <div class="carousel-item">
+                                    <img src="@item.ImageUrl" alt="" class="img-fluid bg-light rounded">
+                                </div>
+                            }
+                        }
+                    </div>
+                    <div class="carousel-indicators m-0 mt-2 d-lg-flex d-none position-static h-100">
+                        @{
+                            int count = -1;
+                        }
+                        @foreach (var item in Model.Images)
+                        {
+                            count++;
+                            if (count == 0)
+                            {
+                                <button type="button" data-bs-target="#carouselExampleFade" data-bs-slide-to="0"
+                                        aria-current="true" aria-label="Slide 1" class="w-auto h-auto rounded bg-light active">
+                                    <img src="@item.ImageUrl" class="d-block avatar-xl" alt="swiper-indicator-img">
+                                </button>
+                            }
+                            else
+                            {
+                                <button type="button" data-bs-target="#carouselExampleFade" data-bs-slide-to="@count"
+                                        aria-label="Slide @count" class="w-auto h-auto rounded bg-light">
+                                    <img src="@item.ImageUrl" class="d-block avatar-xl" alt="swiper-indicator-img">
+                                </button>
+                            }
+                        }
+                    </div>
+                </div>
+            </div>
+            <div class="card-footer border-top">
+                <div class="row g-2">
+                    <div class="col-lg-12">
+                        @* <a href="#!"
+                        class="btn btn-primary d-flex align-items-center justify-content-center gap-2 w-100"><i class="fa-solid fa-plus"></i> Add More Image</a> *@
+                        <form asp-action="AddProductImage" method="post" enctype="multipart/form-data">
+                            <input type="hidden" name="id" type="text" value="@Model.Id">
+                            <label for="productImages" class="custom-file-upload btn btn-primary w-100">Chọn tệp</label>
+                            <input type="file" name="formFiles" multiple id="productImages" hidden />
+                            <div id="previewImages" class="d-flex flex-wrap gap-2 mt-3"></div>
+                            <input class="btn btn-outline-secondary w-100" type="submit" value="Add Image">
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-8">
+        <div class="card">
+            <div class="card-body">
+                <h4 class="badge bg-success text-light fs-14 py-1 px-2">New Arrival</h4>
+                <p class="mb-1">
+                    <a href="#!" class="fs-24 text-dark fw-medium">@Model.Name</a>
+                    <a asp-action="UpdateProduct" asp-route-id="@Model.Id" class="btn btn-soft-primary btn-sm">
+                        <iconify-icon icon="solar:pen-2-broken" class="align-middle fs-18"></iconify-icon>
+                    </a>
+                </p>
+                <h2 class="fw-medium my-3">
+                    @string.Format(new System.Globalization.CultureInfo("vi-VN"), "{0:N0}",
+                            Model.Price)đ
+                </h2>
+                <div class="quantity mt-4">
+                    <h4 class="text-dark fw-medium mt-3">Stock :</h4>
+                    <div class="input-step border bg-body-secondary p-1 mt-1 rounded d-inline-flex overflow-visible">
+                        <button type="button"
+                                class="minus bg-light text-dark border-0 rounded-1 fs-20 lh-1 h-100">
+                            -
+                        </button>
+                        <input type="number"
+                               class="text-dark text-center border-0 bg-body-secondary rounded h-100" value="@Model.Stock"
+                               min="0" max="100" readonly="">
+                        <button type="button"
+                                class="plus bg-light text-dark border-0 rounded-1 fs-20 lh-1 h-100">
+                            +
+                        </button>
+                    </div>
+                </div>
+                <ul class="d-flex flex-column gap-2 list-unstyled fs-15 my-3">
+                    <li>
+                        <i class='bx bx-check text-success'></i> In Stock
+                    </li>
+                    <li>
+                        <i class='bx bx-check text-success'></i> Free delivery available
+                    </li>
+                    <li>
+                        <i class='bx bx-check text-success'></i> Sales 10% Off Use Code: <span class="text-dark fw-medium">CODE123</span>
+                    </li>
+                </ul>
+                <h4 class="text-dark fw-medium">Description :</h4>
+                <p class="text-muted">@productDescription.Description</p>
+                <h4 class="text-dark fw-medium mt-3">Available offers :</h4>
+                <div class="d-flex align-items-center mt-2">
+                    <i class="bx bxs-bookmarks text-success me-3 fs-20 mt-1"></i>
+                    <p class="mb-0">
+                        <span class="fw-medium text-dark">Bank Offer</span> 10% instant discount on
+                        Bank
+                        Debit Cards, up to $30 on orders of $50 and above
+                    </p>
+                </div>
+                <div class="d-flex align-items-center mt-2">
+                    <i class="bx bxs-bookmarks text-success me-3 fs-20 mt-1"></i>
+                    <p class="mb-0">
+                        <span class="fw-medium text-dark">Bank Offer</span> Grab our exclusive offer
+                        now
+                        and save 20% on your next purchase! Don't miss out, shop today!
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-lg-12">
+        <div class="card bg-light-subtle">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-lg-3">
+                        <div class="d-flex align-items-center gap-3">
+                            <div class="avatar bg-light d-flex align-items-center justify-content-center rounded">
+                                <iconify-icon icon="solar:kick-scooter-bold-duotone"
+                                              class="fs-35 text-primary"></iconify-icon>
+                            </div>
+
+                            <div>
+                                <p class="text-dark fw-medium fs-16 mb-1">Free shipping for all orders over $200</p>
+                                <p class="mb-0">Only in this week</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-3">
+                        <div class="d-flex align-items-center gap-3">
+                            <div class="avatar bg-light d-flex align-items-center justify-content-center rounded">
+                                <iconify-icon icon="solar:ticket-bold-duotone"
+                                              class="fs-35 text-primary"></iconify-icon>
+                            </div>
+
+                            <div>
+                                <p class="text-dark fw-medium fs-16 mb-1">Special discounts for customers</p>
+                                <p class="mb-0">Coupons up to $ 100</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-3">
+                        <div class="d-flex align-items-center gap-3">
+                            <div class="avatar bg-light d-flex align-items-center justify-content-center rounded">
+                                <iconify-icon icon="solar:gift-bold-duotone"
+                                              class="fs-35 text-primary"></iconify-icon>
+                            </div>
+
+                            <div>
+                                <p class="text-dark fw-medium fs-16 mb-1">Free gift wrapping</p>
+                                <p class="mb-0">With 100 letters custom note</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-3">
+                        <div class="d-flex align-items-center gap-3">
+                            <div class="avatar bg-light d-flex align-items-center justify-content-center rounded">
+                                <iconify-icon icon="solar:headphones-round-sound-bold-duotone"
+                                              class="fs-35 text-primary"></iconify-icon>
+                            </div>
+
+                            <div>
+                                <p class="text-dark fw-medium fs-16 mb-1">Expert Customer Service</p>
+                                <p class="mb-0">8:00 - 20:00, 7 days/wee</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-lg-6">
+        <div class="card">
+            <div class="card-header">
+                <h4 class="card-title">Items Detail</h4>
+            </div>
+            <div class="card-body">
+                <div class="">
+                    <ul class="d-flex flex-column gap-2 list-unstyled fs-14 text-muted mb-0">
+                        <li>
+                            <span class="fw-medium text-dark">Brand</span><span class="mx-2">:</span>@productDescription.Brand
+                        </li>
+                        <li>
+                            <span class="fw-medium text-dark">Model</span><span class="mx-2">:</span>@productDescription.Model
+                        </li>
+                        <li><span class="fw-medium text-dark">Relaease Date</span><span class="mx-2">:</span>@productDescription.ReleaseDate</li>
+                        <li>
+                            <span class="fw-medium text-dark">Type </span><span class="mx-2">:</span>@productDescription.Type
+                        </li>
+                        <li><span class="fw-medium text-dark">Size</span><span class="mx-2">:</span>@productDescription.Size</li>
+                        <li>
+                            <span class="fw-medium text-dark">Resolution</span><span class="mx-2">:</span>
+                            @productDescription.Resolution
+                        </li>
+                        <li>
+                            <span class="fw-medium text-dark">Dimensions</span><span class="mx-2">:</span>@productDescription.Dimensions
+                        </li>
+                        <li><span class="fw-medium text-dark">Weight </span><span class="mx-2">:</span>@productDescription.Weight</li>
+                        <li><span class="fw-medium text-dark">SIM </span><span class="mx-2">:</span>@productDescription.SIM</li>
+                        <li><span class="fw-medium text-dark">OS</span><span class="mx-2">:</span>@productDescription.OS</li>
+                        <li>
+                            <span class="fw-medium text-dark">Chipset</span><span class="mx-2">:</span>@productDescription.Chipset
+                        </li>
+                        <li>
+                            <span class="fw-medium text-dark">Relaease Date</span><span class="mx-2">:</span>@productDescription.ReslaeaseDate
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-6">
+        <div class="card">
+            <div class="card-header">
+                <h4 class="card-title">Top Review From World</h4>
+            </div>
+            <div class="card-body">
+                <div class="d-flex align-items-center gap-2">
+                    <img src="assets/images/users/avatar-6.jpg" alt="" class="avatar-md rounded-circle">
+                    <div>
+                        <h5 class="mb-0">Henny K. Mark</h5>
+                    </div>
+                </div>
+                <div class="d-flex align-items-center gap-2 mt-3 mb-1">
+                    <ul class="d-flex text-warning m-0 fs-20 list-unstyled">
+                        <li>
+                            <i class="bx bxs-star"></i>
+                        </li>
+                        <li>
+                            <i class="bx bxs-star"></i>
+                        </li>
+                        <li>
+                            <i class="bx bxs-star"></i>
+                        </li>
+                        <li>
+                            <i class="bx bxs-star"></i>
+                        </li>
+                        <li>
+                            <i class="bx bxs-star-half"></i>
+                        </li>
+                    </ul>
+                    <p class="fw-medium mb-0 text-dark fs-15">Excellent Quality</p>
+                </div>
+
+                <p class="mb-0 text-dark fw-medium fs-15">Reviewed in Canada on 16 November 2023</p>
+                <p class="text-muted">
+                    Medium thickness. Did not shrink after wash. Good elasticity . XL size
+                    Perfectly fit for 5.10 height and heavy body. Did not fade after wash. Only for maroon colour
+                    t-shirt colour lightly gone in first wash but not faded. I bought 5 tshirt of different colours.
+                    Highly recommended in so low price.
+                </p>
+                <div class="mt-2">
+                    <a href="#!" class="fs-14 me-3 text-muted"><i class='bx bx-like'></i> Helpful</a>
+                    <a href="#!" class="fs-14 text-muted">Report</a>
+                </div>
+
+                <hr class="my-3">
+
+                <div class="d-flex align-items-center gap-2">
+                    <img src="assets/images/users/avatar-4.jpg" alt="" class="avatar-md rounded-circle">
+                    <div>
+                        <h5 class="mb-0">Jorge Herry</h5>
+                    </div>
+                </div>
+                <div class="d-flex align-items-center gap-2 mt-3 mb-1">
+                    <ul class="d-flex text-warning m-0 fs-20 list-unstyled">
+                        <li>
+                            <i class="bx bxs-star"></i>
+                        </li>
+                        <li>
+                            <i class="bx bxs-star"></i>
+                        </li>
+                        <li>
+                            <i class="bx bxs-star"></i>
+                        </li>
+                        <li>
+                            <i class="bx bxs-star"></i>
+                        </li>
+                        <li>
+                            <i class="bx bxs-star-half"></i>
+                        </li>
+                    </ul>
+                    <p class="fw-medium mb-0 text-dark fs-15">Good Quality</p>
+                </div>
+
+                <p class="mb-0 text-dark fw-medium fs-15">
+                    Reviewed in U.S.A on 21 December 2023
+
+                </p>
+                <p class="text-muted mb-0">
+                    I liked the tshirt, it's pure cotton &amp; skin friendly, but the size is
+                    smaller to compare standard size.
+                </p>
+                <p class="text-muted mb-0">best rated</p>
+
+                <div class="mt-2">
+                    <a href="#!" class="fs-14 me-3 text-muted"><i class='bx bx-like'></i> Helpful</a>
+                    <a href="#!" class="fs-14 text-muted">Report</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Product detail Map Js -->
+<script src="~/admin/assets/js/pages/product-details.js"></script>
+<script>
+    document.getElementById('productImages').addEventListener('change', function (event) {
+        const previewContainer = document.getElementById('previewImages');
+        previewContainer.innerHTML = ""; // Xóa ảnh cũ khi chọn ảnh mới
+
+        const files = event.target.files;
+        if (files.length > 4) {
+            alert("Bạn chỉ có thể chọn tối đa 4 ảnh.");
+            return;
+        }
+
+        for (let i = 0; i < files.length; i++) {
+            const file = files[i];
+            const reader = new FileReader();
+
+            reader.onload = function (e) {
+                const img = document.createElement('img');
+                img.src = e.target.result;
+                img.classList.add('img-fluid', 'rounded', 'border', 'p-1');
+                img.style.width = "100px"; // Điều chỉnh kích thước ảnh
+                img.style.height = "100px";
+
+                previewContainer.appendChild(img);
+            };
+
+            reader.readAsDataURL(file);
+        }
+    });
+</script>

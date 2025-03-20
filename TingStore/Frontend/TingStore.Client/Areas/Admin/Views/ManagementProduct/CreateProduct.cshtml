@@ -1,0 +1,241 @@
+@using TingStore.Client.Areas.Admin.Models.Products
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+
+
+@model ProductInput
+@{
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+    ViewData["Title"] = "CreateProduct";
+}
+
+
+<div class="row">
+    <div class="col-xl-12">
+        <form asp-action="CreateProduct" method="post" enctype="multipart/form-data">
+            <div class="card">
+                <div class="card-header">
+                    <h4 class="card-title">Add Product Photo</h4>
+                </div>
+                <div class="card-body">
+                    <!-- File Upload -->
+
+                    <div class="fallback">
+                        <input asp-for="ProductFile" type="file" multiple id="productImages" />
+                    </div>
+                    <div id="previewImages" class="d-flex flex-wrap gap-2 mt-3"></div>
+
+                    <div class="dz-message needsclick">
+                        <i class="bx bx-cloud-upload fs-48 text-primary"></i>
+                        <h3 class="mt-4">Drop your images here, or <span class="text-primary">click to browse</span>
+                        </h3>
+                        <span class="text-muted fs-13">
+                            1600 x 1200 (4:3) recommended. PNG, JPG and GIF files are allowed
+                        </span>
+                    </div>
+
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-header">
+                    <h4 class="card-title">Product Information</h4>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <div class="mb-3">
+                                <label for="product-name" class="form-label">Product Name</label>
+                                <input asp-for="Name" type="text" id="product-name" class="form-control"
+                                    placeholder="Items Name">
+                            </div>
+                        </div>
+                        <div class="col-lg-6">
+                            <label for="Sim" class="form-label">Category</label>
+                            <select asp-for="Category" class="form-control" id="Sim" data-choices data-choices-groups
+                                data-placeholder="Select display">
+                                <option value="">Select Sim type</option>
+                                <option value="Phone">Phone</option>
+                                <option value="IPad">IPad</option>
+                                <option value="Tablet">Tablet</option>
+                                <option value="Laptop">Laptop</option>
+                                <option value="Book">Book</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-4">
+                            <div class="mb-3">
+                                <label for="product-brand" class="form-label">Brand</label>
+                                <input asp-for="Brand" type="text" id="product-brand" class="form-control"
+                                    placeholder="Brand Name">
+                            </div>
+                        </div>
+                        <div class="col-lg-4">
+                            <div class="mb-3">
+                                <label for="product-weight" class="form-label">Weight</label>
+                                <input asp-for="Weight" type="text" id="product-weight" class="form-control"
+                                    placeholder="In gm & kg">
+                            </div>
+                        </div>
+                        <div class="col-lg-4">
+                            <label for="display" class="form-label">Display type</label>
+                            <select asp-for="type" class="form-control" id="display" data-choices data-choices-groups
+                                data-placeholder="Select display">
+                                <option value="">Select display type</option>
+                                <option value="Amoled">Amoled</option>
+                                <option value="LCD">LCD</option>
+                                <option value="IPS">IPS</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-4">
+                            <div class="mb-3">
+                                <label for="product-brand" class="form-label">Model</label>
+                                <input asp-for="Model" type="text" id="product-brand" class="form-control"
+                                    placeholder="Model Name">
+                            </div>
+                        </div>
+                        <div class="col-lg-4">
+                            <div class="mb-3">
+                                <label for="product-weight" class="form-label">Size</label>
+                                <input asp-for="Size" type="text" id="product-weight" class="form-control"
+                                    placeholder="px">
+                            </div>
+                        </div>
+                        <div class="col-lg-4">
+                            <div class="mb-3">
+                                <label for="product-weight" class="form-label">Relaease</label>
+                                <input asp-for="Relaease" type="date" id="product-weight" class="form-control">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-4">
+                            <div class="mb-3">
+                                <label for="product-brand" class="form-label">Resolution</label>
+                                <input asp-for="Resolution" type="text" id="product-brand" class="form-control"
+                                    placeholder="Resolution">
+                            </div>
+                        </div>
+                        <div class="col-lg-4">
+                            <div class="mb-3">
+                                <label for="product-weight" class="form-label">Dimensions</label>
+                                <input asp-for="Dimensions" type="text" id="product-weight" class="form-control"
+                                    placeholder="Dimensions">
+                            </div>
+                        </div>
+                        <div class="col-lg-4">
+                            <label for="Sim" class="form-label">SIM</label>
+                            <select asp-for="Sim" class="form-control" id="Sim" data-choices data-choices-groups
+                                data-placeholder="Select display">
+                                <option value="">Select Sim type</option>
+                                <option value="Dual sim">Dual sim</option>
+                                <option value="Single sim">Single sim</option>
+                                <option value="E-sim">E-sim</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-4">
+                            <label for="os" class="form-label">OS</label>
+                            <select asp-for="Os" class="form-control" id="os" data-choices data-choices-groups
+                                data-placeholder="Select display">
+                                <option value="">Select Sim type</option>
+                                <option value="Amoled">IOS</option>
+                                <option value="Android">Android</option>
+                            </select>
+                        </div>
+                        <div class="col-lg-4">
+                            <div class="mb-3">
+                                <label for="product-weight" class="form-label">Chip set</label>
+                                <input asp-for="Chipset" type="text" id="product-weight" class="form-control"
+                                    placeholder="Chipset">
+                            </div>
+                        </div>
+                        <div class="col-lg-4">
+                            <div class="mb-3">
+                                <label for="product-weight" class="form-label">Reslaease Date</label>
+                                <input asp-for="ReslaeaseDate" type="date" id="product-weight" class="form-control">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="mb-3">
+                                <label for="description" class="form-label">Description</label>
+                                <textarea asp-for="Description" class="form-control bg-light-subtle" id="description"
+                                    rows="7" placeholder="Short description about the product"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-header">
+                    <h4 class="card-title">Pricing Details</h4>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <label for="product-price" class="form-label">Price</label>
+                            <div class="input-group mb-3">
+                                <span class="input-group-text fs-20"><i class='bx bx-dollar'></i></span>
+                                <input asp-for="Price" type="number" id="product-price" class="form-control"
+                                    placeholder="000">
+                            </div>
+                        </div>
+                        <div class="col-lg-6">
+                            <label for="product-discount" class="form-label">Discount</label>
+                            <div class="input-group mb-3">
+                                <span class="input-group-text fs-20"><i class='bx bxs-discount'></i></span>
+                                <input asp-for="Stock" type="number" id="product-discount" class="form-control"
+                                    placeholder="000">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="p-3 bg-light mb-3 rounded">
+                <div class="row justify-content-end g-2">
+                    <div class="col-lg-2">
+                        <input class="btn btn-outline-secondary w-100" type="submit" value="Create Product">
+                    </div>
+                    <div class="col-lg-2">
+                        <a class="btn btn-primary w-100" style="cursor: pointer;"
+                            href="@Url.Action("Index", new { indexpag = 1 })">Cancel</a>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    document.getElementById('productImages').addEventListener('change', function (event) {
+        const previewContainer = document.getElementById('previewImages');
+        previewContainer.innerHTML = ""; // Xóa ảnh cũ khi chọn ảnh mới
+
+        const files = event.target.files;
+        if (files.length > 4) {
+            alert("Bạn chỉ có thể chọn tối đa 4 ảnh.");
+            return;
+        }
+
+        for (let i = 0; i < files.length; i++) {
+            const file = files[i];
+            const reader = new FileReader();
+
+            reader.onload = function (e) {
+                const img = document.createElement('img');
+                img.src = e.target.result;
+                img.classList.add('img-fluid', 'rounded', 'border', 'p-1');
+                img.style.width = "100px"; // Điều chỉnh kích thước ảnh
+                img.style.height = "100px";
+
+                previewContainer.appendChild(img);
+            };
+
+            reader.readAsDataURL(file);
+        }
+    });
+</script>

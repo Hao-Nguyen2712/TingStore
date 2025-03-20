@@ -54,7 +54,7 @@ namespace Product.Api.Controllers
         // GET: api/review/customer/{customerId}
         [HttpGet("customer/{customerId}")]
         [ProducesResponseType(typeof(IEnumerable<ReviewResponse>), (int)HttpStatusCode.OK)]
-        public async Task<IActionResult> GetReviewByCustomerId(string customerId)
+        public async Task<IActionResult> GetReviewByCustomerId(int customerId)
         {
             var query = new GetReviewByCustomerIdQuery(customerId);
             var result = await _mediator.Send(query);
@@ -62,7 +62,7 @@ namespace Product.Api.Controllers
         }
 
         // POST: api/review/product/{productId}
-        [HttpPost("addReivew/{productId}")]
+        [HttpPost("addReview/{productId}")]
         [ProducesResponseType(typeof(ReviewResponse), (int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
         public async Task<IActionResult> AddReivew(string productId, [FromBody] AddReviewCommand command)

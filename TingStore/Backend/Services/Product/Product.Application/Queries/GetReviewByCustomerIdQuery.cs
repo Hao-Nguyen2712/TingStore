@@ -9,8 +9,8 @@ namespace Product.Application.Queries
 {
     public class GetReviewByCustomerIdQuery : IRequest<IEnumerable<ReviewResponse>>
     {
-        public string CustomerId { get; set; }
+        public int CustomerId { get; set; }
 
-        public GetReviewByCustomerIdQuery(string customerId) => CustomerId = customerId;
+        public GetReviewByCustomerIdQuery(int customerId) => CustomerId = customerId;
     }
 }

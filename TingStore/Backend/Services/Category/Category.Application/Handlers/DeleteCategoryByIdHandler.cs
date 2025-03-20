@@ -6,13 +6,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Category.Application.Commands;
 using Category.Application.Queries;
 using Category.Core.Repositories;
 using MediatR;
 
 namespace Category.Application.Handlers
 {
-    public class DeleteCategoryByIdHandler : IRequestHandler<DeleteCategoryByIdQuery, bool>
+    public class DeleteCategoryByIdHandler : IRequestHandler<DeleteCategoryByIdCommand, bool>
     {
         private readonly ICategoryRepository _categoryRepository;
 
@@ -21,7 +22,7 @@ namespace Category.Application.Handlers
             _categoryRepository = categoryRepository;
         }
 
-        public async Task<bool> Handle(DeleteCategoryByIdQuery request, CancellationToken cancellationToken)
+        public async Task<bool> Handle(DeleteCategoryByIdCommand request, CancellationToken cancellationToken)
         {
             return await _categoryRepository.DeleteCategory(request.Id);
         }

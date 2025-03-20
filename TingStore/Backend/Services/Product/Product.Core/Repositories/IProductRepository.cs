@@ -13,6 +13,7 @@ namespace Product.Core.Repositories
 {
     public interface IProductRepository
     {
+        Task<IEnumerable<Product.Core.Models.Product>> GetAllProduct();
         Task<Pagination<Product.Core.Models.Product>> GetProducts(ProductSpecParams productSpecParams);
         Task<Product.Core.Models.Product> GetProduct(string id);
         Task<IEnumerable<Product.Core.Models.Product>> GetProductByName(string name);
