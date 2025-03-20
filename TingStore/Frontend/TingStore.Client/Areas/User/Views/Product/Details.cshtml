@@ -1,0 +1,663 @@
+﻿@using System.Text.Json
+@using System.Globalization
+@using TingStore.Client.Areas.User.Models.Products
+@model TingStore.Client.Areas.User.Models.Products.ProductResponse
+@{
+    ViewData["Title"] = "Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@{
+    ProductDescription? des = JsonSerializer.Deserialize<ProductDescription>(@Model.Description);
+}
+
+<section class="shop-detail py-40">
+    <div class="container-fluid">
+        <div class="detail-wrapper">
+            <div class="row row-gap-3">
+                <div class="col-xl-6">
+                    <div class="product-image-container bg-white">
+                        <div class="product-slider-asnav">
+                            @if (Model.Images != null && Model.Images.Any())
+                            {
+                                foreach (var image in Model.Images)
+                                {
+                                    <div class="nav-image swiper-slide">
+                                        <img src="@image.Url" alt="@Model.Name - Image" style="width:100px" />
+                                    </div>
+                                }
+                            }
+                            else if (!string.IsNullOrEmpty(Model.ProductImage))
+                            {
+                                <div class="nav-image">
+                                    <img src="@Model.ProductImage" alt="@Model.Name" style="width:100px" />
+                                </div>
+                            }
+                            else
+                            {
+                                <div class="nav-image">
+                                    <img src="/images/placeholder.jpg" alt="@Model.Name" style="width:100px" />
+                                </div>
+                            }
+                        </div>
+                        <div class="product-slider">
+                            @if (Model.Images != null && Model.Images.Any())
+                            {
+                                foreach (var image in Model.Images)
+                                {
+                                    <div class="detail-image swiper-slide">
+                                        <img src="@image.Url" alt="@Model.Name - Image"
+                                             style="width:100%; height:fit-content" />
+                                    </div>
+                                }
+                            }
+                            else if (!string.IsNullOrEmpty(Model.ProductImage))
+                            {
+                                <div class="detail-image">
+                                    <img src="@Model.ProductImage" alt="@Model.Name"
+                                         style="width:100%; height:fit-content" />
+                                </div>
+                            }
+                            else
+                            {
+                                <div class="detail-image">
+                                    <img src="/images/placeholder.jpg" alt="@Model.Name"
+                                         style="width:100%; height:fit-content" />
+                                </div>
+                            }
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xl-6">
+                    <div class="product-text-container bg-white br-20">
+                        <h3 class="fw-700 mb-16">@Model.Name</h3>
+                        <div class="d-flex align-items-center flex-wrap gap-16 mb-24">
+                            @{
+                                double averageRating = ViewBag.AverageRating != null ? Convert.ToDouble(ViewBag.AverageRating) : 0.0;
+                                int fullStars = (int)Math.Floor(averageRating);
+                                bool hasHalfStar = (averageRating - fullStars) >= 0.5;
+                                int emptyStars = 5 - fullStars - (hasHalfStar ? 1 : 0);
+                            }
+
+                            <h5 class="color-sec">
+                                @for (int i = 0; i < fullStars; i++)
+                                {
+                                    <span class="text-warning">★</span> 
+                                }
+                                @if (hasHalfStar)
+                                {
+                                    <span class="text-warning half-star">★</span> 
+                                }
+                                @for (int i = 0; i < emptyStars; i++)
+                                {
+                                    <span class="text-secondary">★</span>
+                                }
+                                <span class="text-16 fw-400 dark-black">(@(Model.Reviews?.Count ?? 0) Reviews)</span>
+                            </h5>
+
+                            <div class="vr-line vr-line-2"></div>
+                            <p class="light-gray">Brand: <span class="color-primary">@des.Brand</span></p>
+                        </div>
+
+                        <div class="d-flex align-items-center gap-16 mb-24">
+                            <p class="light-gray text-decoration-line-through">
+                                @((Model.Price * 1.2m).ToString("C", new
+                                    CultureInfo("vi-VN")))</ p >
+                                <h5>@Model.Price.ToString("C", new CultureInfo("vi-VN"))</h5>
+                                <span class="label white">-12%</span>
+                        </div>
+                        @{
+                            var shortDescription = string.Join(" ", des.Description.Split().Take(20)) +
+                            (des.Description.Split().Length > 20 ? "..." : "");
+                        }
+                        <p class="light-gray mb-16">
+                            @shortDescription
+                        </p>
+                        <div class="hr-line mb-24"></div>
+                        <div class="function-bar mb-16">
+                            <div class="quantity quantity-wrap">
+                                <div class="input-area quantity-wrap">
+                                    <input class="decrement" type="button" value="-">
+                                    <input type="text" name="quantity" value="1" maxlength="2" size="1" class="number">
+                                    <input class="increment" type="button" value="+">
+                                </div>
+                            </div>
+                            <div class="cart-btn w-100">
+                                <a href="cart.html" class="cus-btn-2 w-100">ADD TO CART</a>
+                            </div>
+                            <div class="side-icons">
+                                <ul class="list-unstyled m-0">
+                                    <li>
+                                        <a href="wishlist.html">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="22"
+                                                 viewBox="0 0 24 22" fill="none">
+                                                <path d="M12 21.6648C11.6583 21.6648 11.3289 21.541 11.0722 21.3162C10.1026 20.4684 9.16789 19.6717 8.34318 18.9689L8.33897 18.9653C5.92107 16.9048 3.83312 15.1254 2.38037 13.3725C0.756407 11.4129 0 9.55493 0 7.52521C0 5.55316 0.676207 3.73383 1.90393 2.4021C3.1463 1.05463 4.851 0.3125 6.70458 0.3125C8.08995 0.3125 9.35869 0.750488 10.4754 1.6142C11.039 2.05017 11.5499 2.58374 12 3.20612C12.4502 2.58374 12.9609 2.05017 13.5247 1.6142C14.6415 0.750488 15.9102 0.3125 17.2956 0.3125C19.149 0.3125 20.8538 1.05463 22.0962 2.4021C23.3239 3.73383 24 5.55316 24 7.52521C24 9.55493 23.2437 11.4129 21.6198 13.3723C20.167 15.1254 18.0793 16.9046 15.6617 18.9649C14.8355 19.6688 13.8993 20.4667 12.9276 21.3165C12.6711 21.541 12.3415 21.6648 12 21.6648ZM6.70458 1.71838C5.24834 1.71838 3.91058 2.29956 2.93737 3.35498C1.9497 4.42633 1.4057 5.90729 1.4057 7.52521C1.4057 9.2323 2.04016 10.759 3.4627 12.4755C4.83764 14.1346 6.88274 15.8774 9.25065 17.8954L9.25505 17.899C10.0829 18.6046 11.0213 19.4044 11.998 20.2584C12.9805 19.4027 13.9204 18.6016 14.7498 17.895C17.1176 15.877 19.1625 14.1346 20.5374 12.4755C21.9598 10.759 22.5943 9.2323 22.5943 7.52521C22.5943 5.90729 22.0503 4.42633 21.0626 3.35498C20.0896 2.29956 18.7516 1.71838 17.2956 1.71838C16.2288 1.71838 15.2494 2.0575 14.3846 2.7262C13.6139 3.32239 13.077 4.07605 12.7622 4.60339C12.6004 4.87457 12.3155 5.03644 12 5.03644C11.6845 5.03644 11.3996 4.87457 11.2377 4.60339C10.9231 4.07605 10.3863 3.32239 9.6154 2.7262C8.75059 2.0575 7.77116 1.71838 6.70458 1.71838Z"
+                                                      fill="#141516" />
+                                            </svg>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                        <a href="checkout.html" class="cus-btn-3 w-100 mb-24">Buy Now</a>
+                        <div class="hr-line mb-24"></div>
+                        <div class="d-flex align-items-center gap-16 mb-16">
+                            <h6>Category:</h6>
+                            <p class="light-gray">
+                                <span class="color-primary">Mobile Phone</span> , Android , Flagship
+                            </p>
+                        </div>
+                        <div class="d-flex align-items-center gap-16 mb-16">
+                            <h6>Tags:</h6>
+                            <p class="light-gray">
+                                5G Compatible , <span class="color-primary">256GB Storage , </span>
+                                Student Phone
+                            </p>
+                        </div>
+                        <div class="hr-line mb-24"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- Shop Detail End -->
+<!-- Product Description Start -->
+<section class="product-description pb-40">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="description-wrapper bg-white br-20">
+                <nav class="mb-32">
+                    <div class="nav nav-tabs" id="nav-tab" role="tablist">
+                        <button class="nav-link" id="nav-desc-tab" data-bs-toggle="tab" data-bs-target="#nav-desc"
+                                type="button" role="tab" aria-controls="nav-desc" aria-selected="true">
+                            Description
+                        </button>
+
+                        <button class="nav-link active" id="nav-info-tab" data-bs-toggle="tab"
+                                data-bs-target="#nav-info" type="button" role="tab" aria-controls="nav-info"
+                                aria-selected="true">
+                            Additional Information
+                        </button>
+
+                        <button class="nav-link" id="nav-review-tab" data-bs-toggle="tab" data-bs-target="#nav-review"
+                                type="button" role="tab" aria-controls="nav-review" aria-selected="false">
+                            Reviews (@(Model.Reviews?.Count ?? 0))
+                        </button>
+                    </div>
+                </nav>
+                <div class="tab-content" id="nav-tabContent">
+                    <div class="tab-pane fade" id="nav-desc" role="tabpanel" aria-labelledby="nav-desc-tab">
+                        <h5 class="mb-24">Product Supreme Quality</h5>
+                        <p class="light-gray mb-16">
+                            @des.Description
+                        </p>
+                        <div class="py-40">
+                            <div class="row row-gap-4">
+                                <div class="col-lg-6">
+                                    <img src="assets/media/products/product-detail-1.png" alt="">
+                                </div>
+                                <div class="col-lg-6">
+                                    <img src="assets/media/products/product-detail-2.png" alt="">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tab-pane fade active show" id="nav-info" role="tabpanel" aria-labelledby="nav-info-tab">
+                        <h5 class="mb-32">Technical Specifications</h5>
+                        <div class="specs-chart mb-32">
+                            <h6 class="color-primary mb-16">Network</h6>
+                            <ul class="list-unstyled">
+                                <li>
+                                    <div class="brand-block">
+                                        <p class="item fw-500">
+                                            Brand
+                                        </p>
+                                        <p class="category light-gray">
+                                            @des.Brand
+                                        </p>
+                                    </div>
+                                </li>
+                                <li>
+                                    <div class="brand-block">
+                                        <p class="item fw-500">
+                                            Model
+                                        </p>
+                                        <p class="category light-gray">
+                                            @des.Model
+                                        </p>
+                                    </div>
+                                </li>
+                                <li>
+                                    <div class="brand-block">
+                                        <p class="item fw-500">
+                                            Release Date
+                                        </p>
+                                        <p class="category light-gray">
+                                            @des.ReleaseDate
+                                        </p>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="specs-chart mb-32">
+                            <h6 class="color-primary mb-16">Display</h6>
+                            <ul class="list-unstyled">
+                                <li>
+                                    <div class="brand-block">
+                                        <p class="item fw-500">
+                                            Type
+                                        </p>
+                                        <p class="category light-gray">
+                                            @des.Type
+                                        </p>
+                                    </div>
+                                </li>
+                                <li>
+                                    <div class="brand-block">
+                                        <p class="item fw-500">
+                                            Size
+                                        </p>
+                                        <p class="category light-gray">
+                                            @des.Size
+                                        </p>
+                                    </div>
+                                </li>
+                                <li>
+                                    <div class="brand-block">
+                                        <p class="item fw-500">
+                                            Resolution
+                                        </p>
+                                        <p class="category light-gray">
+                                            @des.Resolution
+                                        </p>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="specs-chart mb-32">
+                            <h6 class="color-primary mb-16">Body</h6>
+                            <ul class="list-unstyled">
+                                <li>
+                                    <div class="brand-block">
+                                        <p class="item fw-500">
+                                            Dimensions
+                                        </p>
+                                        <p class="category light-gray">
+                                            @des.Dimensions
+                                        </p>
+                                    </div>
+                                </li>
+                                <li>
+                                    <div class="brand-block">
+                                        <p class="item fw-500">
+                                            Weight
+                                        </p>
+                                        <p class="category light-gray">
+                                            @des.Weight
+                                        </p>
+                                    </div>
+                                </li>
+                                <li>
+                                    <div class="brand-block">
+                                        <p class="item fw-500">
+                                            SIM
+                                        </p>
+                                        <p class="category light-gray">
+                                            @des.SIM
+                                        </p>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="specs-chart mb-32">
+                            <h6 class="color-primary mb-16">Performance</h6>
+                            <ul class="list-unstyled">
+                                <li>
+                                    <div class="brand-block">
+                                        <p class="item fw-500">
+                                            OS
+                                        </p>
+                                        <p class="category light-gray">
+                                            @des.OS
+                                        </p>
+                                    </div>
+                                </li>
+                                <li>
+                                    <div class="brand-block">
+                                        <p class="item fw-500">
+                                            Chipset
+                                        </p>
+                                        <p class="category light-gray">
+                                            @des.Chipset
+                                        </p>
+                                    </div>
+                                </li>
+                                <li>
+                                    <div class="brand-block">
+                                        <p class="item fw-500">
+                                            Release Date
+                                        </p>
+                                        <p class="category light-gray">
+                                            @des.ReleaseDate
+                                        </p>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    @{
+                        var avatars = new string[]
+                        {
+                            "user-1.png", "user-2.png", "user-3.png", "user-4.png", "user-5.png"
+                        };
+                    }
+
+                    <div class="tab-pane fade" id="nav-review" role="tabpanel" aria-labelledby="nav-review-tab">
+                        <div class="comments-sec mb-48">
+                            <h5 class="mb-32 fw-600">(@(Model.Reviews?.Count ?? 0)) Reviews For Mobile Phone</h5>
+                            @if (Model.Reviews != null && Model.Reviews.Any())
+                            {
+                                @foreach (var review in Model.Reviews)
+                                {
+                                    var avatarIndex = review.CustomerId % avatars.Length;
+                                    var avatarPath = $"~/user/assets/media/users/{avatars[avatarIndex]}";
+
+                                    <div class="comment-box br-10 p-16 mb-24">
+                                        <div class="d-flex align-items-start gap-16">
+                                            <img src="@Url.Content(avatarPath)" alt="Customer Avatar" class="br-50" style="width: 50px; height: 50px;">
+                                            <div class="flex-grow-1">
+                                                <div class="info mb-8">
+                                                    <h6 class="fw-600 mb-0">Khách hàng #@review.CustomerId</h6>
+                                                    <div class="rating-stars">
+                                                        @for (int i = 1; i <= 5; i++)
+                                                        {
+                                                            if (i <= review.Rating)
+                                                            {
+                                                                <span class="fa fa-star color-sec"></span>
+                                                            }
+                                                            else
+                                                            {
+                                                                <span class="fa fa-star light-gray"></span>
+                                                            }
+                                                        }
+                                                    </div>
+                                                </div>
+                                                <p class="light-gray mb-0">@(review.Comment ?? "Không có bình luận")</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                }
+                            }
+                            else
+                            {
+                                <div class="text-center py-32">
+                                    <p class="light-gray fs-5">Chưa có đánh giá nào cho sản phẩm này.</p>
+                                    <p class="light-gray">Hãy là người đầu tiên chia sẻ cảm nhận của bạn!</p>
+                                </div>
+                            }
+                        </div>
+
+                        <div class="review-form">
+                            <h5 class="fw-600 mb-16">Write a Review</h5>
+                            <p class="light-gray mb-32">Your email address will not be published. Required fields are marked.</p>
+
+                            <form method="post" class="form-group contact-form">
+                                <div class="row g-3">
+                                    <div class="col-12">
+                                        <label class="fw-500 mb-8">Your Rating:</label>
+                                        <div id="stars" class="fs-3 mb-16">
+                                            <i class="fa fa-star star" data-value="1"></i>
+                                            <i class="fa fa-star star" data-value="2"></i>
+                                            <i class="fa fa-star star" data-value="3"></i>
+                                            <i class="fa fa-star star" data-value="4"></i>
+                                            <i class="fa fa-star star" data-value="5"></i>
+                                        </div>
+                                        <input type="hidden" id="rate-value" name="rating" value="0">
+                                    </div>
+                                    <div class="col-12">
+                                        <label class="fw-500 mb-8">Your Review:</label>
+                                        <textarea class="form-control br-10" name="message" id="comment" rows="4" placeholder="Share your thoughts..."></textarea>
+                                    </div>
+                                    <div class="col-12">
+                                        <button type="submit" class="cus-btn-3 mt-16">Submit Review</button>
+                                    </div>
+                                </div>
+                            </form>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- Product Description End -->
+<!-- Recommended Product Start -->
+<section class="recommended-product bg-lightest-gray pb-40">
+    <div class="container-fluid">
+        <div class="top-bar mb-16">
+            <h5>Recommended Products</h5>
+            <a href="shop-grid-sidebar-1.html" class="cus-btn-arrow">
+                Show All
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="15" viewBox="0 0 20 15" fill="none">
+                    <path d="M13.3545 14.7476C13.3545 11.7476 16.1545 7.74756 19.3545 7.74756M19.3545 7.74756C17.5212 7.74756 13.3545 6.74756 13.3545 0.747559M19.3545 7.74756H0.354492"
+                          stroke="#0C0C0D" stroke-width="2" />
+                </svg>
+            </a>
+        </div>
+        <div class="row row-gap-4">
+            <div class="col-xxl-2 col-xl-3 col-lg-4 col-md-6">
+                <div class="featured-product-card bg-white br-10">
+                    <div class="image-box mb-16">
+                        <span class="sale-label">-12%</span>
+                        <a href="shop-detail.html">
+                            <img src="assets/media/products/product-1.png" class="product-image"
+                                 alt="">
+                        </a>
+                        <div class="side-icons">
+                            <ul class="list-unstyled">
+                                <li>
+                                    <a href="wishlist.html">
+                                        <img src="assets/media/icons/heart.png" alt="">
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#" class="btn" data-bs-toggle="modal" data-bs-target="#productQuickView">
+                                        <img src="assets/media/icons/eye.png" alt="">
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#" class="zui-wrapper-button" data-bs-toggle="modal"
+                                       data-bs-target="#comparepopup">
+                                        <img src="assets/media/icons/compare.png" alt="">
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="product-desc">
+                        <h6 class="product-title mb-8"><a href="shop-detail.html">Elite Audio Gear</a></h6>
+                        <div class="text mb-16">
+                            <p class="light-gray">
+                                Lorem ipsum dolor sit amet consectetur. Id viverra cursus enim risus
+                                mattis urnanullam quis magna. Ligula maecenas integer diam risus rhoncus at. Viverra a
+                                consectetur ac lobortis.
+                            </p>
+                        </div>
+                        <div class="rating-star mb-16 bg-white">
+                            <h5 class="color-sec mb-24">
+                                ★★★★<span class="light-gray">★</span> <span class="text-16 fw-400 dark-black">(@Model.Reviews.Count ?? 0)</span>
+                            </h5>
+                            <h6><span class="text-decoration-line-through light-gray"> $12.00</span> $10.00</h6>
+                        </div>
+                        <a href="cart.html" class="cus-btn-2 w-100">Add to Cart</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- Recommended Product End -->
+@section Scripts {
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const stars = document.querySelectorAll('#stars .star');
+            const rateValue = document.getElementById('rate-value');
+            const reviewForm = document.querySelector('.review-form form');
+            const commentsSection = document.querySelector('.comments-sec');
+            const noReviewsMsg = document.querySelector('.comments-sec .light-gray');
+
+            // Handle star selection for rating
+            stars.forEach(star => {
+                star.addEventListener('click', () => {
+                    const value = parseInt(star.getAttribute('data-value'));
+                    rateValue.value = value; // Update hidden input value
+                    stars.forEach(s => s.classList.remove('active')); // Remove active class from all stars
+                    for (let i = 0; i < value; i++) {
+                        stars[i].classList.add('active'); // Add active class to selected stars
+                    }
+                });
+
+                // Hover effect (optional)
+                star.addEventListener('mouseover', () => {
+                    const value = parseInt(star.getAttribute('data-value'));
+                    stars.forEach(s => s.classList.remove('active'));
+                    for (let i = 0; i < value; i++) {
+                        stars[i].classList.add('active');
+                    }
+                });
+
+                star.addEventListener('mouseout', () => {
+                    const currentValue = parseInt(rateValue.value);
+                    stars.forEach(s => s.classList.remove('active'));
+                    for (let i = 0; i < currentValue; i++) {
+                        stars[i].classList.add('active');
+                    }
+                });
+            });
+
+            // Handle review form submission
+            if (reviewForm) {
+                reviewForm.addEventListener('submit', async function (e) {
+                    e.preventDefault();
+
+                    const comment = document.getElementById('comment').value || null;
+                    const rating = parseInt(rateValue.value) || 0;
+
+                    if (!rating || rating <= 0 || rating > 5) {
+                        Swal.fire({
+                            icon: 'warning',
+                            title: 'Invalid Rating',
+                            text: 'Please select a rating between 1 and 5 stars.',
+                            confirmButtonColor: '#3085d6',
+                        });
+                        return;
+                    }
+
+                    const reviewData = {
+                        productId: '@Model.Id',
+                        customerId: 1,
+                        rating: rating,
+                        comment: comment
+                    };
+
+                    try {
+                        const response = await fetch('/User/Review/AddReview', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                            },
+                            body: JSON.stringify(reviewData),
+                        });
+
+                        if (response.ok) {
+                            const result = await response.json();
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Success!',
+                                text: 'Your review has been submitted successfully!',
+                                confirmButtonColor: '#28a745',
+                            });
+
+                            reviewForm.reset();
+                            rateValue.value = 0; // Reset rating
+                            stars.forEach(s => s.classList.remove('active')); // Remove active class from stars
+
+                            if (noReviewsMsg) noReviewsMsg.parentElement.style.display = 'none';
+
+                            // Create new review HTML
+                            const newReview = `
+                                <div class="comment-box bg-lightest-gray br-10 p-16 mb-24" data-review-id="${result.id}">
+                                    <div class="d-flex align-items-start gap-16">
+                                        <img src="assets/media/users/user-4.png" alt="Customer Avatar" class="br-50" style="width: 50px; height: 50px;">
+                                        <div class="flex-grow-1">
+                                            <div class="d-flex justify-content-between align-items-center mb-8">
+                                                <div class="info">
+                                                    <h6 class="fw-600 mb-0">Customer #${reviewData.customerId}</h6>
+                                                    <small class="light-gray">${new Date().toLocaleDateString('en-GB')} ${new Date().toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' })}</small>
+                                                </div>
+                                                <div class="rating-stars">
+                                                    ${Array(rating).fill('<span class="fa fa-star color-sec"></span>').join('')}${Array(5 - rating).fill('<span class="fa fa-star light-gray"></span>').join('')}
+                                                </div>
+                                            </div>
+                                            <p class="light-gray mb-0">${comment || 'No comments'}</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            `;
+                            commentsSection.insertAdjacentHTML('afterbegin', newReview);
+
+                            // Update review count on the tab
+                            const reviewTab = document.getElementById('nav-review-tab');
+                            const currentCount = parseInt(reviewTab.textContent.match(/\d+/)?.[0] || 0);
+                            reviewTab.textContent = `Reviews (${currentCount + 1})`;
+                        } else {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Submission Failed',
+                                text: 'Unable to submit your review. Please try again.',
+                                confirmButtonColor: '#d33',
+                            });
+                        }
+                    } catch (error) {
+                        console.error('Error:', error);
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'An Error Occurred',
+                            text: 'Something went wrong while submitting your review.',
+                            confirmButtonColor: '#d33',
+                        });
+                    }
+                });
+            }
+        });
+    </script>
+}
+
+<style>
+    #stars .star {
+        cursor: pointer;
+        color: #ccc;
+        transition: color 0.2s;
+    }
+
+        #stars .star.active {
+            color: #f5c518;
+        }
+
+    .text-warning {
+        color: #ffcc00 !important;
+    }
+
+    .text-secondary {
+        color: #6c757d !important;
+    }
+
+    .half-star {
+        position: relative;
+        display: inline-block;
+        overflow: hidden;
+        width: 50%;
+    }
+
+</style>

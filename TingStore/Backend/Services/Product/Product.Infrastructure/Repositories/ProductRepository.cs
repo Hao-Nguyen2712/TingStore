@@ -28,14 +28,27 @@ namespace Product.Infrastructure.Repositories
         public async Task<bool> AddImageToProduct(ImageItem imageItem)
         {
             var filter = Builders<Core.Models.Product>.Filter.Eq(p => p.Id, imageItem.id);
-            var update = Builders<Core.Models.Product>.Update.Push(p => p.Images, new Core.Models.ProductImage
+
+            // Kiểm tra product tồn tại
+            var product = await _context.Products.Find(filter).FirstOrDefaultAsync();
+            if (product == null) return false;
+
+            // Nếu Images == null, thì Set nó thành một mảng rỗng
+            if (product.Images == null)
+            {
+                var setImagesUpdate = Builders<Core.Models.Product>.Update.Set(p => p.Images, new List<Core.Models.ProductImage>());
+                await _context.Products.UpdateOneAsync(filter, setImagesUpdate);
+            }
+
+            // Sau đó, Push ảnh vào mảng Images
+            var pushImageUpdate = Builders<Core.Models.Product>.Update.Push(p => p.Images, new Core.Models.ProductImage
             {
                 ImageUrl = imageItem.imageUrl,
                 IsPrimary = imageItem.isPrimary,
                 CreateAt = DateTime.UtcNow
             });
 
-            var updateResult = await _context.Products.UpdateOneAsync(filter, update);
+            var updateResult = await _context.Products.UpdateOneAsync(filter, pushImageUpdate);
             return updateResult.IsAcknowledged && updateResult.ModifiedCount > 0;
         }
 

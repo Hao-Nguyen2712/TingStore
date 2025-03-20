@@ -97,10 +97,20 @@ namespace Cart.Api.Controllers
         [HttpPost]
         [Route("DeleteProductFromCartCommand")]
         [ProducesResponseType((int)HttpStatusCode.NoContent)]
-        public IActionResult DeleteItems([FromBody] DeleteProductFromCartCommand command)
+        public async Task<IActionResult> DeleteItems([FromBody] DeleteProductFromCartCommand command)
         {
-            var result = _mediator.Send(command);
+            var query = command;
+            var result = await _mediator.Send(command);
             return Ok(result);
+        }
+
+        [HttpPost]
+        [Route("UpdateItemQuantity")]
+        [ProducesResponseType((int)HttpStatusCode.NoContent)]
+        public async Task<IActionResult> UpdateItemQuantity([FromBody] UpdateItemsQuantityCommand command)
+        {     
+            await _mediator.Send(command);
+            return NoContent();
         }
     }
 }

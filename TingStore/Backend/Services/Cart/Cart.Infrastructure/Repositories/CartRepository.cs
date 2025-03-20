@@ -56,6 +56,33 @@ namespace Cart.Infrastructure.Repositories
                 }
                 else
                 {
+                    existingItem.Quantity = newItem.Quantity;
+                }
+            }
+            await _distributedCache.SetStringAsync(key + cart.Id, JsonConvert.SerializeObject(existingItems));
+            cart.Items = existingItems;
+            return cart;
+        }
+
+        public async Task<CartShopping> AddCart(CartShopping cart)
+        {
+            var checkCart = await _distributedCache.GetStringAsync(key + cart.Id);
+            if (string.IsNullOrEmpty(checkCart))
+            {
+                await _distributedCache.SetStringAsync(key + cart.Id, JsonConvert.SerializeObject(cart.Items));
+                return cart;
+            }
+
+            var existingItems = JsonConvert.DeserializeObject<List<CartShoppingItem>>(checkCart);
+            foreach (var newItem in cart.Items)
+            {
+                var existingItem = existingItems.FirstOrDefault(i => i.ProductId == newItem.ProductId);
+                if (existingItem == null)
+                {
+                    existingItems.Add(newItem);
+                }
+                else
+                {
                     existingItem.Quantity += newItem.Quantity;
                 }
             }
@@ -82,7 +109,11 @@ namespace Cart.Infrastructure.Repositories
             }
 
             var updatedItems = existingItems.Where(item => !productIdsToRemove.Contains(item.ProductId)).ToList();
-
+            for (int i = 0; i < updatedItems.Count; i++)
+            {
+                updatedItems.RemoveAt(i);
+                break;
+            }
 
             if (updatedItems.Count == 0)
             {

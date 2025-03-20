@@ -18,7 +18,7 @@ namespace Product.Core.Models
         public string ProductId { get; set; }
 
         [BsonElement("customerId")]
-        public string CustomerId { get; set; }
+        public int CustomerId { get; set; }
 
         [BsonElement("rating")]
         public int Rating { get; set; }

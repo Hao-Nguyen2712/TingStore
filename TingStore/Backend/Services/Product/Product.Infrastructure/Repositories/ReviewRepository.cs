@@ -38,7 +38,7 @@ namespace Product.Infrastructure.Repositories
             Find(r => r.ProductId == productId).ToListAsync();
         }
 
-        public async Task<IEnumerable<Review>> GetReviewByCustomerId(string customerId)
+        public async Task<IEnumerable<Review>> GetReviewByCustomerId(int customerId)
         {
             return await _context.Reviews
             .Find(c => c.CustomerId == customerId).ToListAsync();
