@@ -10,6 +10,7 @@ using Microsoft.Extensions.Logging;
 using TingStore.Client.Areas.Admin.Services.ProductManagement;
 using TingStore.Client.Areas.Admin.Models.Products;
 using System.Text.Json;
+using TingStore.Client.Areas.Admin.Services.Categories;
 
 namespace TingStore.Client.Areas.Admin.Controllers
 {
@@ -19,20 +20,26 @@ namespace TingStore.Client.Areas.Admin.Controllers
     {
         private readonly ILogger<ManagementProductController> _logger;
         private readonly IProductManagementService _productManagementService;
+        private readonly ICategoryService _categoryService;
 
-        public ManagementProductController(ILogger<ManagementProductController> logger, IProductManagementService productManagementService)
+        public ManagementProductController(ILogger<ManagementProductController> logger, IProductManagementService productManagementService, ICategoryService categoryService)
         {
             _logger = logger;
             this._productManagementService = productManagementService;
+            this._categoryService = categoryService;
         }
 
-        public async Task<IActionResult> Index(int? indexpag, string? sort)
+        public async Task<IActionResult> Index(int? indexpag, string? sort, string? catname)
         {
             int indexpage = indexpag ?? 1;
             _logger.LogInformation($"Page Index: {indexpage}");
-            var ProductList = await _productManagementService.GetAllProducts(indexpage, sort);
+            var ProductList = await _productManagementService.GetAllProducts(indexpage, sort, catname);
+            System.Console.WriteLine("count: "+ProductList.Count );
+            System.Console.WriteLine("pagesize: "+ProductList.PageSize );
             int numberOfPage = (int)Math.Ceiling((double)ProductList.Count / ProductList.PageSize);
             ViewBag.numberOfPage = numberOfPage;
+            System.Console.WriteLine("____________________________________");
+            System.Console.WriteLine("number of page: "+ numberOfPage);
             if (sort == "priceAsc")
             {
                 ViewBag.sortPage = "priceAsc";
@@ -45,8 +52,25 @@ namespace TingStore.Client.Areas.Admin.Controllers
             {
                 ViewBag.sortPage = "default";
             }
+            if(!string.IsNullOrEmpty(catname)) {
+                ViewBag.vbCategory = catname;
+            }
+            ViewBag.CategoryList = await this._categoryService.GetAllActiveCategories();
             return View(ProductList);
         }
+
+        public async Task<IActionResult> trash()
+        {
+            List<ProductResponse> productResponsesList = new List<ProductResponse>();
+            var ProductList = await this._productManagementService.GetAllProductNoFilter();
+            foreach(var item in ProductList) {
+                if(!item.IsActive) {
+                    productResponsesList.Add(item);
+                }
+            }
+            return View(productResponsesList);
+        }
+
 
         public async Task<IActionResult> ProductDetail(string id)
         {
@@ -219,8 +243,43 @@ namespace TingStore.Client.Areas.Admin.Controllers
         {
             try
             {
-                await this._productManagementService.DeleteProduct(id);
+                var product = await this._productManagementService.GetProductById(id);
+                UpdateProductResquest updateProductResquest = new UpdateProductResquest {
+                    Id = product.Id,
+                    Name = product.Name,
+                    Description = product.Description,
+                    Price = product.Price,
+                    Stock = product.Stock,
+                    CategoryId = product.CategoryId,
+                    IsActive = false
+                };
+                var respone = await this._productManagementService.UpdateProduct(updateProductResquest);
                 TempData["SuccessMessage"] = "Product deleted successfully!";
+                return RedirectToAction("Index");
+            }
+            catch (System.Exception)
+            {
+                TempData["ErrorMessage"] = "Error deleting product.";
+                return Error();
+            }
+        }
+
+        public async Task<IActionResult> RestoreProduct(string id)
+        {
+            try
+            {
+                var product = await this._productManagementService.GetProductById(id);
+                UpdateProductResquest updateProductResquest = new UpdateProductResquest {
+                    Id = product.Id,
+                    Name = product.Name,
+                    Description = product.Description,
+                    Price = product.Price,
+                    Stock = product.Stock,
+                    CategoryId = product.CategoryId,
+                    IsActive = true
+                };
+                var respone = await this._productManagementService.UpdateProduct(updateProductResquest);
+                TempData["SuccessMessage"] = "Product Restore successfully!";
                 return RedirectToAction("Index");
             }
             catch (System.Exception)

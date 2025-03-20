@@ -9,7 +9,7 @@ namespace TingStore.Client.Areas.Admin.Services.ProductManagement
 {
     public interface IProductManagementService
     {
-        Task<Pagination<ProductResponse>> GetAllProducts(int indexPage, string sort);
+        Task<Pagination<ProductResponse>> GetAllProducts(int indexPage, string sort, string cateName);
         Task<ProductResponse> GetProductById(string? id);
 
         Task<ProductResponse> CreateProduct(ProductResquest productResquest);
@@ -18,7 +18,7 @@ namespace TingStore.Client.Areas.Admin.Services.ProductManagement
 
         Task<bool> UpdateProduct(UpdateProductResquest updateProduct);
         Task<bool> DeleteProduct(string id);
-
+        Task<IEnumerable<ProductResponse>> GetAllProductNoFilter();
 
     }
 }
