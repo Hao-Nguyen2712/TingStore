@@ -7,6 +7,7 @@ using Product.Core.Specs;
 using TingStore.Client.Areas.User.Models.Cart;
 using TingStore.Client.Areas.User.Models.Products;
 using TingStore.Client.Areas.User.Services.Cart;
+using TingStore.Client.Areas.User.Services.Categories;
 using TingStore.Client.Areas.User.Services.Products;
 using TingStore.Client.Areas.User.Services.Reviews;
 
@@ -20,12 +21,14 @@ namespace TingStore.Client.Areas.User.Controllers
         private readonly IProductService _productService;
         private readonly IReviewProductService _reviewProductService;
         private readonly ICartService _cartService;
+        private readonly ICategoryService _categoryService;
 
-        public ProductController(IProductService productService, IReviewProductService reviewProductService, ICartService cartService)
+        public ProductController(IProductService productService, IReviewProductService reviewProductService, ICartService cartService, ICategoryService categoryService)
         {
             _productService = productService;
             _reviewProductService = reviewProductService;
             _cartService = cartService;
+            _categoryService = categoryService;
         }
 
         public async Task<IActionResult> Shop(int pageIndex = 1, int pageSize = 10, string brandId = null, string sort = null, string search = null)
@@ -56,7 +59,7 @@ namespace TingStore.Client.Areas.User.Controllers
 
                 // averageRatings
                 var averageRatings = new Dictionary<string, double>();
-                foreach ( var product in productList.Data)
+                foreach (var product in productList.Data)
                 {
                     var averageRating = await _reviewProductService.GetAverageRatingByProductId(product.Id);
                     averageRatings[product.Id] = averageRating;
@@ -70,7 +73,7 @@ namespace TingStore.Client.Areas.User.Controllers
                     var reviewCount = await _reviewProductService.GetReviewCountByProductId(product.Id);
                     reviewCounts[product.Id] = reviewCount;
                 }
-                ViewBag.ReviewCounts     = reviewCounts;
+                ViewBag.ReviewCounts = reviewCounts;
 
                 var filterParams = new Dictionary<string, string>
                 {
@@ -79,10 +82,17 @@ namespace TingStore.Client.Areas.User.Controllers
                     { "search", search }
                 };
 
+                var categoryList = await _categoryService.GeAllActiveCategoriesListString();
+                ViewBag.categoryList = categoryList;
+
                 ViewBag.FilterParams = filterParams;
                 ViewBag.BrandId = brandId;
                 ViewBag.Sort = sort;
                 ViewBag.Search = search;
+
+                if(brandId != null) {
+                    ViewBag.categorySelected = brandId;
+                }
 
                 return View(productList);
             }
@@ -143,6 +153,18 @@ namespace TingStore.Client.Areas.User.Controllers
                 TempData["ErrorMessage"] = "Add to cart failed";
             }
             return RedirectToAction("Shop");
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> SeachProduct(string ProductName)
+        {
+            return RedirectToAction("Shop", new { search = ProductName });
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> FilterByCategory(string CategoryName)
+        {
+            return RedirectToAction("Shop", new { brandId = CategoryName });
         }
     }
 }
