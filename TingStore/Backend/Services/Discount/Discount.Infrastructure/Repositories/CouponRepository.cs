@@ -51,6 +51,9 @@ namespace Discount.Infrastructure.Repositories
             return coupon;
         }
 
+        public async Task<Coupon> GetCouponById(Guid id) => await _context.Coupons.FindAsync(id)
+            ?? throw new Exception("Coupon null");
+
         public async Task<Coupon> GetCouponByName(string couponName)
         {
             return await _context.Coupons.FirstOrDefaultAsync(c => c.CouponName == couponName)

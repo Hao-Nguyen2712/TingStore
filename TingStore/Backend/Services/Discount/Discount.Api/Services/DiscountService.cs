@@ -64,10 +64,11 @@ namespace Discount.Api.Services
             var querry = new GetTotalValueForOrderQuerry(request.CouponCode, (decimal)request.Amount);
             var result = await _mediator.Send(querry);
 
-            if (result == decimal.Zero)
+            if (result == null)
             {
                 return new ApplyCouponVoucherResponse
                 {
+                    Id = string.Empty,
                     ValueDiscount = 0,
                     IsSuccess = false,
                     Message = "Coupon is not valid"
@@ -75,10 +76,40 @@ namespace Discount.Api.Services
             }
             return new ApplyCouponVoucherResponse
             {
+                Id = result.Id,
                 ValueDiscount = Convert.ToDouble(result),
                 IsSuccess = true,
                 Message = "Coupon is valid"
             };
+        }
+
+        public override async Task<ReturnCouponResponse> ReturnCoupon(ReturnCouponRequest request, ServerCallContext context)
+        {
+            var command = new ReturnCouponCommand
+            {
+                Id = request.Id
+            };
+            var result = await _mediator.Send(command);
+            if (!result)
+            {
+                throw new RpcException(new Status(StatusCode.NotFound, $"Coupon with Id = {request.Id} is not found"));
+            }
+            return new ReturnCouponResponse
+            {
+                Success = result
+            };
+        }
+
+        public override async Task<GetCouponResponse> GetCoupons(EmptyRequest request, ServerCallContext context)
+        {
+            var query = new GetAllCouponQuery();
+            var result = await _mediator.Send(query);
+            var response = new GetCouponResponse();
+            foreach (var item in result)
+            {
+                response.Coupons.Add(CouponHelper.ToModel(item));
+            }
+            return response;
         }
     }
 }

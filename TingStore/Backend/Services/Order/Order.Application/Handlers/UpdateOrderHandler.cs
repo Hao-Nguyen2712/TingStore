@@ -31,14 +31,16 @@ namespace Order.Application.Handlers
             {
                 throw new KeyNotFoundException("Order not found");
             }
-
+            string discoutId = "";
             if (!string.IsNullOrEmpty(request.Code))
             {
                 var couponResponse = await _discountClientService.GetValue(request.Code, request.TotalAmount);
                 updateOrder.DiscountAmount = couponResponse.Value;
+                discoutId = couponResponse.Id ?? string.Empty;
             }
-
+          
             updateOrder.FinalAmount = updateOrder.TotalAmount - updateOrder.DiscountAmount ?? 0;
+            updateOrder.DiscountId = discoutId;
 
             if (request.Item?.Any() == true)
             {
