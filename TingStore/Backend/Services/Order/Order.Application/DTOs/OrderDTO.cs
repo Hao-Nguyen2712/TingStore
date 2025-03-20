@@ -19,7 +19,8 @@ namespace Order.Application.DTOs
         public DateTime? UpdateAt { get; set; }
       
         public decimal TotalAmount { get; set; }
-     
+
+        public string? DiscountId { get; set; }
         public decimal? DiscountAmount { get; set; }
    
         public decimal FinalAmount { get; set; }

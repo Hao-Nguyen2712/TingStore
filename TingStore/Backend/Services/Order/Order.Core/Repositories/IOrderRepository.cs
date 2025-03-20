@@ -17,7 +17,6 @@ namespace Order.Core.Repositories
         Task<IEnumerable<Core.Entities.Order>> GetOrders();
         Task<bool> UpdateOrderStatus(Guid orderId, string newStatus);
         Task<IEnumerable<Core.Entities.Order>> GetOrdersByDateRange(DateTime startDate, DateTime endDate);
-
-
+        Task<IEnumerable<Core.Entities.Order>> GetCanceledOrders();
     }
 }

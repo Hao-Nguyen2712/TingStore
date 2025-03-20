@@ -12,7 +12,8 @@ service DiscountServicegRPC {
     rpc DeleteCoupon(DeleteCouponRequest) returns (EmptyResponse);
     rpc ApplyCouponVoucher(ApplyCouponVoucherRequest) returns (ApplyCouponVoucherResponse);
     rpc GetCoupons(EmptyRequest) returns (GetCouponResponse) ;
-       
+    rpc ReturnCoupon(ReturnCouponRequest) returns (ReturnCouponResponse);
+
 }
 
 message CouponModel {
@@ -49,13 +50,22 @@ message ApplyCouponVoucherRequest {
 }
 
 message ApplyCouponVoucherResponse {
-   double valueDiscount = 1; // kết quả được giảm
-   bool isSuccess = 2;
-   string message = 3;
+   string id = 1;
+   double valueDiscount = 2; // kết quả được giảm
+   bool isSuccess = 3;
+   string message = 4;
 }
 
 message GetCouponResponse {
     repeated CouponModel coupons = 1;
 }
 message EmptyRequest {
+}
+
+message ReturnCouponRequest {
+   string id = 1;
+}
+
+message ReturnCouponResponse {
+   bool success = 1;
 }

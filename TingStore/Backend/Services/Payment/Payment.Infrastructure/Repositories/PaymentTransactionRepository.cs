@@ -57,7 +57,7 @@ namespace Payment.Infrastructure.Repositories
         public async Task<bool> UpdateAsync(Core.Entities.PaymentTransaction transaction)
         {
             var transation = await _context.PaymentTransactions.FindAsync(transaction.Id);
-            if(transation == null)
+            if (transation == null)
             {
                 return false;
             }

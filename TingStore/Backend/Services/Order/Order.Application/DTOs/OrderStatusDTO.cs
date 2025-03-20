@@ -6,10 +6,11 @@ using System.Threading.Tasks;
 
 namespace Order.Application.DTOs
 {
-    public enum OrderStatusDTO
-    {
-        Successful,
-        Waiting,
-        Canceled,
-    }
+        public enum OrderStatusDTO
+        {
+            Successful,
+            Waiting,
+            Canceled,
+            Processing
+        }
 }

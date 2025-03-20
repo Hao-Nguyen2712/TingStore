@@ -10,7 +10,7 @@
                 }
             ],
             "UpstreamPathTemplate": "/apigateway/cart/{everything}",
-            "UpstreamHttpMethod": ["GET", "POST", "DELETE"]
+            "UpstreamHttpMethod": [ "GET", "POST", "DELETE" ]
         },
         {
             "DownstreamPathTemplate": "/api/category/{everything}",
@@ -22,7 +22,7 @@
                 }
             ],
             "UpstreamPathTemplate": "/apigateway/category/{everything}",
-            "UpstreamHttpMethod": ["GET", "POST", "PUT", "DELETE"]
+            "UpstreamHttpMethod": [ "GET", "POST", "PUT", "DELETE" ]
         },
         {
             "DownstreamPathTemplate": "/api/order/{everything}",
@@ -34,7 +34,7 @@
                 }
             ],
             "UpstreamPathTemplate": "/apigateway/order/{everything}",
-            "UpstreamHttpMethod": ["POST"]
+            "UpstreamHttpMethod": [ "POST" ]
         },
         {
             "DownstreamPathTemplate": "/api/product/{everything}",
@@ -46,7 +46,7 @@
                 }
             ],
             "UpstreamPathTemplate": "/apigateway/product/{everything}",
-            "UpstreamHttpMethod": ["GET", "POST", "PUT", "DELETE"]
+            "UpstreamHttpMethod": [ "GET", "POST", "PUT", "DELETE" ]
         },
         {
             "DownstreamPathTemplate": "/api/review/{everything}",
@@ -58,7 +58,7 @@
                 }
             ],
             "UpstreamPathTemplate": "/apigateway/review/{everything}",
-            "UpstreamHttpMethod": ["GET", "POST", "PUT", "DELETE"]
+            "UpstreamHttpMethod": [ "GET", "POST", "PUT", "DELETE" ]
         },
         {
             "DownstreamPathTemplate": "/api/users/{everything}",
@@ -70,7 +70,7 @@
                 }
             ],
             "UpstreamPathTemplate": "/apigateway/users/{everything}",
-            "UpstreamHttpMethod": ["GET", "POST", "PUT", "DELETE"]
+            "UpstreamHttpMethod": [ "GET", "POST", "PUT", "DELETE" ]
         },
         {
             "DownstreamPathTemplate": "/api/discount/{everything}",
@@ -82,7 +82,19 @@
                 }
             ],
             "UpstreamPathTemplate": "/apigateway/discount/{everything}",
-            "UpstreamHttpMethod": ["GET", "POST", "PUT", "DELETE"]
+            "UpstreamHttpMethod": [ "GET", "POST", "PUT", "DELETE" ]
+        },
+        {
+            "DownstreamPathTemplate": "/api/payment/{everything}",
+            "DownstreamScheme": "http",
+            "DownstreamHostAndPorts": [
+                {
+                    "Host": "payment-container",
+                    "Port": 80
+                }
+            ],
+            "UpstreamPathTemplate": "/apigateway/payment/{everything}",
+            "UpstreamHttpMethod": [ "GET", "POST", "PUT", "DELETE" ]
         }
     ]
 }
