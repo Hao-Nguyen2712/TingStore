@@ -12,11 +12,13 @@ using MongoDB.Bson;
 
 namespace Category.Application.Commands
 {
-    public class UpdateCategoryCommand : IRequest<bool>
+    public class DeleteCategoryByIdCommand : IRequest<bool>
     {
-        [BsonId]
-        [BsonRepresentation(BsonType.ObjectId)]
         public string Id { get; set; }
-        public string Name { get; set; }
+
+        public DeleteCategoryByIdCommand(string id)
+        {
+            Id = id;
+        }
     }
 }

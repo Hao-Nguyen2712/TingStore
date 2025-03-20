@@ -15,21 +15,20 @@ using Microsoft.Extensions.Logging;
 
 namespace Category.Application.Handlers
 {
-    public class GetAllCategoriesHandler : IRequestHandler<GetAllCategoriesQuery, IEnumerable<CategoryResponse>>
+    public class GetCategoriesCountHandler : IRequestHandler<GetCategoriesCountQuery, int>
     {
         private readonly ICategoryRepository _categoryRepository;
-        private readonly ILogger<GetAllCategoriesHandler> _logger;
+        private readonly ILogger<GetCategoriesCountHandler> _logger;
 
-        public GetAllCategoriesHandler(ICategoryRepository categoryRepository, ILogger<GetAllCategoriesHandler> logger)
+        public GetCategoriesCountHandler(ICategoryRepository categoryRepository, ILogger<GetCategoriesCountHandler> logger)
         {
             _categoryRepository = categoryRepository;
             _logger = logger;
         }
 
-        public async Task<IEnumerable<CategoryResponse>> Handle(GetAllCategoriesQuery request, CancellationToken cancellationToken)
+        public async Task<int> Handle(GetCategoriesCountQuery request, CancellationToken cancellationToken)
         {
-            var categoryList = await _categoryRepository.GetAllCategories();
-            return CategoryMapper.Mapper.Map<IEnumerable<CategoryResponse>>(categoryList);
+            return await _categoryRepository.GetCategoriesCount();
         }
     }
 }

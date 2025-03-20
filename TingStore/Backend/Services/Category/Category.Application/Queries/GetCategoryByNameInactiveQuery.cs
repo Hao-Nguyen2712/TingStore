@@ -11,7 +11,13 @@ using MediatR;
 
 namespace Category.Application.Queries
 {
-    public class GetAllCategoriesQuery : IRequest<IEnumerable<CategoryResponse>>
+    public class GetCategoryByNameInactiveQuery : IRequest<CategoryResponse>
     {
+        public string Name { get; set; }
+
+        public GetCategoryByNameInactiveQuery(string name)
+        {
+            Name = name;
+        }
     }
 }

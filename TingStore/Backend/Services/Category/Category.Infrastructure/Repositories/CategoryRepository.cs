@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Linq;
 using Category.Core.Repositories;
 using Category.Core.Specs;
 using Category.Infrastructure.Data;
@@ -26,7 +27,7 @@ namespace Category.Infrastructure.Repositories
         public async Task<Pagination<Core.Entities.Category>> GetCategories(CategorySpecParams categorySpecParams)
         {
             var builder = Builders<Core.Entities.Category>.Filter;
-            var filter = builder.Empty;
+            var filter = builder.Eq(c => c.IsActive, true);
             if (!string.IsNullOrEmpty(categorySpecParams.Search))
             {
                 var searchFilter = builder.Regex(x => x.Name, new BsonRegularExpression(categorySpecParams.Search));
@@ -44,7 +45,7 @@ namespace Category.Infrastructure.Repositories
                     PageSize = categorySpecParams.PageSize,
                     PageIndex = categorySpecParams.PageIndex,
                     Data = await DataFilter(categorySpecParams, filter),
-                    Count = await _categoryContext.Categories.CountDocumentsAsync(p => true)
+                    Count = await _categoryContext.Categories.CountDocumentsAsync(filter)
                 };
             }
             return new Pagination<Core.Entities.Category>
@@ -57,7 +58,7 @@ namespace Category.Infrastructure.Repositories
                 .Skip(categorySpecParams.PageSize * (categorySpecParams.PageIndex - 1))
                 .Limit(categorySpecParams.PageSize)
                 .ToListAsync(),
-                Count = await _categoryContext.Categories.CountDocumentsAsync(p => true)
+                Count = await _categoryContext.Categories.CountDocumentsAsync(filter)
             };
         }
 
@@ -91,13 +92,36 @@ namespace Category.Infrastructure.Repositories
 
         public async Task<Core.Entities.Category> GetCategoryById(string id)
         {
-            return await _categoryContext.Categories.Find(c => c.Id == id).FirstOrDefaultAsync();
+            return await _categoryContext.Categories.Find(c => c.Id == id && c.IsActive).FirstOrDefaultAsync();
         }
+        public async Task<IEnumerable<Core.Entities.Category>> GetAllCategories()
+        {
+            try
+            {
+                var filter = Builders<Core.Entities.Category>.Filter.Eq(c => c.IsActive, true);
+                var categories = await _categoryContext.Categories.Find(filter).ToListAsync();
+
+                if (categories == null || !categories.Any())
+                {
+                    Console.WriteLine("Không có danh mục nào được tìm thấy.");
+                }
+
+                return categories;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Lỗi khi lấy danh mục: {ex.Message}");
+                throw;
+            }
+        }
+
         public async Task<IEnumerable<Core.Entities.Category>> GetCategoryByName(string name)
         {
-            FilterDefinition<Core.Entities.Category> filter = Builders<Core.Entities.Category>.Filter.Eq(p => p.Name, name);
+            var filter = Builders<Core.Entities.Category>.Filter.Eq(c => c.Name, name) &
+                 Builders<Core.Entities.Category>.Filter.Eq(c => c.IsActive, true);
             return await _categoryContext.Categories.Find(filter).ToListAsync();
         }
+
         public async Task<Core.Entities.Category> CreateCategory(Core.Entities.Category category)
         {
             await _categoryContext.Categories.InsertOneAsync(category);
@@ -111,9 +135,49 @@ namespace Category.Infrastructure.Repositories
         
         public async Task<bool> DeleteCategory(string id)
         {
-            FilterDefinition<Core.Entities.Category> filter = Builders<Core.Entities.Category>.Filter.Eq(c => c.Id, id);
-            DeleteResult deleteResult = await _categoryContext.Categories.DeleteOneAsync(filter);
-            return deleteResult.IsAcknowledged && deleteResult.DeletedCount > 0;
-        }  
+            var filter = Builders<Core.Entities.Category>.Filter.Eq(c => c.Id, id);
+            var update = Builders<Core.Entities.Category>.Update.Set(c => c.IsActive, false);
+            var deleteResult = await _categoryContext.Categories.UpdateOneAsync(filter, update);
+            return deleteResult.IsAcknowledged && deleteResult.ModifiedCount > 0;
+        }
+
+        public async Task<IEnumerable<Core.Entities.Category>> GetAllActiveCategories()
+        {
+            var filter = Builders<Core.Entities.Category>.Filter.Eq(c => c.IsActive, true);
+            return await _categoryContext.Categories.Find(filter).ToListAsync();
+        }
+        public async Task<IEnumerable<Core.Entities.Category>> GetAllInactiveCategories()
+        {
+            var filter = Builders<Core.Entities.Category>.Filter.Eq(c => c.IsActive, false);
+            return await _categoryContext.Categories.Find(filter).ToListAsync();
+        }
+        public async Task<bool> RestoreCategory(string id)
+        {
+            var filter = Builders<Core.Entities.Category>.Filter.Eq(c => c.Id, id);
+            var update = Builders<Core.Entities.Category>.Update.Set(c => c.IsActive, true);
+            var updateResult = await _categoryContext.Categories.UpdateOneAsync(filter, update);
+            return updateResult.IsAcknowledged && updateResult.ModifiedCount > 0;
+        }
+        public async Task<int> GetCategoriesCount()
+        {
+            return (int)await _categoryContext.Categories.CountDocumentsAsync(FilterDefinition<Core.Entities.Category>.Empty) ;
+        }
+        public async Task<int> GetAllActiveCategoriesCount()
+        {
+            var filter = Builders<Core.Entities.Category>.Filter.Eq(c => c.IsActive, true);
+            return (int)await _categoryContext.Categories.CountDocumentsAsync(filter);
+        }
+        public async Task<int> GetAllInactiveCategoriesCount()
+        {
+            var filter = Builders<Core.Entities.Category>.Filter.Eq(c => c.IsActive, false);
+            return (int)await _categoryContext.Categories.CountDocumentsAsync(filter);
+        }
+
+        public async Task<Core.Entities.Category> GetCategoryByNameInactive(string name)
+        {
+            var filter = Builders<Core.Entities.Category>.Filter.Eq(c => c.Name, name) &
+                 Builders<Core.Entities.Category>.Filter.Eq(c => c.IsActive, false);
+            return await _categoryContext.Categories.Find(filter).FirstOrDefaultAsync();
+        }
     }
 }

@@ -125,10 +125,12 @@ namespace TingStore.Client.Areas.Admin.Controllers
             {
                 var productRespone = await this._productManagementService.CreateProduct(productResquest);
                 var addImageRespone = await this._productManagementService.AddProductImage(productRespone.Id, productInput.ProductFile);
+                TempData["SuccessMessage"] = "Product created successfully!";
                 return RedirectToAction("Index");
             }
             catch (System.Exception)
             {
+                TempData["ErrorMessage"] = "Error creating product.";
                 return View(productInput);
             }
         }
@@ -202,10 +204,12 @@ namespace TingStore.Client.Areas.Admin.Controllers
             try
             {
                 var respone = await this._productManagementService.UpdateProduct(updateProductResquest);
+                TempData["SuccessMessage"] = "Product updated successfully!";
                 return RedirectToAction("ProductDetail", new { id = updateProductResquest.Id });
             }
             catch (System.Exception)
             {
+                TempData["ErrorMessage"] = "Error updating product.";
                 return View();
             }
 
@@ -216,10 +220,12 @@ namespace TingStore.Client.Areas.Admin.Controllers
             try
             {
                 await this._productManagementService.DeleteProduct(id);
+                TempData["SuccessMessage"] = "Product deleted successfully!";
                 return RedirectToAction("Index");
             }
             catch (System.Exception)
             {
+                TempData["ErrorMessage"] = "Error deleting product.";
                 return Error();
             }
         }

@@ -6,12 +6,17 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Category.Application.Responses;
 using MediatR;
 
-namespace Category.Application.Queries
+namespace Category.Application.Commands
 {
-    public class GetAllCategoriesQuery : IRequest<IEnumerable<CategoryResponse>>
+    public class RestoreCategoryCommand : IRequest<bool>
     {
+        public string Id { get; set; }
+
+        public RestoreCategoryCommand(string id)
+        {
+            Id = id;
+        }
     }
 }
