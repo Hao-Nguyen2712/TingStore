@@ -10,5 +10,7 @@ namespace TingStore.Client.Areas.User.Services.Products
     {
         Task<Pagination<ProductResponse>> GetAllProducts(ProductSpecParams productSpecParams);
         Task<ProductResponse> GetProductById(string id);
+        Task<IEnumerable<ProductResponse>> GetAllProductsNoFilter();
+        Task<List<string>> getListByProName();
     }
 }

@@ -65,6 +65,12 @@ namespace Product.Infrastructure.Repositories
                 .DeleteOneAsync(filter);
             return deleteResult.IsAcknowledged && deleteResult.DeletedCount > 0;
         }
+
+        public async Task<IEnumerable<Core.Models.Product>> GetAllProduct()
+        {
+            return await _context.Products.Find(_ => true).ToListAsync();
+        }
+
         public async Task<Core.Models.Product> GetProduct(string id)
         {
             return await _context
@@ -92,10 +98,11 @@ namespace Product.Infrastructure.Repositories
         public async Task<Pagination<Core.Models.Product>> GetProducts(ProductSpecParams productSpecParams)
         {
             var builder = Builders<Product.Core.Models.Product>.Filter;
-            var filter = builder.Empty;
+            var filter = builder.Eq(x => x.IsActive, true);
+
             if (!string.IsNullOrEmpty(productSpecParams.Search))
             {
-                var searchFilter = builder.Regex(x => x.Name, new BsonRegularExpression(productSpecParams.Search));
+                var searchFilter = builder.Regex(x => x.Name, new BsonRegularExpression(productSpecParams.Search, "i"));
                 filter &= searchFilter;
             }
             if (!string.IsNullOrEmpty(productSpecParams.BrandId))

@@ -78,6 +78,16 @@ namespace Product.Api.Controllers
             return Ok(result);
         }
 
+        [HttpGet]
+        [Route("GetAllNFProductsNoFilter")]
+        [ProducesResponseType(typeof(IList<ProductResponse>), (int)HttpStatusCode.OK)]
+        public async Task<IActionResult> GetAllNFProductsNoFilter()
+        {
+            var query = new GetAllNFProductQuery();
+            var result = await _mediator.Send(query);
+            return Ok(result);
+        }
+
         [HttpPost]
         [Route("CreateProduct")]
         [ProducesResponseType(typeof(ProductResponse), (int)HttpStatusCode.OK)]
