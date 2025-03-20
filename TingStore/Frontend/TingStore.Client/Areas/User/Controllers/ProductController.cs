@@ -56,7 +56,7 @@ namespace TingStore.Client.Areas.User.Controllers
 
                 // averageRatings
                 var averageRatings = new Dictionary<string, double>();
-                foreach ( var product in productList.Data)
+                foreach (var product in productList.Data)
                 {
                     var averageRating = await _reviewProductService.GetAverageRatingByProductId(product.Id);
                     averageRatings[product.Id] = averageRating;
@@ -70,7 +70,7 @@ namespace TingStore.Client.Areas.User.Controllers
                     var reviewCount = await _reviewProductService.GetReviewCountByProductId(product.Id);
                     reviewCounts[product.Id] = reviewCount;
                 }
-                ViewBag.ReviewCounts     = reviewCounts;
+                ViewBag.ReviewCounts = reviewCounts;
 
                 var filterParams = new Dictionary<string, string>
                 {
@@ -143,6 +143,12 @@ namespace TingStore.Client.Areas.User.Controllers
                 TempData["ErrorMessage"] = "Add to cart failed";
             }
             return RedirectToAction("Shop");
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> SeachProduct(string ProductName)
+        {
+            return RedirectToAction("Shop", new { search = ProductName });
         }
     }
 }
