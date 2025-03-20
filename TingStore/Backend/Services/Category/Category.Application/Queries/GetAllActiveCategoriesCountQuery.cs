@@ -6,12 +6,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Category.Application.Responses;
 using MediatR;
 
 namespace Category.Application.Queries
 {
-    public class GetAllCategoriesQuery : IRequest<IEnumerable<CategoryResponse>>
+    public class GetAllActiveCategoriesCountQuery : IRequest<int>
     {
     }
 }

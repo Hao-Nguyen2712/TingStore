@@ -15,13 +15,18 @@ namespace Category.Core.Entities
         public string Id { get; set; }
         [BsonElement("name")]
         public string Name { get; set; }
-        [BsonElement("description")]
-        public string Description { get; set; }
         [BsonElement("createdAt")]
         [BsonDateTimeOptions(Kind = DateTimeKind.Utc)]
         public DateTime CreatedAt { get; set; }
         [BsonElement("updateAt")]
         [BsonDateTimeOptions(Kind = DateTimeKind.Utc)]
         public DateTime UpdateAt { get; set; }
+        [BsonElement("isActive")]
+        public bool IsActive { get; set; } = true;
+
+        public Category()
+        {
+            IsActive = true;
+        }
     }
 }
