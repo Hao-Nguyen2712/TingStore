@@ -24,68 +24,64 @@
     <link rel="stylesheet" href="~/user/assets/css/app.css" asp-append-version="true">
     <link rel="stylesheet" href="~/user/assets/css/cart.css" asp-append-version="true">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+    <style>
+        .autocomplete {
+            position: relative;
+            display: inline-block;
+        }
+
+        input {
+            border: 1px solid transparent;
+            background-color: #f1f1f1;
+            padding: 10px;
+            font-size: 16px;
+        }
+
+            input[type=text] {
+                background-color: #f1f1f1;
+                width: 100%;
+            }
+
+            input[type=submit] {
+                background-color: DodgerBlue;
+                color: #fff;
+                cursor: pointer;
+            }
+
+        .autocomplete-items {
+            position: absolute;
+            border: 1px solid #d4d4d4;
+            border-bottom: none;
+            border-top: none;
+            z-index: 99;
+            top: 100%;
+            left: 0;
+            right: 0;
+        }
+
+            .autocomplete-items div {
+                padding: 10px;
+                cursor: pointer;
+                background-color: #fff;
+                border-bottom: 1px solid #d4d4d4;
+            }
+
+                /*when hovering an item:*/
+                .autocomplete-items div:hover {
+                    background-color: #e9e9e9;
+                }
+
+        .autocomplete-active {
+            background-color: DodgerBlue !important;
+            color: #ffffff;
+        }
+    </style>
 </head>
-<style>
-    /*the container must be positioned relative:*/
-    .autocomplete {
-        position: relative;
-        display: inline-block;
-    }
 
-    input {
-        border: 1px solid transparent;
-        background-color: #f1f1f1;
-        padding: 10px;
-        font-size: 16px;
-    }
-
-    input[type=text] {
-        background-color: #f1f1f1;
-        width: 100%;
-    }
-
-    input[type=submit] {
-        background-color: DodgerBlue;
-        color: #fff;
-        cursor: pointer;
-    }
-
-    .autocomplete-items {
-        position: absolute;
-        border: 1px solid #d4d4d4;
-        border-bottom: none;
-        border-top: none;
-        z-index: 99;
-        /*position the autocomplete items to be the same width as the container:*/
-        top: 100%;
-        left: 0;
-        right: 0;
-    }
-
-    .autocomplete-items div {
-        padding: 10px;
-        cursor: pointer;
-        background-color: #fff;
-        border-bottom: 1px solid #d4d4d4;
-    }
-
-    /*when hovering an item:*/
-    .autocomplete-items div:hover {
-        background-color: #e9e9e9;
-    }
-
-    /*when navigating through the items using the arrow keys:*/
-    .autocomplete-active {
-        background-color: DodgerBlue !important;
-        color: #ffffff;
-    }
-</style>
 @using TingStore.Client.Areas.User.Services.Products
 @using TingStore.Client.Areas.User.Controllers
 @using Microsoft.AspNetCore.Http
 @inject IProductService ProductService
-
-
 
 <body class="tt-smooth-scroll">
 
@@ -202,9 +198,8 @@
                                 </div>
                             </form> *@
                             <form autocomplete="off" asp-controller="Product" asp-action="SeachProduct"  class="navbar-form nav_margin autocomplete" role="search" method="post">
-                                <div class="autocomplete input-field" style="width:680px;">
+                                <div class="autocomplete input-field" style="width:457px;">
                                     <input class="form-control" id="myInput" type="text" name="ProductName" placeholder="Search for products...">
-                                    @* <input class="cus-btn" type="submit"> *@
                                     <button type="submit" class="cus-btn">Search</button>
                                 </div>
                             </form>
@@ -1161,5 +1156,4 @@
     @await RenderSectionAsync("Scripts", required: false)
     @RenderSection("Styles", required: false)
 </body>
-
 </html>

@@ -48,5 +48,32 @@ namespace TingStore.Client.Areas.User.Services.Categories
             }
             throw new HttpRequestException("Unable to fetch category.");
         }
+
+        public async Task<IEnumerable<CategoryResponse>> GeAllActiveCategories()
+        {
+            var response = await this._httpClient.GetAsync($"apigateway/category/GetAllActiveCategories");
+            if (response.IsSuccessStatusCode)
+            {
+                var data = await response.Content.ReadAsStringAsync();
+                var option = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
+                return JsonSerializer.Deserialize<IEnumerable<CategoryResponse>>(data, option) ?? new List<CategoryResponse>();
+            }
+            throw new HttpRequestException("Unable to fetch Product List.");
+        }
+
+        public async Task<List<string>> GeAllActiveCategoriesListString()
+        {
+            List<string> listCategory = new List<string>();
+            var categorys = await GeAllActiveCategories();
+            if (categorys.Count() != 0 || !categorys.Any())
+            {
+                foreach (var item in categorys)
+                {
+                    listCategory.Add(item.Name);
+                }
+                return listCategory;
+            }
+            return new List<string>();
+        }
     }
 }
