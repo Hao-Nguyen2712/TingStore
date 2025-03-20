@@ -21,9 +21,9 @@ namespace TingStore.Client.Areas.User.Controllers
         private readonly IProductService _productService;
         private readonly IReviewProductService _reviewProductService;
         private readonly ICartService _cartService;
-        private readonly ICategoryService _categoryService;
+        private readonly ICategoryUserService _categoryService;
 
-        public ProductController(IProductService productService, IReviewProductService reviewProductService, ICartService cartService, ICategoryService categoryService)
+        public ProductController(IProductService productService, IReviewProductService reviewProductService, ICartService cartService, ICategoryUserService categoryService)
         {
             _productService = productService;
             _reviewProductService = reviewProductService;

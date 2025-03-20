@@ -5,7 +5,7 @@ using TingStore.Client.Areas.User.Models.Categories;
 
 namespace TingStore.Client.Areas.User.Services.Categories
 {
-    public interface ICategoryService
+    public interface ICategoryUserService
     {
         Task<IEnumerable<CategoryResponse>> GetCategories();
         Task<CategoryResponse> GetCategoryById(string id);

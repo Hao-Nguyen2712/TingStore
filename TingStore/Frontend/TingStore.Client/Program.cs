@@ -18,13 +18,17 @@ builder.Services.AddControllersWithViews();
 // Đăng ký IUserService
 builder.Services.AddScoped<IUserService, UserService>();
 
-builder.Services.AddScoped<TingStore.Client.Areas.Admin.Services.Categories.ICategoryService, TingStore.Client.Areas.Admin.Services.Categories.CategoryService>();
+
+// admin/categoryService
+builder.Services.AddScoped<ICategoryService, CategoryService>();
 
 // Đăng ký IProductService
 builder.Services.AddScoped<IProductService, ProductService>();
 // đăng ký DI cho CartService
 builder.Services.AddScoped<ICartService, CartService>();
 
+// Đăng ký ICategoryUserService
+builder.Services.AddScoped<ICategoryUserService, CategoryUserService>();
 
 // admin/productmanagement
 builder.Services.AddScoped<IProductManagementService, ProductManagementService>();
@@ -33,8 +37,6 @@ builder.Services.AddScoped<IProductManagementService, ProductManagementService>(
 // Đăng ký IReviewProductService
 builder.Services.AddScoped<IReviewProductService, ReviewProductService>();
 
-// user/categoryService
-builder.Services.AddScoped<TingStore.Client.Areas.User.Services.Categories.ICategoryService, TingStore.Client.Areas.User.Services.Categories.CategoryService>();
 
 
 // Cấu hình HttpClient để gọi API Gateway
