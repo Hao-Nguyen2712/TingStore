@@ -165,7 +165,6 @@
                                     <div class="col-xxl-3 col-xl-4 col-lg-4 col-md-6">
                                         <div class="featured-product-card bg-white br-10 ">
                                             <div class="image-box mb-16">
-                                                <span class="sale-label">-12%</span>
                                                 <a asp-area="User" asp-controller="Product" asp-action="Details" asp-route-id="@product.Id"><img src="@product.ProductImage" class="product-image" alt="@product.Name"></a>
                                                 <div class="side-icons">
                                                     <ul class="list-unstyled">
@@ -223,7 +222,15 @@
                                                         @product.Price.ToString("C", new CultureInfo("vi-VN"))
                                                     </h6>
                                                 </div>
-                                                <a href="cart.html" class="cus-btn-2 w-100">Add to Cart</a>
+ 
+                                                <button class="cus-btn-2 w-100 add-to-cart-btn"
+                                                        data-product-id="@product.Id"
+                                                        data-product-name="@product.Name"
+                                                        data-price="@product.Price"
+                                                        data-image="@product.ProductImage">
+                                                    Add to Cart
+                                                </button>
+
                                             </div>
                                         </div>
                                     </div>
@@ -245,7 +252,6 @@
                                     <div class="col-xxl-3 col-xl-4 col-lg-4 col-md-6">
                                         <div class="featured-product-card bg-white br-10 ">
                                             <div class="image-box mb-16">
-                                                <span class="sale-label">-12%</span>
                                                 <a asp-area="User" asp-controller="Product" asp-action="Details" asp-route-id="@product.Id"><img src="@product.ProductImage" class="product-image" alt="@product.Name"></a>
                                                 <div class="side-icons">
                                                     <ul class="list-unstyled">
@@ -303,7 +309,7 @@
                                                         @product.Price.ToString("C", new CultureInfo("vi-VN"))
                                                     </h6>
                                                 </div>
-                                                <a href="cart.html" class="cus-btn-2 w-100">Add to Cart</a>
+                                                <a id="addToCartForm" class="cus-btn-2 w-100">Add to Cart</a>
                                             </div>
                                         </div>
                                     </div>
@@ -325,7 +331,6 @@
                                     <div class="col-xxl-3 col-xl-4 col-lg-4 col-md-6">
                                         <div class="featured-product-card bg-white br-10 ">
                                             <div class="image-box mb-16">
-                                                <span class="sale-label">-12%</span>
                                                 <a asp-area="User" asp-controller="Product" asp-action="Details" asp-route-id="@product.Id"><img src="@product.ProductImage" class="product-image" alt="@product.Name"></a>
                                                 <div class="side-icons">
                                                     <ul class="list-unstyled">
@@ -383,7 +388,13 @@
                                                         @product.Price.ToString("C", new CultureInfo("vi-VN"))
                                                     </h6>
                                                 </div>
-                                                <a href="cart.html" class="cus-btn-2 w-100">Add to Cart</a>
+                                                <button class="cus-btn-2 w-100 add-to-cart-btn"
+                                                        data-product-id="@product.Id"
+                                                        data-product-name="@product.Name"
+                                                        data-price="@product.Price"
+                                                        data-image="@product.ProductImage">
+                                                    Add to Cart
+                                                </button>
                                             </div>
                                         </div>
                                     </div>
@@ -405,7 +416,6 @@
                                     <div class="col-xxl-3 col-xl-4 col-lg-4 col-md-6">
                                         <div class="featured-product-card bg-white br-10 ">
                                             <div class="image-box mb-16">
-                                                <span class="sale-label">-12%</span>
                                                 <a asp-area="User" asp-controller="Product" asp-action="Details" asp-route-id="@product.Id"><img src="@product.ProductImage" class="product-image" alt="@product.Name"></a>
                                                 <div class="side-icons">
                                                     <ul class="list-unstyled">
@@ -463,7 +473,13 @@
                                                         @product.Price.ToString("C", new CultureInfo("vi-VN"))
                                                     </h6>
                                                 </div>
-                                                <a href="cart.html" class="cus-btn-2 w-100">Add to Cart</a>
+                                                <button class="cus-btn-2 w-100 add-to-cart-btn"
+                                                        data-product-id="@product.Id"
+                                                        data-product-name="@product.Name"
+                                                        data-price="@product.Price"
+                                                        data-image="@product.ProductImage">
+                                                    Add to Cart
+                                                </button>
                                             </div>
                                         </div>
                                     </div>
@@ -485,7 +501,6 @@
                                     <div class="col-xxl-3 col-xl-4 col-lg-4 col-md-6">
                                         <div class="featured-product-card bg-white br-10 ">
                                             <div class="image-box mb-16">
-                                                <span class="sale-label">-12%</span>
                                                 <a asp-area="User" asp-controller="Product" asp-action="Details" asp-route-id="@product.Id"><img src="@product.ProductImage" class="product-image" alt="@product.Name"></a>
                                                 <div class="side-icons">
                                                     <ul class="list-unstyled">
@@ -543,7 +558,13 @@
                                                         @product.Price.ToString("C", new CultureInfo("vi-VN"))
                                                     </h6>
                                                 </div>
-                                                <a href="cart.html" class="cus-btn-2 w-100">Add to Cart</a>
+                                                <button class="cus-btn-2 w-100 add-to-cart-btn"
+                                                        data-product-id="@product.Id"
+                                                        data-product-name="@product.Name"
+                                                        data-price="@product.Price"
+                                                        data-image="@product.ProductImage">
+                                                    Add to Cart
+                                                </button>
                                             </div>
                                         </div>
                                     </div>
@@ -610,7 +631,6 @@
                             <div class="col-xxl-2 col-xl-3 col-lg-4 col-md-6">
                                 <div class="featured-product-card bg-white br-10">
                                     <div class="image-box mb-16">
-                                        <span class="sale-label">-12%</span>
                                         <a asp-area="User" asp-controller="Product" asp-action="Details" asp-route-id="@product.Id"><img src="@product.ProductImage" class="product-image" alt="@product.Name"></a>
                                         <div class="side-icons">
                                             <ul class="list-unstyled">
@@ -668,7 +688,14 @@
                                                 @product.Price.ToString("C", new CultureInfo("vi-VN"))
                                             </h6>
                                         </div>
-                                        <a href="cart.html" class="cus-btn-2 w-100">Add to Cart</a>
+      
+                                        <button class="cus-btn-2 w-100 add-to-cart-btn" 
+            data-product-id="@product.Id" 
+            data-product-name="@product.Name" 
+            data-price="@product.Price" 
+            data-image="@product.ProductImage">
+        Add to Cart
+    </button>
                                     </div>
                                 </div>
                             </div>
@@ -689,7 +716,6 @@
                             <div class="col-xxl-2 col-xl-3 col-lg-4 col-md-6">
                                 <div class="featured-product-card bg-white br-10">
                                     <div class="image-box mb-16">
-                                        <span class="sale-label">-12%</span>
                                         <a asp-area="User" asp-controller="Product" asp-action="Details" asp-route-id="@product.Id"><img src="@product.ProductImage" class="product-image" alt="@product.Name"></a>
                                         <div class="side-icons">
                                             <ul class="list-unstyled">
@@ -747,7 +773,14 @@
                                                 @product.Price.ToString("C", new CultureInfo("vi-VN"))
                                             </h6>
                                         </div>
-                                        <a href="cart.html" class="cus-btn-2 w-100">Add to Cart</a>
+
+                                        <button class="cus-btn-2 w-100 add-to-cart-btn"
+                                                data-product-id="@product.Id"
+                                                data-product-name="@product.Name"
+                                                data-price="@product.Price"
+                                                data-image="@product.ProductImage">
+                                            Add to Cart
+                                        </button>
                                     </div>
                                 </div>
                             </div>
@@ -768,7 +801,6 @@
                             <div class="col-xxl-2 col-xl-3 col-lg-4 col-md-6">
                                 <div class="featured-product-card bg-white br-10">
                                     <div class="image-box mb-16">
-                                        <span class="sale-label">-12%</span>
                                         <a asp-area="User" asp-controller="Product" asp-action="Details" asp-route-id="@product.Id"><img src="@product.ProductImage" class="product-image" alt="@product.Name"></a>
                                         <div class="side-icons">
                                             <ul class="list-unstyled">
@@ -826,7 +858,13 @@
                                                 @product.Price.ToString("C", new CultureInfo("vi-VN"))
                                             </h6>
                                         </div>
-                                        <a href="cart.html" class="cus-btn-2 w-100">Add to Cart</a>
+                                        <button class="cus-btn-2 w-100 add-to-cart-btn"
+                                                data-product-id="@product.Id"
+                                                data-product-name="@product.Name"
+                                                data-price="@product.Price"
+                                                data-image="@product.ProductImage">
+                                            Add to Cart
+                                        </button>
                                     </div>
                                 </div>
                             </div>
@@ -847,7 +885,6 @@
                             <div class="col-xxl-2 col-xl-3 col-lg-4 col-md-6">
                                 <div class="featured-product-card bg-white br-10">
                                     <div class="image-box mb-16">
-                                        <span class="sale-label">-12%</span>
                                         <a asp-area="User" asp-controller="Product" asp-action="Details" asp-route-id="@product.Id"><img src="@product.ProductImage" class="product-image" alt="@product.Name"></a>
                                         <div class="side-icons">
                                             <ul class="list-unstyled">
@@ -926,7 +963,6 @@
                             <div class="col-xxl-2 col-xl-3 col-lg-4 col-md-6">
                                 <div class="featured-product-card bg-white br-10">
                                     <div class="image-box mb-16">
-                                        <span class="sale-label">-12%</span>
                                         <a asp-area="User" asp-controller="Product" asp-action="Details" asp-route-id="@product.Id"><img src="@product.ProductImage" class="product-image" alt="@product.Name"></a>
                                         <div class="side-icons">
                                             <ul class="list-unstyled">
@@ -984,7 +1020,13 @@
                                                 @product.Price.ToString("C", new CultureInfo("vi-VN"))
                                             </h6>
                                         </div>
-                                        <a href="cart.html" class="cus-btn-2 w-100">Add to Cart</a>
+                                        <button class="cus-btn-2 w-100 add-to-cart-btn"
+                                                data-product-id="@product.Id"
+                                                data-product-name="@product.Name"
+                                                data-price="@product.Price"
+                                                data-image="@product.ProductImage">
+                                            Add to Cart
+                                        </button>
                                     </div>
                                 </div>
                             </div>
@@ -1044,7 +1086,6 @@
                     <div class="col-xxl-2 col-xl-3 col-lg-4 col-md-6">
                         <div class="featured-product-card bg-white br-10">
                             <div class="image-box mb-16">
-                                <span class="sale-label">-12%</span>
                                 <a href="shop-detail.html"><img src="@product.ProductImage" class="product-image" alt="@product.Name"></a>
                                 <div class="side-icons">
                                     <ul class="list-unstyled">
@@ -1102,7 +1143,13 @@
                                         @product.Price.ToString("C", new CultureInfo("vi-VN"))
                                     </h6>
                                 </div>
-                                <a href="cart.html" class="cus-btn-2 w-100">Add to Cart</a>
+                                 <button class="cus-btn-2 w-100 add-to-cart-btn"
+         data-product-id="@product.Id"
+         data-product-name="@product.Name"
+         data-price="@product.Price"
+         data-image="@product.ProductImage">
+     Add to Cart
+ </button>
                             </div>
                         </div>
                     </div>
@@ -1150,7 +1197,6 @@
                                                         <div class="d-flex align-items-center gap-16 mb-24">
                                                             <p class="light-gray text-decoration-line-through">@((product.Price * 1.2m).ToString("C", new CultureInfo("vi-VN")))</p>
                                                             <h5>@product.Price.ToString("C", new CultureInfo("vi-VN"))</h5>
-                                                            <span class="label white">-12%</span>
                                                         </div>
                                                         @{
                                                             var description = getDescription(product.Id).Description;
@@ -1170,7 +1216,13 @@
                                                                 </div>
                                                             </div>
                                                             <div class="cart-btn w-100">
-                                                                <a href="cart.html" class="cus-btn-2 w-100">ADD TO CART</a>
+                                                                <button class="cus-btn-2 w-100 add-to-cart-btn"
+                                                                        data-product-id="@product.Id"
+                                                                        data-product-name="@product.Name"
+                                                                        data-price="@product.Price"
+                                                                        data-image="@product.ProductImage">
+                                                                    Add to Cart
+                                                                </button>
                                                             </div>
                                                         </div>
                                                         <div class="hr-line mb-24"></div>
@@ -1263,4 +1315,65 @@
     </div>
 </section>
 <!-- Inner Banner End -->
+@section Scripts {
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            $('.add-to-cart-btn').on('click', function (e) {
+                e.preventDefault();
+
+                var button = $(this);
+                var productId = button.data('product-id');
+                var productName = button.data('product-name');
+                var price = button.data('price');
+                var productImage = button.data('image');
+
+                var cartItem = {
+                    ProductId: productId,
+                    ProductName: productName,
+                    Price: price,
+                    ProductImage: productImage,
+                    Quantity: 1 // Default quantity is 1
+                };
+
+                $.ajax({
+                    url: '/User/Product/AddCart', // URL to AddCart action
+                    type: 'POST',
+                    data: JSON.stringify(cartItem),
+                    contentType: 'application/json; charset=utf-8',
+                    dataType: 'json',
+                    success: function (response) {
+                        if (response.success) {
+                            Swal.fire({
+                                icon: "success",
+                                title: "Success!",
+                                text: "The product has been added to your cart!",
+                                timer: 1500,
+                                showConfirmButton: false
+                            }).then(() => {
+                                location.reload(); // Reload the entire page
+                            });
+                        } else {
+                            Swal.fire({
+                                icon: "error",
+                                title: "Failed!",
+                                text: "Could not add the product to the cart!"
+                            });
+                        }
+                    },
+                    error: function (xhr, status, error) {
+                        console.log('Error: ' + error);
+                        Swal.fire({
+                            icon: "error",
+                            title: "Error!",
+                            text: "An error occurred while adding to the cart. Please try again!"
+                        });
+                    }
+                });
+            });
+
+        });
+    </script>
+}
 

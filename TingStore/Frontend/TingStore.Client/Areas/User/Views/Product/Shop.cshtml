@@ -45,7 +45,7 @@
                     <div class="visual-btns v-2">
                         <a href="javascript:;" class="visual-box shop-filter">
                             <img src="assets/media/icons/filter-icon.png" alt="">
-                            <span>Filter tes</span>
+                            <span>Filter</span>
                         </a>
                     </div>
                     <div class="results d-xl-block d-none">
@@ -93,20 +93,7 @@
                 </div>
             </div>
             <div class="hr-line mb-sm-12 mb-24"></div>
-            <div class="shop-grid-bottombar">
-                <p class="light-gray">Selected filters:</p>
-                <a href="#" class="filter-tag">
-                    <span>Wireless Headphones</span>
-                    <i class="fa-thin fa-xmark"></i>
-                </a>
-                <a href="#" class="filter-tag">
-                    <span>Min $30 - Max $300</span>
-                    <i class="fa-thin fa-xmark"></i>
-                </a>
-                <a href="#" class="text-decoration-underline fw-500">
-                    Clear All
-                </a>
-            </div>
+            
         </div>
         <div class="row row-gap-3">
             @if (Model?.Data != null && Model.Data.Any())
@@ -116,7 +103,6 @@
                     <div class="col-xxl-2 col-xl-3 col-lg-3 col-md-4">
                         <div class="featured-product-card bg-white br-10">
                             <div class="image-box mb-16">
-                                <span class="sale-label">-12%</span>
                                 <a asp-area="User" asp-controller="Product" asp-action="Details" asp-route-id="@product.Id">
                                     <img src="@(string.IsNullOrEmpty(product.ProductImage) ? "/images/placeholder.jpg" : product.ProductImage)" class="product-image" alt="@product.Name">
                                 </a>
@@ -178,15 +164,13 @@
                                         @product.Price.ToString("C", new CultureInfo("vi-VN"))
                                     </h6>
                                 </div>
-
-                                @* form add cart *@ 
-                                <form asp-area="User" asp-controller="Product" asp-action="AddCart" method="post">
-                                    <input type="hidden" name="ProductId" value="@product.Id" />
-                                    <input type="hidden" name="ProductName" value="@product.Name" />
-                                    <input type="hidden" name="Price" value="@product.Price" />
-                                    <input type="hidden" name="ProductImage" value="@product.ProductImage" />
-                                    <button type="submit" class="cus-btn-2 w-100">Add to Cart</button>
-                                </form>
+                                <button class="cus-btn-2 w-100 add-to-cart-btn"
+                                        data-product-id="@product.Id"
+                                        data-product-name="@product.Name"
+                                        data-price="@product.Price"
+                                        data-image="@product.ProductImage">
+                                    Add to Cart
+                                </button>
                             </div>
                         </div>
                     </div>
@@ -234,7 +218,6 @@
                                                         <div class="d-flex align-items-center gap-16 mb-24">
                                                             <p class="light-gray text-decoration-line-through">@((product.Price * 1.2m).ToString("C", new CultureInfo("vi-VN")))</p>
                                                             <h5>@product.Price.ToString("C", new CultureInfo("vi-VN"))</h5>
-                                                            <span class="label white">-12%</span>
                                                         </div>
                                                         @{
                                                             var description = getDescription(product.Id).Description;
@@ -254,7 +237,13 @@
                                                                 </div>
                                                             </div>
                                                             <div class="cart-btn w-100">
-                                                                <a href="cart.html" class="cus-btn-2 w-100">ADD TO CART</a>
+                                                                <button class="cus-btn-2 w-100 add-to-cart-btn"
+                                                                        data-product-id="@product.Id"
+                                                                        data-product-name="@product.Name"
+                                                                        data-price="@product.Price"
+                                                                        data-image="@product.ProductImage">
+                                                                    Add to Cart
+                                                                </button>
                                                             </div>
                                                         </div>
                                                         <div class="hr-line mb-24"></div>
@@ -407,4 +396,65 @@
 </div>
 <div class="overlay"></div>
 <!-- Filter Sidebar -->
+@section Scripts {
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            $('.add-to-cart-btn').on('click', function (e) {
+                e.preventDefault();
+
+                var button = $(this);
+                var productId = button.data('product-id');
+                var productName = button.data('product-name');
+                var price = button.data('price');
+                var productImage = button.data('image');
+
+                var cartItem = {
+                    ProductId: productId,
+                    ProductName: productName,
+                    Price: price,
+                    ProductImage: productImage,
+                    Quantity: 1 // Default quantity is 1
+                };
+
+                $.ajax({
+                    url: '/User/Product/AddCart', // URL to AddCart action
+                    type: 'POST',
+                    data: JSON.stringify(cartItem),
+                    contentType: 'application/json; charset=utf-8',
+                    dataType: 'json',
+                    success: function (response) {
+                        if (response.success) {
+                            Swal.fire({
+                                icon: "success",
+                                title: "Success!",
+                                text: "The product has been added to your cart!",
+                                timer: 1500,
+                                showConfirmButton: false
+                            }).then(() => {
+                                location.reload(); // Reload the entire page
+                            });
+                        } else {
+                            Swal.fire({
+                                icon: "error",
+                                title: "Failed!",
+                                text: "Could not add the product to the cart!"
+                            });
+                        }
+                    },
+                    error: function (xhr, status, error) {
+                        console.log('Error: ' + error);
+                        Swal.fire({
+                            icon: "error",
+                            title: "Error!",
+                            text: "An error occurred while adding to the cart. Please try again!"
+                        });
+                    }
+                });
+            });
+
+        });
+    </script>
+}
 
