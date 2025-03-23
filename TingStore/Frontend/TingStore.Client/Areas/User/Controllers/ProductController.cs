@@ -132,28 +132,27 @@ namespace TingStore.Client.Areas.User.Controllers
             }
         }
 
-        // add to cart
-        public async Task<IActionResult> AddCart(CartItem item)
+        [HttpPost]
+        public async Task<IActionResult> AddCart([FromBody] CartItem item)
         {
-            item.Quantity = 1; // mặc định với cart là 1
-            var idUser = 1; // Lấy bằng context sau khi đã đăng nhập
+            item.Quantity = 1;
+            var idUser = 1; // Lấy từ context sau khi đã đăng nhập
 
             CartRequest cartRequest = new()
             {
                 Id = idUser,
                 Items = new List<CartItem> { item }
             };
+
             var result = await _cartService.AddToCart(cartRequest);
-            if (result)
+
+            return Json(new
             {
-                TempData["SuccessMessage"] = "Add to cart successfully";
-            }
-            else
-            {
-                TempData["ErrorMessage"] = "Add to cart failed";
-            }
-            return RedirectToAction("Shop");
+                success = result,
+                message = result ? "Add to cart successfully" : "Add to cart failed"
+            });
         }
+
 
         [HttpPost]
         public async Task<IActionResult> SeachProduct(string ProductName)
