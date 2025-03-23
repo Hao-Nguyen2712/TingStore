@@ -2,6 +2,58 @@
 
     loadCart();
 
+    $("#addToCartForm").click(function (event) {
+        event.preventDefault();
+
+        var productId = $(this).data("product-id");
+        var productName = $(this).data("product-name");
+        var price = $(this).data("price");
+        var productImage = $(this).data("product-image");
+
+        var formData = {
+            ProductId: productId,
+            ProductName: productName,
+            Price: price,
+            ProductImage: productImage,
+            Quantity: 1
+        };
+
+
+        var cartRequest = {
+            Id: 1, // Lấy ID user từ session hoặc cookie nếu cần
+            Items: [formData]
+        };
+
+        console.log("Cart Request:", JSON.stringify(cartRequest));
+
+        $.ajax({
+            url: "http://localhost:5004/api/Cart/CreateCart",
+            type: "POST",
+            contentType: "application/json",
+            data: JSON.stringify(cartRequest),
+
+            success: function (response) {
+                if (response.success) {
+                    showSuccessAlert("Add to Cart Successfull");
+                    setTimeout(loadCart, 500);
+                }
+                else {
+                    showSuccessAlert("Add to Cart Failed");
+                 }
+            },
+            error: function (xhr) {
+                console.log("Error when adding to cart:", xhr);
+                console.log("Status:", status);
+                console.log("Error:", error);
+                console.log("Response Text:", xhr.responseText);
+                showErrorAlert("Error when adding to cart!");
+               
+            }
+        });
+
+    });
+
+
     $(".product-list").on("click", ".increment, .decrement", function () {
         let inputField = $(this).siblings(".number");
         let currentQuantity = parseInt(inputField.val());
@@ -89,7 +141,7 @@
 
 function loadCart() {
     $.ajax({
-        url: "http://localhost:5001/apigateway/cart/1",
+        url: "http://localhost:5004/api/Cart/1",
         type: "GET",
         dataType: "json",
         success: function (response) {

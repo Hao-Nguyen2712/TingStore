@@ -40,10 +40,10 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-builder.WebHost.ConfigureKestrel(options =>
-{
-    options.ListenAnyIP(80);
-});
+//builder.WebHost.ConfigureKestrel(options =>
+//{
+//    options.ListenAnyIP(80);
+//});
 
 builder.Services.AddHealthChecks().Services.AddDbContext<UserContext>();
 var app = builder.Build();
@@ -57,11 +57,14 @@ var app = builder.Build();
 
 
 // Migrate database with retry policy and seed data using UserContextSeed
-app.MigrateDatabase<UserContext>(async (context, services) =>
+using (var scope = app.Services.CreateScope())
 {
-    var logger = services.GetService<ILogger<UserContextSeed>>();
+    var services = scope.ServiceProvider;
+    var logger = services.GetRequiredService<ILogger<UserContextSeed>>();
+    var context = services.GetRequiredService<UserContext>();
+
     await UserContextSeed.SeedAsync(context, logger);
-});
+}
 // Add Global Exception Handler
 app.UseGlobalExceptionMiddleware();
 

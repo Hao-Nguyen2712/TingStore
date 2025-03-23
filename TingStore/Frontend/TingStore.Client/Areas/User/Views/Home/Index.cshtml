@@ -223,7 +223,13 @@
                                                         @product.Price.ToString("C", new CultureInfo("vi-VN"))
                                                     </h6>
                                                 </div>
-                                                <a href="cart.html" class="cus-btn-2 w-100">Add to Cart</a>
+                                                <button class="addToCartForm cus-btn-2 w-100"
+                                                        data-product-id="@product.Id"
+                                                        data-product-name="@product.Name"
+                                                        data-price="@product.Price"
+                                                        data-product-image="@product.ProductImage">
+                                                    Add to Cart
+                                                </button>
                                             </div>
                                         </div>
                                     </div>
@@ -303,7 +309,7 @@
                                                         @product.Price.ToString("C", new CultureInfo("vi-VN"))
                                                     </h6>
                                                 </div>
-                                                <a href="cart.html" class="cus-btn-2 w-100">Add to Cart</a>
+                                                <a id="addToCartForm" class="cus-btn-2 w-100">Add to Cart</a>
                                             </div>
                                         </div>
                                     </div>
@@ -668,7 +674,13 @@
                                                 @product.Price.ToString("C", new CultureInfo("vi-VN"))
                                             </h6>
                                         </div>
-                                        <a href="cart.html" class="cus-btn-2 w-100">Add to Cart</a>
+                                        <form method="post">
+                                            <input type="hidden" name="ProductId" value="@product.Id" />
+                                            <input type="hidden" name="ProductName" value="@product.Name" />
+                                            <input type="hidden" name="Price" value="@product.Price" />
+                                            <input type="hidden" name="ProductImage" value="@product.ProductImage" />
+                                            <button id="addToCartForm" type="submit" class="cus-btn-2 w-100">Add to Cart</button>
+                                        </form>
                                     </div>
                                 </div>
                             </div>
@@ -1102,7 +1114,13 @@
                                         @product.Price.ToString("C", new CultureInfo("vi-VN"))
                                     </h6>
                                 </div>
-                                <a href="cart.html" class="cus-btn-2 w-100">Add to Cart</a>
+                                <form id="addToCartForm" method="post">
+                                    <input type="hidden" name="ProductId" value="@product.Id" />
+                                    <input type="hidden" name="ProductName" value="@product.Name" />
+                                    <input type="hidden" name="Price" value="@product.Price" />
+                                    <input type="hidden" name="ProductImage" value="@product.ProductImage" />
+                                    <button type="submit" class="cus-btn-2 w-100">Add to Cart</button>
+                                </form>
                             </div>
                         </div>
                     </div>
