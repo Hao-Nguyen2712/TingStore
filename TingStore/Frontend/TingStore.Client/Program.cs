@@ -9,6 +9,7 @@ using TingStore.Client.Areas.User.Services.Reviews;
 using TingStore.Client.Areas.Admin.Services.ProductManagement;
 using TingStore.Client.Areas.User.Services.Cart;
 using TingStore.Client.Areas.User.Services.Categories;
+using TingStore.Client.Areas.Admin.Services.OrderMangement;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -32,6 +33,8 @@ builder.Services.AddScoped<ICategoryUserService, CategoryUserService>();
 
 // admin/productmanagement
 builder.Services.AddScoped<IProductManagementService, ProductManagementService>();
+
+builder.Services.AddScoped<IOrderManagementService, OrderManagementService>();
 
 
 // Đăng ký IReviewProductService
