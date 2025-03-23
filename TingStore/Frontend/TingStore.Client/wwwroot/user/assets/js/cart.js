@@ -219,23 +219,50 @@ function updateItemQuantity(userId, productId, quantity) {
 
 
 function deleteProductFromCart(userId, productId) {
-    $.ajax({
-        url: "http://localhost:5001/apigateway/cart/DeleteProductFromCartCommand",
-        type: "POST",
-        contentType: "application/json",
-        data: JSON.stringify({
-            UserId: userId,
-            ProductIdToRemove: [String(productId)] 
-        }),
-        success: function () {
-            console.log("Xóa sản phẩm thành công");
-            loadCart(); 
-        },
-        error: function () {
-            console.log("Lỗi khi xóa sản phẩm khỏi giỏ hàng!");
+    Swal.fire({
+        title: "Are you sure?",
+        text: "Do you want to remove this product from your cart?",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#d33",
+        cancelButtonColor: "#3085d6",
+        confirmButtonText: "Yes, delete it!",
+        cancelButtonText: "Cancel"
+    }).then((result) => {
+        if (result.isConfirmed) {
+            $.ajax({
+                url: "http://localhost:5001/apigateway/cart/DeleteProductFromCartCommand",
+                type: "POST",
+                contentType: "application/json",
+                data: JSON.stringify({
+                    UserId: userId,
+                    ProductIdToRemove: [String(productId)]
+                }),
+                success: function () {
+                    Swal.fire({
+                        icon: "success",
+                        title: "Deleted!",
+                        text: "The product has been removed from your cart.",
+                        timer: 1500,
+                        showConfirmButton: false
+                    }).then(() => {
+                        location.reload(); // Reload the entire page
+                    });
+
+                    loadCart(); // Refresh the cart modal
+                },
+                error: function () {
+                    Swal.fire({
+                        icon: "error",
+                        title: "Error!",
+                        text: "Failed to remove the product. Please try again!"
+                    });
+                }
+            });
         }
     });
 }
+
 
 function formatCurrencyVND(amount) {
     return amount.toLocaleString("vi-VN", { style: "currency", currency: "VND" });
