@@ -25,12 +25,22 @@ namespace TingStore.Client.Areas.User.Controllers
 
         public async Task<IActionResult> Index()
         {
+            // Get list Categories
             var categories = await _categoryUserService.GetCategories();
+            // Get list Products
             var products = await _productService.GetAllProducts(new Product.Core.Specs.ProductSpecParams());
+            var productList = products.Data.ToList();
+
+            // Count product in category
+            foreach(var category in categories)
+            {
+                var count = productList.Count(p => p.CategoryId == category.Name);
+                category.ProductCount = count;
+            }
             var model = new HomeViewModel
             {
                 Categories = (List<Models.Categories.CategoryResponse>)categories,
-                Products = products.Data.ToList() // gáng danh sách products vào Products
+                Products = productList // gáng danh sách products vào Products
             };
 
             // fetch rate and count review

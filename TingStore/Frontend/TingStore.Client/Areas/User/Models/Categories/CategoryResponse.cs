@@ -10,5 +10,6 @@ namespace TingStore.Client.Areas.User.Models.Categories
         public DateTime CreatedAt { get; set; }
         public DateTime UpdateAt { get; set; }
         public bool IsActive { get; set; }
+        public int ProductCount { get; set; }
     }
 }
