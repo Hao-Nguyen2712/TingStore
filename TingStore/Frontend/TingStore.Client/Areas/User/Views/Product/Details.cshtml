@@ -81,11 +81,11 @@
                             <h5 class="color-sec">
                                 @for (int i = 0; i < fullStars; i++)
                                 {
-                                    <span class="text-warning">★</span> 
+                                    <span class="text-warning">★</span>
                                 }
                                 @if (hasHalfStar)
                                 {
-                                    <span class="text-warning half-star">★</span> 
+                                    <span class="text-warning half-star">★</span>
                                 }
                                 @for (int i = 0; i < emptyStars; i++)
                                 {
@@ -103,7 +103,6 @@
                                 @((Model.Price * 1.2m).ToString("C", new
                                     CultureInfo("vi-VN")))</ p >
                                 <h5>@Model.Price.ToString("C", new CultureInfo("vi-VN"))</h5>
-                                <span class="label white">-12%</span>
                         </div>
                         @{
                             var shortDescription = string.Join(" ", des.Description.Split().Take(20)) +
@@ -455,7 +454,6 @@
             <div class="col-xxl-2 col-xl-3 col-lg-4 col-md-6">
                 <div class="featured-product-card bg-white br-10">
                     <div class="image-box mb-16">
-                        <span class="sale-label">-12%</span>
                         <a href="shop-detail.html">
                             <img src="assets/media/products/product-1.png" class="product-image"
                                  alt="">
@@ -562,7 +560,7 @@
 
                     const reviewData = {
                         productId: '@Model.Id',
-                        customerId: 1,
+                        customerId: 100001, 
                         rating: rating,
                         comment: comment
                     };
@@ -583,40 +581,15 @@
                                 title: 'Success!',
                                 text: 'Your review has been submitted successfully!',
                                 confirmButtonColor: '#28a745',
+                            }).then(() => {
+                                // Reload trang sau khi người dùng nhấn OK
+                                location.reload();
                             });
 
+                            // Reset form (không cần thiết vì trang sẽ reload)
                             reviewForm.reset();
-                            rateValue.value = 0; // Reset rating
-                            stars.forEach(s => s.classList.remove('active')); // Remove active class from stars
-
-                            if (noReviewsMsg) noReviewsMsg.parentElement.style.display = 'none';
-
-                            // Create new review HTML
-                            const newReview = `
-                                <div class="comment-box bg-lightest-gray br-10 p-16 mb-24" data-review-id="${result.id}">
-                                    <div class="d-flex align-items-start gap-16">
-                                        <img src="assets/media/users/user-4.png" alt="Customer Avatar" class="br-50" style="width: 50px; height: 50px;">
-                                        <div class="flex-grow-1">
-                                            <div class="d-flex justify-content-between align-items-center mb-8">
-                                                <div class="info">
-                                                    <h6 class="fw-600 mb-0">Customer #${reviewData.customerId}</h6>
-                                                    <small class="light-gray">${new Date().toLocaleDateString('en-GB')} ${new Date().toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' })}</small>
-                                                </div>
-                                                <div class="rating-stars">
-                                                    ${Array(rating).fill('<span class="fa fa-star color-sec"></span>').join('')}${Array(5 - rating).fill('<span class="fa fa-star light-gray"></span>').join('')}
-                                                </div>
-                                            </div>
-                                            <p class="light-gray mb-0">${comment || 'No comments'}</p>
-                                        </div>
-                                    </div>
-                                </div>
-                            `;
-                            commentsSection.insertAdjacentHTML('afterbegin', newReview);
-
-                            // Update review count on the tab
-                            const reviewTab = document.getElementById('nav-review-tab');
-                            const currentCount = parseInt(reviewTab.textContent.match(/\d+/)?.[0] || 0);
-                            reviewTab.textContent = `Reviews (${currentCount + 1})`;
+                            rateValue.value = 0;
+                            stars.forEach(s => s.classList.remove('active'));
                         } else {
                             Swal.fire({
                                 icon: 'error',
@@ -665,5 +638,4 @@
         overflow: hidden;
         width: 50%;
     }
-
 </style>
