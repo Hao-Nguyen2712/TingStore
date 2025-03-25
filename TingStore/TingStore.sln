@@ -91,7 +91,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Payment.Infrastructure", "B
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Payment.Application", "Backend\Services\Payment\Payment.Application\Payment.Application.csproj", "{5014D0B6-869E-4565-80CC-AD35A83AF763}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Identity.Provider", "..\Identity.Provider\Identity.Provider.csproj", "{DDFFFC30-E70D-44FC-8A22-3598B674122A}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Identity.Provider", "Backend\Infrastructure\Identity.Provider\Identity.Provider.csproj", "{DDFFFC30-E70D-44FC-8A22-3598B674122A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
