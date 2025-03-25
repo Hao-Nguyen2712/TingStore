@@ -9,6 +9,7 @@ using User.Application.Queries;
 using User.Api.Middlewares;
 using MediatR;
 using User.Application.Behaviors;
+using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -45,23 +46,42 @@ builder.WebHost.ConfigureKestrel(options =>
     options.ListenAnyIP(80);
 });
 
+// Đăng ký DbContext đúng cách
+builder.Services.AddDbContext<UserContext>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+
 builder.Services.AddHealthChecks().Services.AddDbContext<UserContext>();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
 // if (app.Environment.IsDevelopment())
 // {
-    app.UseSwagger();
-    app.UseSwaggerUI();
+app.UseSwagger();
+app.UseSwaggerUI();
 // }
 
 
 // Migrate database with retry policy and seed data using UserContextSeed
-app.MigrateDatabase<UserContext>(async (context, services) =>
+using (var scope = app.Services.CreateScope())
 {
-    var logger = services.GetService<ILogger<UserContextSeed>>();
-    await UserContextSeed.SeedAsync(context, logger);
-});
+    var services = scope.ServiceProvider;
+    var logger = services.GetRequiredService<ILogger<UserContextSeed>>();
+    var context = services.GetRequiredService<UserContext>();
+
+    try
+    {
+        // Migrate database trước khi seed dữ liệu
+        context.Database.Migrate();
+
+        await UserContextSeed.SeedAsync(context, logger);
+    }
+    catch (Exception ex)
+    {
+        logger.LogError(ex, "An error occurred while migrating the database.");
+    }
+}
+
 // Add Global Exception Handler
 app.UseGlobalExceptionMiddleware();
 

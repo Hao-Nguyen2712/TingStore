@@ -12,6 +12,7 @@ namespace User.Application.Commands
     // Chứa dữ liệu đầu vào
     public class CreateUserCommand : IRequest<UserResponse>
     {
+        public int Id { get; set; }
         public string Email { get; set; }
         public string Password { get; set; }
         public string FullName { get; set; }

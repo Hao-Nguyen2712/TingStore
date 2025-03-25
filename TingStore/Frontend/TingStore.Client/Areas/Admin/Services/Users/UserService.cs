@@ -94,7 +94,7 @@ namespace TingStore.Client.Areas.Admin.Services
             else
             {
                 var errorContent = await response.Content.ReadAsStringAsync();
-                Console.WriteLine("Error Response: " + errorContent); 
+                Console.WriteLine("Error Response: " + errorContent);
                 throw new HttpRequestException($"Unable to create user. Status: {response.StatusCode}, Error: {errorContent}");
             }
         }

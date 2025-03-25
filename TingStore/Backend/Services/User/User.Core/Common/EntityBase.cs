@@ -11,7 +11,6 @@ namespace User.Core.Common
     public abstract class EntityBase
     {
         [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)] //UserId tự tăng
         public int Id { get; set; }
 
         [Required]

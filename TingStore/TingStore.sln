@@ -73,23 +73,23 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Category.Core", "Backend\Se
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Category.Infrastructure", "Backend\Services\Category\Category.Infrastructure\Category.Infrastructure.csproj", "{8A811B9E-2F2A-42EB-ABC2-37489DF2D5D3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Category.Application", "Backend\Services\Category\Category.Application\Category.Application.csproj", "{97715B10-4922-48B6-BD40-6E289973291C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Category.Application", "Backend\Services\Category\Category.Application\Category.Application.csproj", "{97715B10-4922-48B6-BD40-6E289973291C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Category.API", "Backend\Services\Category\Category.API\Category.API.csproj", "{F64939AE-95E6-4B1C-9E3A-5A0BB9DA0883}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Category.API", "Backend\Services\Category\Category.API\Category.API.csproj", "{F64939AE-95E6-4B1C-9E3A-5A0BB9DA0883}"
 EndProject
 Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{81DDED9D-158B-E303-5F62-77A2896D2A5A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EventBus.Messages", "Backend\Infrastructure\EventBus.Messages\EventBus.Messages.csproj", "{302032B4-2B8D-4916-A9E5-B0E0F43183C0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EventBus.Messages", "Backend\Infrastructure\EventBus.Messages\EventBus.Messages.csproj", "{302032B4-2B8D-4916-A9E5-B0E0F43183C0}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Payment", "Payment", "{78DB88E5-46B8-4442-9F43-66F00F0F188E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Payment.Api", "Backend\Services\Payment\Payment.Api\Payment.Api.csproj", "{64F6B43F-9B7F-4CDA-BC3E-72547203287A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Payment.Api", "Backend\Services\Payment\Payment.Api\Payment.Api.csproj", "{64F6B43F-9B7F-4CDA-BC3E-72547203287A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Payment.Core", "Backend\Services\Payment\Payment.Core\Payment.Core.csproj", "{D5EB9C3C-2562-4496-9DE2-3E9E0FCAC54E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Payment.Core", "Backend\Services\Payment\Payment.Core\Payment.Core.csproj", "{D5EB9C3C-2562-4496-9DE2-3E9E0FCAC54E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Payment.Infrastructure", "Backend\Services\Payment\Payment.Infrastructure\Payment.Infrastructure.csproj", "{A18C5AF7-10FE-4D57-96D1-669A88ADDADB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Payment.Infrastructure", "Backend\Services\Payment\Payment.Infrastructure\Payment.Infrastructure.csproj", "{A18C5AF7-10FE-4D57-96D1-669A88ADDADB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Payment.Application", "Backend\Services\Payment\Payment.Application\Payment.Application.csproj", "{5014D0B6-869E-4565-80CC-AD35A83AF763}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Payment.Application", "Backend\Services\Payment\Payment.Application\Payment.Application.csproj", "{5014D0B6-869E-4565-80CC-AD35A83AF763}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Identity.Provider", "..\Identity.Provider\Identity.Provider.csproj", "{DDFFFC30-E70D-44FC-8A22-3598B674122A}"
 EndProject

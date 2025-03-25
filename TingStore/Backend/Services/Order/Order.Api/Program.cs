@@ -69,8 +69,8 @@ builder.Services.AddTransient<CardAddOrderConsumer>();
 builder.Services.AddScoped<IOrderRepository, OrderRepository>();
 builder.Services.AddScoped<IOrderItemRepository, OrderItemRepository>();
 builder.Services.AddScoped<IDiscountClientService, DiscountClientService>();
-builder.Services.AddScoped<CleanupExpiredOrdersUseCase>();
-builder.Services.AddHostedService<OrderCleanupBackgroudService>();
+//builder.Services.AddScoped<CleanupExpiredOrdersUseCase>();
+//builder.Services.AddHostedService<OrderCleanupBackgroudService>();
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();

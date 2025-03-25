@@ -96,6 +96,7 @@ namespace Order.Infrastructure.Repositories
             {
                 throw new ArgumentNullException();
             }
+            order.UpdateAt = DateTime.Now;
             order.Status = newStatus;
             _context.Orders.Update(order);
             return await _context.SaveChangesAsync() > 0;
