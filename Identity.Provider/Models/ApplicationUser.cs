@@ -9,5 +9,6 @@ namespace Identity.Provider.Models
     {
         public String? RefreshToken { get; set; }
         public DateTime? RefreshTokenExpiryTime { get; set; }
+        public int? UserId { get; set; } // User Id in User Service 
     };
 }
