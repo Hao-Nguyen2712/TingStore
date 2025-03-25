@@ -35,7 +35,7 @@ namespace Cart.Application.Handler
                
             }        
           
-            var result =  await _cartRepository.UpdateCart(cart);
+            var result =  await _cartRepository.AddCart(cart);
              
             var response = CartMapper.Mapper.Map<CartShoppingDTO>(result);
             if (response == null)

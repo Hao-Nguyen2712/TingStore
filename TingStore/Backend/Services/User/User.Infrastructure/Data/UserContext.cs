@@ -18,5 +18,11 @@ namespace User.Infrastructure.Data
         }
 
         public DbSet<Core.Entities.User> Users { get; set; }
-    }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
+            modelBuilder.Entity<Core.Entities.User>().Property(p => p.Id).ValueGeneratedNever();
+        }
+    };
 }

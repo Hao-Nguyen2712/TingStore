@@ -47,6 +47,13 @@ namespace Order.Infrastructure.Repositories
             _context.Orders.Remove(order);
             return await _context.SaveChangesAsync() > 0;
         }
+
+        public async Task<IEnumerable<Core.Entities.Order>> GetCanceledOrders()
+        {
+            var orders = await _context.Orders.Where(x => x.Status == "Canceled").ToListAsync();
+            return orders;
+        }
+
         public async Task<Core.Entities.Order> GetOrderById(Guid orderId)
         {
             return await _context.Orders.Include(x => x.OrderItems).FirstOrDefaultAsync(x => x.Id == orderId);
@@ -89,6 +96,7 @@ namespace Order.Infrastructure.Repositories
             {
                 throw new ArgumentNullException();
             }
+            order.UpdateAt = DateTime.Now;
             order.Status = newStatus;
             _context.Orders.Update(order);
             return await _context.SaveChangesAsync() > 0;

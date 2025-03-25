@@ -54,6 +54,32 @@ namespace TingStore.Client.Areas.User.Services.Products
                 data: productResponses
             );
         }
+
+        public async Task<IEnumerable<ProductResponse>> GetAllProductsNoFilter() {
+            var response = await this._httpClient.GetAsync($"apigateway/product/GetAllNFProductsNoFilter");
+            if(response.IsSuccessStatusCode) {
+                var data = await response.Content.ReadAsStringAsync();
+                var option = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
+                return JsonSerializer.Deserialize<IEnumerable<ProductResponse>>(data, option) ?? new List<ProductResponse>();
+            }
+            throw new HttpRequestException("Unable to fetch Product List.");
+        }
+
+        public async Task<List<string>> getListByProName()
+        {
+            List<string> listStringProduct = new List<string>();
+            var ProductList = await GetAllProductsNoFilter();
+            if (ProductList.Count() != 0 || !listStringProduct.Any())
+            {
+                foreach (var item in ProductList)
+                {
+                    listStringProduct.Add(item.Name);
+                }
+                return listStringProduct;
+            }
+            return new List<string>();
+        }
+
         public async Task<ProductResponse> GetProductById(string id)
         {
             var response = await _httpClient.GetAsync($"apigateway/product/GetProductById/{id}");

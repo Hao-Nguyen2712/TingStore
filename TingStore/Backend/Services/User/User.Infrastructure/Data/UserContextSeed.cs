@@ -28,6 +28,7 @@ namespace User.Infrastructure.Data
             {
                 new()
                 {
+                    Id = 100001,
                     Email = "datdtce171751@fpt.edu.vn",
                     Password = "tandat123@",
                     FullName = "DatDT",

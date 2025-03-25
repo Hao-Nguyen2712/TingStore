@@ -4,6 +4,7 @@
 using System.Net;
 using System.Xml.Linq;
 using Category.Application.Commands;
+using Category.Application.Handlers;
 using Category.Application.Queries;
 using Category.Application.Responses;
 using Category.Core.Specs;
@@ -27,16 +28,135 @@ namespace Category.API.Controllers
             _logger = logger;
         }
         [HttpGet]
-        [Route("GetAllCategories")]
+        [Route("GetCategories")]
         [ProducesResponseType(typeof(IList<CategoryResponse>), (int)HttpStatusCode.OK)]
-        public async Task<ActionResult<IList<CategoryResponse>>> GetAllCategories([FromQuery]CategorySpecParams categorySpecParams)
+        public async Task<ActionResult<IList<CategoryResponse>>> GetCategories([FromQuery]CategorySpecParams categorySpecParams)
         {
             try
             {
-                var query = new GetAllCategoriesQuery(categorySpecParams);
+                var query = new GetCategoriesQuery(categorySpecParams);
                 var result = await _mediator.Send(query);
                 return Ok(result);
             }catch(Exception ex)
+            {
+                _logger.LogError(ex, "An Exception has occured: {Exception}");
+                throw;
+            }
+        }
+        [HttpGet]
+        [Route("GetAllCategories")]
+        [ProducesResponseType(typeof(IList<CategoryResponse>), (int)HttpStatusCode.OK)]
+        public async Task<ActionResult<IList<CategoryResponse>>> GetAllCategories()
+        {
+            try
+            {
+                var query = new GetAllCategoriesQuery();
+                var result = await _mediator.Send(query);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "An Exception has occured: {Exception}");
+                throw;
+            }
+        }
+        [HttpGet]
+        [Route("GetCategoriesCount")]
+        [ProducesResponseType(typeof(IList<CategoryResponse>), (int)HttpStatusCode.OK)]
+        public async Task<ActionResult<IList<CategoryResponse>>> GetCategoriesCount()
+        {
+            try
+            {
+                var query = new GetCategoriesCountQuery();
+                var result = await _mediator.Send(query);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "An Exception has occured: {Exception}");
+                throw;
+            }
+        }
+        [HttpGet]
+        [Route("GetAllActiveCategoriesCount")]
+        [ProducesResponseType(typeof(IList<CategoryResponse>), (int)HttpStatusCode.OK)]
+        public async Task<ActionResult<IList<CategoryResponse>>> GetAllActiveCategoriesCount()
+        {
+            try
+            {
+                var query = new GetAllActiveCategoriesCountQuery();
+                var result = await _mediator.Send(query);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "An Exception has occured: {Exception}");
+                throw;
+            }
+        }
+        [HttpGet]
+        [Route("GetAllInactiveCategoriesCount")]
+        [ProducesResponseType(typeof(IList<CategoryResponse>), (int)HttpStatusCode.OK)]
+        public async Task<ActionResult<IList<CategoryResponse>>> GetAllInactiveCategoriesCount()
+        {
+            try
+            {
+                var query = new GetAllInactiveCategoriesCountQuery();
+                var result = await _mediator.Send(query);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "An Exception has occured: {Exception}");
+                throw;
+            }
+        }
+        [HttpGet]
+        [Route("GetAllActiveCategories")]
+        [ProducesResponseType(typeof(IList<CategoryResponse>), (int)HttpStatusCode.OK)]
+        public async Task<ActionResult<IList<CategoryResponse>>> GetAllActiveCategories()
+        {
+            try
+            {
+                var query = new GetAllActiveCategoriesQuery();
+                var result = await _mediator.Send(query);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "An Exception has occured: {Exception}");
+                throw;
+            }
+        }
+        [HttpGet]
+        [Route("GetAllInactiveCategories")]
+        [ProducesResponseType(typeof(IList<CategoryResponse>), (int)HttpStatusCode.OK)]
+        public async Task<ActionResult<IList<CategoryResponse>>> GetAllInactiveCategories()
+        {
+            try
+            {
+                var query = new GetAllInactiveCategoriesQuery();
+                var result = await _mediator.Send(query);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "An Exception has occured: {Exception}");
+                throw;
+            }
+        }
+        [HttpPut]
+        [Route("RestoreCategory/{id}")]
+        [ProducesResponseType(typeof(bool), (int)HttpStatusCode.OK)]
+        public async Task<ActionResult<IList<CategoryResponse>>> RestoreCategory(string id)
+        {
+            try
+            {
+                var query = new RestoreCategoryCommand(id);
+                var result = await _mediator.Send(query);
+                return Ok(result);
+            }
+            catch (Exception ex)
             {
                 _logger.LogError(ex, "An Exception has occured: {Exception}");
                 throw;
@@ -67,6 +187,23 @@ namespace Category.API.Controllers
             try
             {
                 var query = new GetCategoryByNameQuery(name);
+                var result = await _mediator.Send(query);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "An Exception has occured: {Exception}");
+                throw;
+            }
+        }
+        [HttpGet]
+        [Route("[action]/{name}", Name = "GetCategoryByNameInactive")]
+        [ProducesResponseType(typeof(CategoryResponse), (int)HttpStatusCode.OK)]
+        public async Task<ActionResult<CategoryResponse>> GetCategoryByNameInactive(string name)
+        {
+            try
+            {
+                var query = new GetCategoryByNameInactiveQuery(name);
                 var result = await _mediator.Send(query);
                 return Ok(result);
             }
@@ -109,13 +246,13 @@ namespace Category.API.Controllers
             }
         }
         [HttpDelete]
-        [Route("{id}", Name = "DeleteProduct")]
+        [Route("DeleteCategory/{id}")]
         [ProducesResponseType(typeof(bool), (int)HttpStatusCode.OK)]
         public async Task<ActionResult<CategoryResponse>> DeleteCategory(string id)
         {
             try
             {
-                var query = new DeleteCategoryByIdQuery(id);
+                var query = new DeleteCategoryByIdCommand(id);
                 var result = await _mediator.Send(query);
                 return Ok(result);
             }

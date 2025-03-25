@@ -40,6 +40,12 @@ service DiscountServicegRPC {
             get: "/api/discount"
         };
     }
+    rpc ReturnCoupon(ReturnCouponRequest) returns (ReturnCouponResponse) {
+        option (google.api.http) = {
+            post: "/api/discount/return"
+            body: "*"
+        };
+    }
        
 }
 
@@ -77,13 +83,22 @@ message ApplyCouponVoucherRequest {
 }
 
 message ApplyCouponVoucherResponse {
-   double valueDiscount = 1; // kết quả được giảm
-   bool isSuccess = 2;
-   string message = 3;
+   string id = 1;
+   double valueDiscount = 2; // kết quả được giảm
+   bool isSuccess = 3;
+   string message = 4;
 }
 
 message GetCouponResponse {
     repeated CouponModel coupons = 1;
 }
 message EmptyRequest {
+}
+
+message ReturnCouponRequest {
+   string id = 1;
+}
+
+message ReturnCouponResponse {
+   bool success = 1;
 }

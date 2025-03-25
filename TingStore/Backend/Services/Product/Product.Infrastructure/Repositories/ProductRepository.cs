@@ -28,14 +28,27 @@ namespace Product.Infrastructure.Repositories
         public async Task<bool> AddImageToProduct(ImageItem imageItem)
         {
             var filter = Builders<Core.Models.Product>.Filter.Eq(p => p.Id, imageItem.id);
-            var update = Builders<Core.Models.Product>.Update.Push(p => p.Images, new Core.Models.ProductImage
+
+            // Kiểm tra product tồn tại
+            var product = await _context.Products.Find(filter).FirstOrDefaultAsync();
+            if (product == null) return false;
+
+            // Nếu Images == null, thì Set nó thành một mảng rỗng
+            if (product.Images == null)
+            {
+                var setImagesUpdate = Builders<Core.Models.Product>.Update.Set(p => p.Images, new List<Core.Models.ProductImage>());
+                await _context.Products.UpdateOneAsync(filter, setImagesUpdate);
+            }
+
+            // Sau đó, Push ảnh vào mảng Images
+            var pushImageUpdate = Builders<Core.Models.Product>.Update.Push(p => p.Images, new Core.Models.ProductImage
             {
                 ImageUrl = imageItem.imageUrl,
                 IsPrimary = imageItem.isPrimary,
                 CreateAt = DateTime.UtcNow
             });
 
-            var updateResult = await _context.Products.UpdateOneAsync(filter, update);
+            var updateResult = await _context.Products.UpdateOneAsync(filter, pushImageUpdate);
             return updateResult.IsAcknowledged && updateResult.ModifiedCount > 0;
         }
 
@@ -52,6 +65,12 @@ namespace Product.Infrastructure.Repositories
                 .DeleteOneAsync(filter);
             return deleteResult.IsAcknowledged && deleteResult.DeletedCount > 0;
         }
+
+        public async Task<IEnumerable<Core.Models.Product>> GetAllProduct()
+        {
+            return await _context.Products.Find(_ => true).ToListAsync();
+        }
+
         public async Task<Core.Models.Product> GetProduct(string id)
         {
             return await _context
@@ -79,10 +98,11 @@ namespace Product.Infrastructure.Repositories
         public async Task<Pagination<Core.Models.Product>> GetProducts(ProductSpecParams productSpecParams)
         {
             var builder = Builders<Product.Core.Models.Product>.Filter;
-            var filter = builder.Empty;
+            var filter = builder.Eq(x => x.IsActive, true);
+
             if (!string.IsNullOrEmpty(productSpecParams.Search))
             {
-                var searchFilter = builder.Regex(x => x.Name, new BsonRegularExpression(productSpecParams.Search));
+                var searchFilter = builder.Regex(x => x.Name, new BsonRegularExpression(productSpecParams.Search, "i"));
                 filter &= searchFilter;
             }
             if (!string.IsNullOrEmpty(productSpecParams.BrandId))

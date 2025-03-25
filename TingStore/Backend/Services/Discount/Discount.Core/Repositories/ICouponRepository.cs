@@ -15,5 +15,6 @@ namespace Discount.Core.Repositories
         public Task DeleteCoupon(string couponName);
         public Task<Coupon> GetCouponByCode(string code);
         public Task<List<Coupon>> GetCoupons();
+        public Task<Coupon> GetCouponById(Guid id);
     }
 }

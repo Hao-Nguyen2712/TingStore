@@ -34,6 +34,10 @@ namespace Order.Infrastructure.Migrations
                     b.Property<decimal?>("DiscountAmount")
                         .HasColumnType("decimal(18,2)");
 
+                    b.Property<string>("DiscountId")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
                     b.Property<decimal>("FinalAmount")
                         .HasColumnType("decimal(18,2)");
 

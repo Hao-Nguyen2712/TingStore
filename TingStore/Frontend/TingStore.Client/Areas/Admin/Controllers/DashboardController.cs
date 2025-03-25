@@ -5,6 +5,10 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using TingStore.Client.Areas.Admin.Models.Dashboard;
+using TingStore.Client.Areas.Admin.Models.Order;
+using TingStore.Client.Areas.Admin.Services.OrderMangement;
+using TingStore.Client.Areas.Admin.Services.Users;
 
 namespace TingStore.Client.Areas.Admin.Controllers
 {
@@ -12,22 +16,26 @@ namespace TingStore.Client.Areas.Admin.Controllers
     [Route("[area]/[controller]/[action]")]
     public class DashboardController : Controller
     {
-        private readonly ILogger<DashboardController> _logger;
+        private readonly IOrderManagementService _orderManagementService;
+        private readonly IUserService _userService;
 
-        public DashboardController(ILogger<DashboardController> logger)
+        public DashboardController( IOrderManagementService orderManagementService, IUserService userService)
         {
-            _logger = logger;
+            _orderManagementService = orderManagementService;
+            _userService = userService;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            return View();
-        }
 
-        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error()
-        {
-            return View("Error!");
+            var model = new DashboardVM
+            {
+                TotalUsers = await _userService.GetAllUsersCount(),
+                TotalOrders = await _orderManagementService.GetAllOrderCount(),
+                Orders = await _orderManagementService.GetAllOrder()
+            };
+            
+            return View(model);
         }
     }
 }

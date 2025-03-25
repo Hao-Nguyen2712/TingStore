@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using Discount.Api.Protos;
+using EventBus.Messages.Events;
 using HealthChecks.UI.Client;
 using MassTransit;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
@@ -21,10 +22,10 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
-//builder.WebHost.ConfigureKestrel(options =>
-//{
-//    options.ListenAnyIP(80);
-//});
+builder.WebHost.ConfigureKestrel(options =>
+{
+    options.ListenAnyIP(80);
+});
 
 builder.Services.AddDbContext<OrderDbContext>(options =>
 {
@@ -43,6 +44,7 @@ builder.Services.AddMassTransit(config =>
 {
     
     config.AddConsumer<CardAddOrderConsumer>();
+    config.AddConsumer<UpdateOrderStatusConsumer>();
     config.UsingRabbitMq((context, configurator) =>
     {   
         configurator.Host(builder.Configuration["EventBusSettings:HostAddress"], c =>
@@ -55,6 +57,10 @@ builder.Services.AddMassTransit(config =>
         {
             c.ConfigureConsumer<CardAddOrderConsumer>(context);
         });
+        configurator.ReceiveEndpoint(EventBus.Messages.Commons.EventBusConstant.UpdateOrderStatusQueue, c =>
+        {
+            c.ConfigureConsumer<UpdateOrderStatusConsumer>(context);
+        });
     });
 });
 
@@ -63,6 +69,8 @@ builder.Services.AddTransient<CardAddOrderConsumer>();
 builder.Services.AddScoped<IOrderRepository, OrderRepository>();
 builder.Services.AddScoped<IOrderItemRepository, OrderItemRepository>();
 builder.Services.AddScoped<IDiscountClientService, DiscountClientService>();
+//builder.Services.AddScoped<CleanupExpiredOrdersUseCase>();
+//builder.Services.AddHostedService<OrderCleanupBackgroudService>();
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();

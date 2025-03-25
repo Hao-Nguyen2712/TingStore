@@ -24,7 +24,7 @@ builder.Services.AddMediatR(typeof(DeleteCategoryByIdHandler).GetTypeInfo().Asse
 builder.Services.AddMediatR(typeof(UpdateCategoryHandler).GetTypeInfo().Assembly);
 builder.Services.AddMediatR(typeof(GetCategoryByIdHandler).GetTypeInfo().Assembly);
 builder.Services.AddMediatR(typeof(GetCategoryByNameHandler).GetTypeInfo().Assembly);
-builder.Services.AddMediatR(typeof(GetAllCategoriesHandler).GetTypeInfo().Assembly);
+builder.Services.AddMediatR(typeof(GetCategoriesHandler).GetTypeInfo().Assembly);
 builder.Services.AddScoped<ICategoryContext, CategoryContext>();
 builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
 

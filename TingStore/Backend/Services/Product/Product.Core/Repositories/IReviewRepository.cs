@@ -10,7 +10,7 @@ namespace Product.Core.Repositories
     {
         Task<Review> GetReviewById(string id);
         Task<IEnumerable<Review>> GetReviewByProductId(string productId);
-        Task<IEnumerable<Review>> GetReviewByCustomerId(string customerId);
+        Task<IEnumerable<Review>> GetReviewByCustomerId(int customerId);
         Task<Review> AddReview(Review review);
         Task<bool> UpdateReview(string id, Review review);
         Task<bool> DeleteReview(string id);
