@@ -10,7 +10,11 @@
                 }
             ],
             "UpstreamPathTemplate": "/apigateway/cart/{everything}",
-            "UpstreamHttpMethod": [ "GET", "POST", "DELETE" ]
+            "UpstreamHttpMethod": [ "GET", "POST", "DELETE" ],
+            "AuthenticationOptions": {
+                "AuthenticationProviderKey": "Bearer",
+                "AllowedScopes": []
+            }
         },
         {
             "DownstreamPathTemplate": "/api/category/{everything}",
@@ -22,7 +26,11 @@
                 }
             ],
             "UpstreamPathTemplate": "/apigateway/category/{everything}",
-            "UpstreamHttpMethod": [ "GET", "POST", "PUT", "DELETE" ]
+            "UpstreamHttpMethod": [ "GET", "POST", "PUT", "DELETE" ],
+            "AuthenticationOptions": {
+                "AuthenticationProviderKey": "Bearer",
+                "AllowedScopes": []
+            }
         },
         {
             "DownstreamPathTemplate": "/api/order/{everything}",
@@ -34,7 +42,11 @@
                 }
             ],
             "UpstreamPathTemplate": "/apigateway/order/{everything}",
-            "UpstreamHttpMethod": [ "GET", "POST", "PUT", "DELETE" ]
+            "UpstreamHttpMethod": [ "GET", "POST", "PUT", "DELETE" ],
+            "AuthenticationOptions": {
+                "AuthenticationProviderKey": "Bearer",
+                "AllowedScopes": []
+            }
         },
         {
             "DownstreamPathTemplate": "/api/product/{everything}",
@@ -46,7 +58,11 @@
                 }
             ],
             "UpstreamPathTemplate": "/apigateway/product/{everything}",
-            "UpstreamHttpMethod": [ "GET", "POST", "PUT", "DELETE" ]
+            "UpstreamHttpMethod": [ "GET", "POST", "PUT", "DELETE" ],
+            "AuthenticationOptions": {
+                "AuthenticationProviderKey": "Bearer",
+                "AllowedScopes": []
+            }
         },
         {
             "DownstreamPathTemplate": "/api/review/{everything}",
@@ -58,7 +74,24 @@
                 }
             ],
             "UpstreamPathTemplate": "/apigateway/review/{everything}",
-            "UpstreamHttpMethod": [ "GET", "POST", "PUT", "DELETE" ]
+            "UpstreamHttpMethod": [ "GET", "POST", "PUT", "DELETE" ],
+            "AuthenticationOptions": {
+                "AuthenticationProviderKey": "Bearer",
+                "AllowedScopes": []
+            }
+        },
+        {
+            "DownstreamPathTemplate": "/api/users/CreateUser",
+            "DownstreamScheme": "http",
+            "DownstreamHostAndPorts": [
+                {
+                    "Host": "user-container",
+                    "Port": 80
+                }
+            ],
+            "UpstreamPathTemplate": "/apigateway/users/CreateUser",
+            "UpstreamHttpMethod": [ "POST" ]
+            // cấu hình gateway không cần xác thực dành riêng cho identity provider
         },
         {
             "DownstreamPathTemplate": "/api/users/{everything}",
@@ -70,7 +103,11 @@
                 }
             ],
             "UpstreamPathTemplate": "/apigateway/users/{everything}",
-            "UpstreamHttpMethod": [ "GET", "POST", "PUT", "DELETE" ]
+            "UpstreamHttpMethod": [ "GET", "POST", "PUT", "DELETE" ],
+            "AuthenticationOptions": {
+                "AuthenticationProviderKey": "Bearer",
+                "AllowedScopes": []
+            }
         },
         {
             "DownstreamPathTemplate": "/api/discount/{everything}",
@@ -82,7 +119,11 @@
                 }
             ],
             "UpstreamPathTemplate": "/apigateway/discount/{everything}",
-            "UpstreamHttpMethod": [ "GET", "POST", "PUT", "DELETE" ]
+            "UpstreamHttpMethod": [ "GET", "POST", "PUT", "DELETE" ],
+            "AuthenticationOptions": {
+                "AuthenticationProviderKey": "Bearer",
+                "AllowedScopes": []
+            }
         },
         {
             "DownstreamPathTemplate": "/api/payment/{everything}",
@@ -94,7 +135,11 @@
                 }
             ],
             "UpstreamPathTemplate": "/apigateway/payment/{everything}",
-            "UpstreamHttpMethod": [ "GET", "POST", "PUT", "DELETE" ]
+            "UpstreamHttpMethod": [ "GET", "POST", "PUT", "DELETE" ],
+            "AuthenticationOptions": {
+                "AuthenticationProviderKey": "Bearer",
+                "AllowedScopes": []
+            }
         }
     ]
 }
