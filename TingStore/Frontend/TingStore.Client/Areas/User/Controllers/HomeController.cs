@@ -88,9 +88,9 @@ namespace TingStore.Client.Areas.User.Controllers
         public async Task<IActionResult> Login(AuthenRequest request)
         {
 
-            if (!ModelState.IsValid)
+            if (!ModelState.IsValid)    
             {
-                ViewBag.ErrorMessage = "Dữ liệu nhập không hợp lệ!";
+                ViewBag.ErrorMessage = "Login failed! Please check your information.";
                 return View(request);
             }
 
@@ -131,6 +131,10 @@ namespace TingStore.Client.Areas.User.Controllers
                         var emailPrefix = token.Email.Split('@')[0];
                         Response.Cookies.Append("email", emailPrefix, cookieOptions);
 
+                        // Set TempData to indicate successful login
+                        TempData["LoginSuccess"] = true;
+                        TempData["Email"] = token.Email;
+
                         return RedirectToAction("Index", "Home", new { area = "User" });
                     }
                 }
@@ -156,12 +160,12 @@ namespace TingStore.Client.Areas.User.Controllers
 
                 if (response.IsSuccessStatusCode)
                 {
-                    ViewBag.Success = "Đăng Kí Thành Công!";
-                    return RedirectToAction("Login", "Home" , new {area = "User"});
+                    TempData["SweetAlertSuccess"] = "Registration successful! Please log in.";
+                    return RedirectToAction("Login", "Home", new { area = "User" });
                 }
                 else
                 {
-                    ViewBag.Error= "Register failed";
+                    TempData["SweetAlertError"] = "Registration failed. Please try again.";
                     return View(registerRequest);
                 }
             }
@@ -185,6 +189,7 @@ namespace TingStore.Client.Areas.User.Controllers
                 Response.Cookies.Delete("acessToken");
                 Response.Cookies.Delete("refreshToken");
                 Response.Cookies.Delete("email");
+                TempData["SweetAlertSuccess"] = "You have been logged out successfully!";
                 return RedirectToAction("Index", "Home", new { area = "User" });
             }
         }
