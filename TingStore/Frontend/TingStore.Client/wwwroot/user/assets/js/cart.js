@@ -148,62 +148,69 @@
 
 });
 
-function loadCart() {
-    $.ajax({
-        url: "http://localhost:5001/apigateway/Cart/1",
-        type: "GET",
-        dataType: "json",
-        success: function (response) {
-            let productList = $(".product-list");
-            productList.empty();
+function loadCart(userId) {
+    function loadCart(userId) {
+        $.ajax({
+            url: `http://localhost:5001/apigateway/Cart?userId=${userId}`, // Truyền userId qua query
+            type: "GET",
+            dataType: "json",
+            success: function (response) {
+                renderCart(response);
+            },
+            error: function () {
+                console.log("Lỗi khi gọi API giỏ hàng!");
+            }
+        });
+    }
 
-            let totalPrice = 0;
-            let totalItems = 0;
+    function renderCart(response) {
+        let productList = $(".product-list");
+        productList.empty();
 
-            response.items.forEach(item => {
-                let productHtml = `
-                    <li class="product-item mb-24">
-                        <span class="item-image">
-                            <img src="${item.productImage}" alt="Product Photo">
-                        </span>
-                        <div class="product-text">
-                            <div class="prod-title mb-16">
-                                <h6>${item.productName}</h6>
-                                <a href="javascript:;" class="cancel" data-id="${item.productId}">
-                                    <img src="/user/assets/media/images/cancel.png" alt="">
-                                </a>
-                            </div>
-                            <div class="prod-desc">
-                                <div>
-                                    <p class="fw-500 mb-8">Số lượng: <span class="quantity-text">${item.quantity}</span></p>
-                                    <p class="fw-500">Giá: ${formatCurrencyVND(item.price || 0)}</p>
-                                </div>
-                                <div class="quantity quantity-wrap d-inline-flex">
-                                    <div class="input-area quantity-wrap">
-                                        <input class="decrement" type="button" value="-">
-                                        <input type="text" name="quantity" value="${item.quantity}" maxlength="2" size="1" class="number">
-                                        <input class="increment" type="button" value="+">
-                                    </div>
-                                </div>
-                            </div>  
+        let totalPrice = 0;
+        let totalItems = 0;
+
+        response.items.forEach(item => {
+            let productHtml = `
+            <li class="product-item mb-24">
+                <span class="item-image">
+                    <img src="${item.productImage}" alt="Product Photo">
+                </span>
+                <div class="product-text">
+                    <div class="prod-title mb-16">
+                        <h6>${item.productName}</h6>
+                        <a href="javascript:;" class="cancel" data-id="${item.productId}">
+                            <img src="/user/assets/media/images/cancel.png" alt="">
+                        </a>
+                    </div>
+                    <div class="prod-desc">
+                        <div>
+                            <p class="fw-500 mb-8">Số lượng: <span class="quantity-text">${item.quantity}</span></p>
+                            <p class="fw-500">Giá: ${formatCurrencyVND(item.price || 0)}</p>
                         </div>
-                    </li>
-                    <li class="hr-line mb-24"></li>
-                `;
-                productList.append(productHtml);
-                totalPrice += item.price * item.quantity;
-                totalItems += item.quantity;
-            });
+                        <div class="quantity quantity-wrap d-inline-flex">
+                            <div class="input-area quantity-wrap">
+                                <input class="decrement" type="button" value="-">
+                                <input type="text" name="quantity" value="${item.quantity}" maxlength="2" size="1" class="number">
+                                <input class="increment" type="button" value="+">
+                            </div>
+                        </div>
+                    </div>  
+                </div>
+            </li>
+            <li class="hr-line mb-24"></li>
+        `;
+            productList.append(productHtml);
+            totalPrice += item.price * item.quantity;
+            totalItems += item.quantity;
+        });
 
-           
-            $(".price-total span:last").text(`Tổng cộng: ${formatCurrencyVND(totalPrice)}`);
-            $(".cart-button h6").text(`${formatCurrencyVND(totalPrice)}`); 
-            $("h6:contains('Shopping Cart')").text(`Shopping Cart (${totalItems})`);
-        },
-        error: function () {
-            console.log("Lỗi khi gọi API giỏ hàng!");
-        }
-    });
+        $(".price-total span:last").text(`Tổng cộng: ${formatCurrencyVND(totalPrice)}`);
+        $(".cart-button h6").text(`${formatCurrencyVND(totalPrice)}`);
+        $("h6:contains('Shopping Cart')").text(`Shopping Cart (${totalItems})`);
+    }
+
+
 }
 
 function updateItemQuantity(userId, productId, quantity) {

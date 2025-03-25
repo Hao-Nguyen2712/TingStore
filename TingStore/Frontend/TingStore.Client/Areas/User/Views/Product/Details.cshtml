@@ -1,6 +1,7 @@
 ﻿@using System.Text.Json
 @using System.Globalization
 @using TingStore.Client.Areas.User.Models.Products
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
 @model TingStore.Client.Areas.User.Models.Products.ProductResponse
 @{
     ViewData["Title"] = "Details";
@@ -121,13 +122,13 @@
                                 </div>
                             </div>
                             <div class="cart-btn w-100">
-                                 <button class="cus-btn-2 w-100 add-to-cart-btn"
-                                                        data-product-id="@Model.Id"
-                                                        data-product-name="@Model.Name"
-                                                        data-price="@Model.Price"
-                                                        data-image="@Model.ProductImage">
-                                                    Add to Cart
-                                                </button>
+                                <button class="cus-btn-2 w-100 add-to-cart-btn"
+                                        data-product-id="@Model.Id"
+                                        data-product-name="@Model.Name"
+                                        data-price="@Model.Price"
+                                        data-image="@Model.ProductImage">
+                                    Add to Cart
+                                </button>
                             </div>
                             <div class="side-icons">
                                 <ul class="list-unstyled m-0">
@@ -353,7 +354,7 @@
                     @{
                         var avatars = new string[]
                         {
-                            "user-1.png", "user-2.png", "user-3.png", "user-4.png", "user-5.png"
+                    "user-1.png", "user-2.png", "user-3.png", "user-4.png", "user-5.png"
                         };
                     }
 
@@ -396,8 +397,8 @@
                             else
                             {
                                 <div class="text-center py-32">
-                                    <p class="light-gray fs-5">Chưa có đánh giá nào cho sản phẩm này.</p>
-                                    <p class="light-gray">Hãy là người đầu tiên chia sẻ cảm nhận của bạn!</p>
+                                    <p class="light-gray fs-5">There are no reviews for this product yet.</p>
+                                    <p class="light-gray">Be the first to share your experience!</p>
                                 </div>
                             }
                         </div>
@@ -436,72 +437,265 @@
         </div>
     </div>
 </section>
-<!-- Product Description End -->
-<!-- Recommended Product Start -->
+<!-- Product Description End --> 
+<!-- Recommended Products Start -->
 <section class="recommended-product bg-lightest-gray pb-40">
     <div class="container-fluid">
+        <!-- Same Brand Recommendations -->
         <div class="top-bar mb-16">
-            <h5>Recommended Products</h5>
-            <a href="shop-grid-sidebar-1.html" class="cus-btn-arrow">
+            <h5>More from @(JsonSerializer.Deserialize<ProductDescription>(Model.Description)?.Brand ?? "This Brand")</h5>
+            <a href="@Url.Action("Shop", new { brandId = JsonSerializer.Deserialize<ProductDescription>(Model.Description)?.Brand })" class="cus-btn-arrow">
                 Show All
                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="15" viewBox="0 0 20 15" fill="none">
-                    <path d="M13.3545 14.7476C13.3545 11.7476 16.1545 7.74756 19.3545 7.74756M19.3545 7.74756C17.5212 7.74756 13.3545 6.74756 13.3545 0.747559M19.3545 7.74756H0.354492"
-                          stroke="#0C0C0D" stroke-width="2" />
+                    <path d="M13.3545 14.7476C13.3545 11.7476 16.1545 7.74756 19.3545 7.74756M19.3545 7.74756C17.5212 7.74756 13.3545 6.74756 13.3545 0.747559M19.3545 7.74756H0.354492" stroke="#0C0C0D" stroke-width="2" />
                 </svg>
             </a>
         </div>
         <div class="row row-gap-4">
-            <div class="col-xxl-2 col-xl-3 col-lg-4 col-md-6">
-                <div class="featured-product-card bg-white br-10">
-                    <div class="image-box mb-16">
-                        <a href="shop-detail.html">
-                            <img src="assets/media/products/product-1.png" class="product-image"
-                                 alt="">
-                        </a>
-                        <div class="side-icons">
-                            <ul class="list-unstyled">
-                                <li>
-                                    <a href="wishlist.html">
-                                        <img src="assets/media/icons/heart.png" alt="">
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="#" class="btn" data-bs-toggle="modal" data-bs-target="#productQuickView">
-                                        <img src="assets/media/icons/eye.png" alt="">
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="#" class="zui-wrapper-button" data-bs-toggle="modal"
-                                       data-bs-target="#comparepopup">
-                                        <img src="assets/media/icons/compare.png" alt="">
-                                    </a>
-                                </li>
-                            </ul>
+            @{
+                var sameBrandRecommendations = ViewBag.SameBrandRecommendations as List<TingStore.Client.Areas.User.Models.Products.ProductResponse>;
+            }
+            @if (sameBrandRecommendations != null && sameBrandRecommendations.Any())
+            {
+                foreach (var product in sameBrandRecommendations)
+                {
+                    <div class="col-xxl-2 col-xl-3 col-lg-4 col-md-6">
+                        <div class="featured-product-card bg-white br-10">
+                            <div class="image-box mb-16">
+                                <a asp-area="User" asp-controller="Product" asp-action="Details" asp-route-id="@product.Id"><img src="@product.ProductImage" class="product-image" alt="@product.Name"></a>
+                                <div class="side-icons">
+                                    <ul class="list-unstyled">
+
+                                        <li>
+                                            <a asp-area="User" asp-controller="Product" asp-action="Details" asp-route-itemid="=@product.Id" class="btn" data-bs-toggle="modal" data-bs-target="#productQuickView_@product.Id">
+                                                <img src="~/user/assets/media/icons/eye.png" alt="">
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="product-desc">
+                                <h6 class="product-title mb-8"><a asp-area="User" asp-controller="Product" asp-action="Details" asp-route-id="@product.Id">@product.Name</a></h6>
+                                <div class="text mb-12">
+                                    <p class="light-gray">@des.Description</p>
+                                </div>
+                                <div class="rating-star mb-16 bg-white">
+
+                                    <h5 class="color-sec">
+                                        @for (int i = 0; i < fullStars; i++)
+                                        {
+                                            <span class="text-warning">★</span>
+                                        }
+                                        @if (hasHalfStar)
+                                        {
+                                            <span class="text-warning half-star">★</span>
+                                        }
+                                        @for (int i = 0; i < emptyStars; i++)
+                                        {
+                                            <span class="text-secondary">★</span>
+                                        }
+                                        <span class="text-16 fw-400 dark-black">(@(Model.Reviews?.Count ?? 0) Reviews)</span>
+                                    </h5>
+                                    <h6 class="text-center">
+                                        <span class="text-decoration-line-through light-gray text-danger">
+                                            @((product.Price * 1.2m).ToString("C", new CultureInfo("vi-VN")))
+                                        </span>
+                                        <br />
+                                        @product.Price.ToString("C", new CultureInfo("vi-VN"))
+                                    </h6>
+                                </div>
+                                <button class="cus-btn-2 w-100 add-to-cart-btn"
+                                        data-product-id="@product.Id"
+                                        data-product-name="@product.Name"
+                                        data-price="@product.Price"
+                                        data-image="@product.ProductImage">
+                                    Add to Cart
+                                </button>
+                            </div>
                         </div>
                     </div>
-                    <div class="product-desc">
-                        <h6 class="product-title mb-8"><a href="shop-detail.html">Elite Audio Gear</a></h6>
-                        <div class="text mb-16">
-                            <p class="light-gray">
-                                Lorem ipsum dolor sit amet consectetur. Id viverra cursus enim risus
-                                mattis urnanullam quis magna. Ligula maecenas integer diam risus rhoncus at. Viverra a
-                                consectetur ac lobortis.
-                            </p>
+                }
+            }
+            else
+            {
+                <p class="light-gray">No products available from this brand.</p>
+            }
+        </div>
+
+        <!-- Different Brand Recommendations -->
+        <div class="top-bar mb-16 mt-40">
+            <h5>Explore Other Brands</h5>
+            <a asp-area="User" asp-controller="Product" asp-action="Shop" class="cus-btn-arrow">
+                Show All
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="15" viewBox="0 0 20 15" fill="none">
+                    <path d="M13.3545 14.7476C13.3545 11.7476 16.1545 7.74756 19.3545 7.74756M19.3545 7.74756C17.5212 7.74756 13.3545 6.74756 13.3545 0.747559M19.3545 7.74756H0.354492" stroke="#0C0C0D" stroke-width="2" />
+                </svg>
+            </a>
+        </div>
+        <div class="row row-gap-4">
+            @{
+                var differentBrandRecommendations = ViewBag.DifferentBrandRecommendations as List<TingStore.Client.Areas.User.Models.Products.ProductResponse>;
+            }
+            @if (differentBrandRecommendations != null && differentBrandRecommendations.Any())
+            {
+                foreach (var product in differentBrandRecommendations)
+                {
+                    ProductDescription productDes = JsonSerializer.Deserialize<ProductDescription>(product.Description);
+                    <div class="col-xxl-2 col-xl-3 col-lg-4 col-md-6">
+                        <div class="featured-product-card bg-white br-10">
+                            <div class="image-box mb-16">
+                                <a href="@Url.Action("Details", new { id = product.Id })">
+                                    <img src="@product.ProductImage" class="product-image" alt="@product.Name" />
+                                </a>
+                                <div class="side-icons">
+                                    <ul class="list-unstyled">
+                                        <li>
+                                            <a asp-area="User" asp-controller="Product" asp-action="Details" asp-route-itemid="=@product.Id" class="btn" data-bs-toggle="modal" data-bs-target="#productQuickView_@product.Id">
+                                                <img src="~/user/assets/media/icons/eye.png" alt="">
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="product-desc">
+                                <h6 class="product-title mb-8"><a asp-area="User" asp-controller="Product" asp-action="Details" asp-route-id="@product.Id">@product.Name</a></h6>
+                                <div class="text mb-12">
+                                    <p class="light-gray">@des.Description</p>
+                                </div>
+                                <div class="rating-star mb-16 bg-white">
+
+                                    <h5 class="color-sec">
+                                        @for (int i = 0; i < fullStars; i++)
+                                        {
+                                            <span class="text-warning">★</span>
+                                        }
+                                        @if (hasHalfStar)
+                                        {
+                                            <span class="text-warning half-star">★</span>
+                                        }
+                                        @for (int i = 0; i < emptyStars; i++)
+                                        {
+                                            <span class="text-secondary">★</span>
+                                        }
+                                        <span class="text-16 fw-400 dark-black">(@(Model.Reviews?.Count ?? 0) Reviews)</span>
+                                    </h5>
+                                    <h6 class="text-center">
+                                        <span class="text-decoration-line-through light-gray text-danger">
+                                            @((product.Price * 1.2m).ToString("C", new CultureInfo("vi-VN")))
+                                        </span>
+                                        <br />
+                                        @product.Price.ToString("C", new CultureInfo("vi-VN"))
+                                    </h6>
+                                </div>
+                                <button class="cus-btn-2 w-100 add-to-cart-btn"
+                                        data-product-id="@product.Id"
+                                        data-product-name="@product.Name"
+                                        data-price="@product.Price"
+                                        data-image="@product.ProductImage">
+                                    Add to Cart
+                                </button>
+                            </div>
                         </div>
-                        <div class="rating-star mb-16 bg-white">
-                            <h5 class="color-sec mb-24">
-                                ★★★★<span class="light-gray">★</span> <span class="text-16 fw-400 dark-black">(@Model.Reviews.Count ?? 0)</span>
-                            </h5>
-                            <h6><span class="text-decoration-line-through light-gray"> $12.00</span> $10.00</h6>
-                        </div>
-                        <a href="cart.html" class="cus-btn-2 w-100">Add to Cart</a>
                     </div>
-                </div>
-            </div>
+                    <!-- Modal -->
+                    <div class="modal fade" id="productQuickView_@product.Id" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-body">
+                                    <div class="shop-detail">
+                                        <div class="detail-wrapper">
+                                            <div class="row">
+                                                <div class="col-lg-6">
+                                                    <div class="quick-image-box">
+                                                        <img src="@product.ProductImage" alt="Image product">
+                                                    </div>
+                                                </div>
+                                                <div class="col-lg-6">
+                                                    <div class="product-text-container bg-white br-20">
+                                                        <div class="close-content text-end">
+                                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                        </div>
+                                                        <h3 class="fw-600 mb-16">@product.Name</h3>
+                                                        <div class="d-flex align-items-center flex-wrap gap-16 mb-24">
+                                                            <h5 class="color-sec">
+                                                                @for (int i = 0; i < fullStars; i++)
+                                                                {
+                                                                    <span class="text-warning">★</span>
+                                                                }
+                                                                @if (hasHalfStar)
+                                                                {
+                                                                    <span class="text-warning half-star">★</span>
+                                                                }
+                                                                @for (int i = 0; i < emptyStars; i++)
+                                                                {
+                                                                    <span class="text-secondary">★</span>
+                                                                }
+                                                                <span class="text-16 fw-400 dark-black">
+                                                                    (@($"{product.ReviewCount} Reviews"))
+                                                                </span>
+                                                            </h5>
+
+                                                            <div class="vr-line vr-line-2"></div>
+                                                            <p class="light-gray">Brand: <span class="color-primary">@des.Description</span></p>
+                                                        </div>
+                                                        <div class="d-flex align-items-center gap-16 mb-24">
+                                                            <p class="light-gray text-decoration-line-through">@((product.Price * 1.2m).ToString("C", new CultureInfo("vi-VN")))</p>
+                                                            <h5>@product.Price.ToString("C", new CultureInfo("vi-VN"))</h5>
+                                                        </div>
+                                                        @{
+                                                            var description = @des.Description;
+                                                        }
+                                                        <p class="light-gray mb-24">
+                                                            @shortDescription
+                                                        </p>
+                                                        <div class="hr-line mb-24"></div>
+                                                        <div class="function-bar mb-16">
+                                                            <div class="quantity quantity-wrap">
+                                                                <div class="input-area quantity-wrap">
+                                                                    <input class="decrement" type="button" value="-">
+                                                                    <input type="text" name="quantity" value="1" maxlength="2" size="1"
+                                                                           class="number">
+                                                                    <input class="increment" type="button" value="+">
+                                                                </div>
+                                                            </div>
+                                                            <div class="cart-btn w-100">
+                                                                <button class="cus-btn-2 w-100 add-to-cart-btn"
+                                                                        data-product-id="@product.Id"
+                                                                        data-product-name="@product.Name"
+                                                                        data-price="@product.Price"
+                                                                        data-image="@product.ProductImage">
+                                                                    Add to Cart
+                                                                </button>
+                                                            </div>
+                                                        </div>
+                                                        <div class="hr-line mb-24"></div>
+                                                        <div class="d-flex align-items-center gap-16 mb-16">
+                                                            <h6>Category:</h6>
+                                                            <p class="light-gray">@product.CategoryId</p>
+                                                        </div>
+                                                        <div class="d-flex align-items-center gap-16 mb-16">
+                                                            <h6>Tags:</h6>
+                                                            <p class="light-gray">5G Compatible , <span>256GB Storage , </span> Student Phone</p>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+            }
+            else
+            {
+                <p class="light-gray">No products available from other brands.</p>
+            }
         </div>
     </div>
 </section>
-<!-- Recommended Product End -->
+<!-- Recommended Products End -->
 @section Scripts {
     <script>
         document.addEventListener('DOMContentLoaded', function () {
@@ -560,7 +754,7 @@
 
                     const reviewData = {
                         productId: '@Model.Id',
-                        customerId: 100001, 
+                        customerId: 100001,
                         rating: rating,
                         comment: comment
                     };
@@ -611,6 +805,141 @@
             }
         });
     </script>
+
+    <script>
+        $(document).ready(function () {
+            loadCart();
+
+            $('.add-to-cart-btn').on('click', function (e) {
+                e.preventDefault();
+
+                var button = $(this);
+                var productId = button.data('product-id');
+                var productName = button.data('product-name');
+                var price = button.data('price');
+                var productImage = button.data('image');
+                var quantity = parseInt(button.closest('.function-bar').find('.number').val()) || 1;
+
+                var cartItem = {
+                    ProductId: productId,
+                    ProductName: productName,
+                    Price: price,
+                    ProductImage: productImage,
+                    Quantity: quantity
+                };
+
+                console.log("Sending to server:", cartItem);
+
+                $.ajax({
+                    url: '/User/Product/AddCart', // Confirm the correct URL
+                    type: 'POST',
+                    data: JSON.stringify(cartItem),
+                    contentType: 'application/json; charset=utf-8',
+                    dataType: 'json',
+                    success: function (response) {
+                        console.log("Server response:", response);
+                        if (response.success) {
+                            Swal.fire({
+                                icon: "success",
+                                title: "Success!",
+                                text: "The product has been added to your cart!",
+                                timer: 1500,
+                                showConfirmButton: false
+                            }).then(() => {
+                                loadCart(); // Update the cart
+                            });
+                        } else {
+                            Swal.fire({
+                                icon: "error",
+                                title: "Failed!",
+                                text: response.message || "Could not add the product to the cart!"
+                            });
+                        }
+                    },
+                    error: function (xhr, status, error) {
+                        console.error("AJAX error:", { status: status, error: error, response: xhr.responseText });
+                        Swal.fire({
+                            icon: "error",
+                            title: "Error!",
+                            text: xhr.responseJSON?.message || "An error occurred while adding to the cart. Please try again!"
+                        });
+                    }
+                });
+            });
+        });
+
+        function loadCart() {
+            $.ajax({
+                url: "http://localhost:5001/apigateway/Cart/1",
+                type: "GET",
+                dataType: "json",
+                success: function (response) {
+                    let productList = $(".product-list");
+                    productList.empty();
+                    let totalPrice = 0;
+                    let totalItems = 0;
+
+                    response.items.forEach(item => {
+                        let productHtml = `
+                            <li class="product-item mb-24">
+                                <span class="item-image">
+                                    <img src="${item.productImage}" alt="Product Photo">
+                                </span>
+                                <div class="product-text">
+                                    <div class="prod-title mb-16">
+                                        <h6>${item.productName}</h6>
+                                        <a href="javascript:;" class="cancel" data-id="${item.productId}">
+                                            <img src="/user/assets/media/images/cancel.png" alt="">
+                                        </a>
+                                    </div>
+                                    <div class="prod-desc">
+                                        <div>
+                                            <p class="fw-500 mb-8">Số lượng: <span class="quantity-text">${item.quantity}</span></p>
+                                            <p class="fw-500">Giá: ${item.price.toLocaleString("vi-VN", { style: "currency", currency: "VND" })}</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                            <li class="hr-line mb-24"></li>
+                        `;
+                        productList.append(productHtml);
+                        totalPrice += item.price * item.quantity;
+                        totalItems += item.quantity;
+                    });
+
+                    $(".price-total span:last").text(`Tổng cộng: ${totalPrice.toLocaleString("vi-VN", { style: "currency", currency: "VND" })}`);
+                    $(".cart-button h6").text(`${totalPrice.toLocaleString("vi-VN", { style: "currency", currency: "VND" })}`);
+                    $("h6:contains('Shopping Cart')").text(`Shopping Cart (${totalItems})`);
+                },
+                error: function () {
+                    console.log("Lỗi khi gọi API giỏ hàng!");
+                }
+            });
+        }
+    </script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+        @if (TempData["SweetAlertSuccess"] != null)
+        {
+            @:Swal.fire({
+            @:icon: 'success',
+            @:title: 'Success',
+            @:text: '@TempData["SweetAlertSuccess"]',
+            @:confirmButtonText: 'OK'
+            @: });
+        }
+        @if (TempData["SweetAlertError"] != null)
+        {
+            @:Swal.fire({
+            @:icon: 'error',
+            @:title: 'Error',
+            @:text: '@TempData["SweetAlertError"]',
+            @:confirmButtonText: 'OK'
+            @: });
+        }
+            });
+    </script>
+}
 }
 
 <style>

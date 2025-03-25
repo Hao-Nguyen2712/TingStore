@@ -11,6 +11,7 @@ using TingStore.Client.Areas.Admin.Services.ProductManagement;
 using TingStore.Client.Areas.User.Services.Cart;
 using TingStore.Client.Areas.User.Services.Categories;
 using TingStore.Client.Areas.Admin.Services.OrderMangement;
+using TingStore.Client.Areas.User.Services.JWT;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -42,6 +43,9 @@ builder.Services.AddScoped<IOrderManagementService, OrderManagementService>();
 
 // Đăng ký IReviewProductService
 builder.Services.AddScoped<IReviewProductService, ReviewProductService>();
+
+// Đăng ký Jwt
+builder.Services.AddScoped<JwtService>();
 
 // Cấu hình HttpClient để gọi API Gateway
 builder.Services.AddHttpClient("ApiGateway", client =>
