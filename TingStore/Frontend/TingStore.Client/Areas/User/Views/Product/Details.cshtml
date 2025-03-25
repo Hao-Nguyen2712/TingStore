@@ -122,7 +122,13 @@
                                 </div>
                             </div>
                             <div class="cart-btn w-100">
-                                <a href="cart.html" class="cus-btn-2 w-100">ADD TO CART</a>
+                                 <button class="cus-btn-2 w-100 add-to-cart-btn"
+                                                        data-product-id="@Model.Id"
+                                                        data-product-name="@Model.Name"
+                                                        data-price="@Model.Price"
+                                                        data-image="@Model.ProductImage">
+                                                    Add to Cart
+                                                </button>
                             </div>
                             <div class="side-icons">
                                 <ul class="list-unstyled m-0">
