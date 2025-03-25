@@ -68,26 +68,20 @@ var app = builder.Build();
 
 app.UseSwagger();
 app.UseSwaggerUI();
-
-
 using (var scope = app.Services.CreateScope())
 {
-    var services = scope.ServiceProvider;
-    var context = services.GetRequiredService<AppDbContext>();
-
-    try
+    var dbContext = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+    var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
+    if (!await roleManager.RoleExistsAsync("User"))
     {
-        // Migrate database trước khi seed dữ liệu
-        context.Database.Migrate();
-
-
+        await roleManager.CreateAsync(new IdentityRole("User"));
     }
-    catch (Exception ex)
+    if (!await roleManager.RoleExistsAsync("Admin"))
     {
-
+        await roleManager.CreateAsync(new IdentityRole("Admin"));
     }
+    await dbContext.Database.MigrateAsync();
 }
-
 
 app.UseHttpsRedirection();
 
