@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Drawing.Printing;
+using System.Text.Json;
 using Microsoft.AspNetCore.Mvc;
 using Product.Core.Specs;
 using TingStore.Client.Areas.User.Models.Cart;
@@ -31,11 +32,31 @@ namespace TingStore.Client.Areas.User.Controllers
             _categoryService = categoryService;
         }
 
-        public async Task<IActionResult> Shop(int pageIndex = 1, int pageSize = 10, string brandId = null, string sort = null, string search = null)
+        public async Task<IActionResult> Shop(int pageIndex = 1, int pageSize = 12, string brandId = null, string sort = null, string search = null)
         {
             try
             {
-                // Tạo ProductSpecParams
+                // Tạo ProductSpecParams để lấy tổng số sản phẩm (không giới hạn PageSize)
+                var countSpecParams = new   ProductSpecParams        
+                {
+                    PageIndex = 1,
+                    PageSize = int.MaxValue,
+                    BrandId = brandId,
+                    Sort = sort,
+                    Search = search
+                };
+
+                // Lấy tổng số sản phẩm thực tế
+                var allProducts = await _productService.GetAllProducts(countSpecParams);
+                var totalItems = allProducts?.Data?.Count() ?? 0;
+                var totalPages = (int)Math.Ceiling((double)totalItems / pageSize);
+
+                // Điều chỉnh pageIndex
+                if (pageIndex < 1) pageIndex = 1;
+                if (pageIndex > totalPages && totalPages > 0) pageIndex = totalPages;
+                else if (totalPages == 0) pageIndex = 1;
+
+                // Tạo ProductSpecParams cho phân trang
                 var productSpecParams = new ProductSpecParams
                 {
                     PageIndex = pageIndex,
@@ -45,19 +66,17 @@ namespace TingStore.Client.Areas.User.Controllers
                     Search = search
                 };
 
+                // Lấy danh sách sản phẩm phân trang
                 var productList = await _productService.GetAllProducts(productSpecParams);
 
-                var totalItems = productList.Count;
-                var totalPages = (int)Math.Ceiling((double)totalItems / pageSize);
+                // Kiểm tra null cho productList.Data
+                if (productList?.Data == null)
+                {
+                    ViewBag.Error = "No products found.";
+                    return View(new Pagination<ProductResponse>());
+                }
 
-                if (pageIndex < 1) pageIndex = 1;
-                if (pageIndex > totalPages && totalPages > 0) pageIndex = totalPages;
-                else if (totalPages == 0) pageIndex = 1;
-
-                productSpecParams.PageIndex = pageIndex;
-                productList = await _productService.GetAllProducts(productSpecParams);
-
-                // averageRatings
+                // AverageRatings
                 var averageRatings = new Dictionary<string, double>();
                 foreach (var product in productList.Data)
                 {
@@ -75,22 +94,27 @@ namespace TingStore.Client.Areas.User.Controllers
                 }
                 ViewBag.ReviewCounts = reviewCounts;
 
+                // Các thông tin khác cho view
                 var filterParams = new Dictionary<string, string>
-                {
-                    { "brandId", brandId },
-                    { "sort", sort },
-                    { "search", search }
-                };
+        {
+            { "brandId", brandId ?? "" }, // Sửa để tránh null
+            { "sort", sort ?? "" },
+            { "search", search ?? "" }
+        };
 
                 var categoryList = await _categoryService.GeAllActiveCategoriesListString();
                 ViewBag.categoryList = categoryList;
-
                 ViewBag.FilterParams = filterParams;
                 ViewBag.BrandId = brandId;
                 ViewBag.Sort = sort;
                 ViewBag.Search = search;
+                ViewBag.PageIndex = pageIndex;
+                ViewBag.PageSize = pageSize;
+                ViewBag.TotalItems = totalItems;
+                ViewBag.TotalPages = totalPages;
 
-                if(brandId != null) {
+                if (brandId != null)
+                {
                     ViewBag.categorySelected = brandId;
                 }
 
@@ -123,6 +147,46 @@ namespace TingStore.Client.Areas.User.Controllers
                 product.Reviews = (await _reviewProductService.GetReviewsByProductId(id)).ToList();
                 var averageRating = await _reviewProductService.GetAverageRatingByProductId(id);
                 ViewBag.AverageRating = averageRating;
+
+                // Lấy brand từ Description
+                var productDescription = JsonSerializer.Deserialize<ProductDescription>(product.Description);
+                string currentBrand = productDescription?.Brand;
+
+                // Lấy tất cả sản phẩm (giới hạn số lượng lớn hơn một chút để lọc)
+                var specParams = new ProductSpecParams
+                {
+                    PageSize = 10 // Lấy 10 sản phẩm để có đủ dữ liệu lọc
+                };
+                var allProducts = await _productService.GetAllProducts(specParams);
+
+                // Lọc sản phẩm cùng hãng (loại trừ sản phẩm hiện tại)
+                var sameBrandProducts = allProducts.Data
+                    .Where(p => JsonSerializer.Deserialize<ProductDescription>(p.Description)?.Brand == currentBrand && p.Id != id)
+                    .Take(6)
+                    .ToList();
+
+                // Lọc sản phẩm khác hãng
+                var differentBrandProducts = allProducts.Data
+                    .Where(p => JsonSerializer.Deserialize<ProductDescription>(p.Description)?.Brand != currentBrand)
+                    .Take(6)
+                    .ToList();
+
+                // Tính toán AverageRating và ReviewCount cho từng sản phẩm
+                foreach (var prod in sameBrandProducts)
+                {
+                    prod.AverageRating = await _reviewProductService.GetAverageRatingByProductId(prod.Id);
+                    prod.ReviewCount = await _reviewProductService.GetReviewCountByProductId(prod.Id);
+                }
+
+                foreach (var prod in differentBrandProducts)
+                {
+                    prod.AverageRating = await _reviewProductService.GetAverageRatingByProductId(prod.Id);
+                    prod.ReviewCount = await _reviewProductService.GetReviewCountByProductId(prod.Id);
+                }
+
+                ViewBag.SameBrandRecommendations = sameBrandProducts;
+                ViewBag.DifferentBrandRecommendations = differentBrandProducts;
+
                 return View(product);
             }
             catch (HttpRequestException ex)

@@ -21,6 +21,7 @@ namespace TingStore.Client.Areas.User.Models.Products
         public List<ProductImage> Images { get; set; }
         public List<ReviewResponse> Reviews { get; set; }
         public double? AverageRating { get; set; }
+        public double? ReviewCount { get; set; }
     }
     public class ProductImage
     {

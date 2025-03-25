@@ -1,4 +1,5 @@
-﻿@model TingStore.Client.Areas.User.Models.Authen.RegisterRequest
+﻿@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@model TingStore.Client.Areas.User.Models.Authen.RegisterRequest
 @{
     Layout = "";
 }
@@ -20,39 +21,38 @@
                                     </div>
                                     <h4 class="text-center">Create New User</h4>
                                     <div class="d-flex gap-3 flex-column">
-                                       
                                     </div>
-                                
+
                                     <form method="post" asp-area="User" asp-controller="Home" asp-action="Register">
                                         <div class="row gy-3 overflow-hidden">
                                             <div class="col-12">
                                                 <div class="form-floating mb-3">
                                                     <input asp-for="Email" name="Email" class="form-control"
-                                                           placeholder="name@example.com" required>
-                                                    <label asp-for="Email" 
+                                                           placeholder="name@example.com">
+                                                    <label asp-for="Email"
                                                            class="form-label">Email</label>
-                                                    <span asp-validation-for="Email"    
-                                                          class="text-danger"></span>
+                                                    <span asp-validation-for="Email"
+                                                          class="text-danger fst-italic"></span>
                                                 </div>
                                             </div>
                                             <div class="col-12">
                                                 <div class="form-floating mb-3">
                                                     <input asp-for="Password" name="Password" type="password"
-                                                           class="form-control" placeholder="Password" required>
+                                                           class="form-control" placeholder="Password">
                                                     <label asp-for="Password"
                                                            class="form-label">Password</label>
                                                     <span asp-validation-for="Password"
-                                                          class="text-danger"></span>
+                                                          class="text-danger fst-italic"></span>
                                                 </div>
                                             </div>
                                             <div class="col-12">
                                                 <div class="form-floating mb-3">
                                                     <input asp-for="ConfirmPassword" name="ConfirmPassword" type="password"
-                                                           class="form-control" placeholder="Confirm Password" required>
+                                                           class="form-control" placeholder="Confirm Password">
                                                     <label asp-for="ConfirmPassword"
                                                            class="form-label">Confirm Password</label>
                                                     <span asp-validation-for="ConfirmPassword"
-                                                          class="text-danger"></span>
+                                                          class="text-danger fst-italic"></span>
                                                 </div>
                                             </div>
                                             <div class="col-12">
