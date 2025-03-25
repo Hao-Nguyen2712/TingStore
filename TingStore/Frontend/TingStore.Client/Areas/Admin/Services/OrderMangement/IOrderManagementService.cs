@@ -11,5 +11,7 @@ namespace TingStore.Client.Areas.Admin.Services.OrderMangement
         Task<IEnumerable<OrderResponse>> GetAllOrder();
         Task<OrderResponse> GetOrderByID(string id);
 
+        Task<int> GetAllOrderCount();
+
     }
 }

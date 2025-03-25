@@ -15,9 +15,6 @@ namespace TingStore.Client.Areas.Admin.Services.OrderMangement
         public OrderManagementService(IHttpClientFactory httpClientFactory)
         {
             _httpClient = httpClientFactory.CreateClient("ApiGateway");
-            // _httpClient.BaseAddress = new Uri("http://localhost:5000/api/");
-            // _httpClient.DefaultRequestHeaders.Add("Accept", "application/json");
-            // this.orderAPi = "order/";
             this.orderAPi = "/apigateway/order/";
         }
 
@@ -30,6 +27,12 @@ namespace TingStore.Client.Areas.Admin.Services.OrderMangement
                 return  JsonSerializer.Deserialize<IEnumerable<OrderResponse>>(data, option) ?? new List<OrderResponse>();
             }
             throw new HttpRequestException("Unable to fetch All order.");
+        }
+
+        public async Task<int> GetAllOrderCount()
+        {
+            var orderCounts = await GetAllOrder();
+            return orderCounts.Count();
         }
 
         public async Task<OrderResponse> GetOrderByID(string id) {
