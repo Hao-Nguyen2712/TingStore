@@ -1,0 +1,235 @@
+@using TingStore.Client.Areas.User.Models.UserProfile
+@model UserProfileResponse
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<!-- Icons css (Require in all Page) -->
+<link href="~/user/assets/css/profile.css" rel="stylesheet" type="text/css" />"
+
+
+<!-- Theme Config js (Require in all Page) -->
+<script src="~/admin/assets/js/config.js"></script>
+
+<!-- App favicon -->
+<link rel="shortcut icon" href="~/admin/assets/images/favicon.ico">
+
+<!-- Vendor css (Require in all Page) -->
+<link href="~/admin/assets/css/vendor.min.css" rel="stylesheet" type="text/css" />
+
+<!-- Icons css (Require in all Page) -->
+<link href="~/admin/assets/css/icons.min.css" rel="stylesheet" type="text/css" />
+
+
+
+
+<div class="row container justify-content-center mx-auto">
+    <div class="col-lg-4">
+        <div class="card overflow-hidden">
+            <div class="card-body">
+                <div class="profile rounded-top p-5 position-relative mx-n3 mt-n3">
+                    <img src="~/admin/assets/images/users/dummy-avatar.jpg" alt="" class="avatar-lg border border-light border-3 rounded-circle position-absolute top-100 start-0 translate-middle ms-5">
+                </div>
+                <div class="mt-4 pt-3">
+                    <h4 class="mb-1" title="Fullname" >@Model.FullName<i class="bx bxs-badge-check text-success align-middle"></i></h4>
+                    <div class="mt-2">
+                        <div>
+
+                            <label class="text-dark fw-semibold">Email:</label>
+                            <input type="text" id="email" class="form-control form-input-profile" value="@Model.Email" disabled>
+                        </div>
+
+                        <div>
+                            <label class="text-dark fw-semibold">Phone :</label>
+                            <input type="text" id="email" class="form-control form-input-profile" value="@Model.PhoneNumber" disabled>
+                        </div>
+
+                        <div class="position-relative">
+                            <label class="text-dark fw-semibold">Password :</label>
+                            <input type="password" id="password" class="form-control form-input-profile pe-5" value="@Model.Password" disabled>
+                            <button type="button" class="btn border-0 position-absolute icon-button-password top-50 end-0" id="togglePassword">
+                                <i class="bx bx-show fs-20"></i>
+                            </button>
+                        </div>
+
+
+                        <div>
+                            <label class="text-dark fw-semibold">Address :</label>
+                            <input type="text" id="email" class="form-control form-input-profile" value="@Model.Address" disabled>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+            <div class="card-footer border-top gap-1 justify-content-center align-items-center hstack">
+                
+                <button id="editBtn" class="btn btn-soft-dark d-inline-flex align-items-center justify-content-center rounded avatar-sm">
+                    <i class='bx bx-edit-alt fs-18'></i>
+                </button>
+
+                <button id="saveBtn" class="btn btn-primary d-none">Save</button>
+            </div>
+        </div>
+
+        
+    </div>
+
+    <div class="col-lg-8">
+        <div class="row">
+            <div class="col-lg-4">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="d-flex align-items-center justify-content-between">
+                            <div>
+                                <h4 class="card-title mb-2 d-flex align-items-center gap-2">Total Order</h4>
+                                <p class="text-muted fw-medium fs-22 mb-0">219</p>
+                            </div>
+                            <div>
+                                <div class="avatar-md bg-primary bg-opacity-10 rounded">
+                                    <iconify-icon icon="solar:box-bold-duotone" class="fs-32 text-primary avatar-title"></iconify-icon>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="d-flex align-items-center justify-content-between">
+                            <div>
+                                <h4 class="card-title mb-2 d-flex align-items-center gap-2">Total Expense</h4>
+                                <p class="text-muted fw-medium fs-22 mb-0">$2,189</p>
+                            </div>
+                            <div>
+                                <div class="avatar-md bg-primary bg-opacity-10 rounded">
+                                    <iconify-icon icon="solar:chat-round-money-bold-duotone" class="fs-32 text-primary avatar-title"></iconify-icon>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="d-flex align-items-center justify-content-between">
+                            <div>
+                                <h4 class="card-title mb-2 d-flex align-items-center gap-2">Saved Items</h4>
+                                <p class="text-muted fw-medium fs-22 mb-0">89</p>
+                            </div>
+                            <div>
+                                <div class="avatar-md bg-primary bg-opacity-10 rounded">
+                                    <iconify-icon icon="solar:heart-bold-duotone" class="fs-32 text-primary avatar-title"></iconify-icon>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header">
+                <h4 class="card-title">Transaction History</h4>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table align-middle mb-0 table-hover table-centered">
+                        <thead class="bg-light-subtle">
+                            <tr>
+                                <th>Invoice ID</th>
+                                <th>Status</th>
+                                <th>Total Amount</th>
+                                <th>Due Date</th>
+                                <th>Payment Method</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><a href="javascript: void(0);" class="text-body">#INV2540</a> </td>
+                                <td> <span class="badge bg-success-subtle text-success py-1 px-2">Completed</span> </td>
+                                <td> $421.00 </td>
+                                <td> 07 Jan, 2023</td>
+                                <td> Mastercard </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- JavaScript -->
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        console.log("DOM Loaded");
+
+        document.getElementById("editBtn").addEventListener("click", function () {
+            document.querySelectorAll("input").forEach(input => input.removeAttribute("disabled"));
+            document.getElementById("saveBtn").classList.remove("d-none");
+            this.classList.add("d-none");
+        });
+
+        document.getElementById("saveBtn").addEventListener("click", async function () {
+            let userData = {
+                Id: @Model.Id,
+                FullName: document.getElementById("fullName")?.value || "@Model.FullName",
+                Email: document.getElementById("email")?.value || "@Model.Email",
+                PhoneNumber: document.getElementById("phone")?.value || "@Model.PhoneNumber",
+                Address: document.getElementById("address")?.value || "@Model.Address"
+            };
+
+            console.log("Sending data:", userData);
+
+            let response = await fetch("/User/Profile/Edit", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(userData)
+            });
+
+            if (response.ok) {
+                alert("Profile updated successfully!");
+                document.querySelectorAll("input").forEach(input => input.setAttribute("disabled", "true"));
+                document.getElementById("saveBtn").classList.add("d-none");
+                document.getElementById("editBtn").classList.remove("d-none");
+            } else {
+                alert("Update failed!");
+            }
+        });
+    });
+    document.addEventListener("DOMContentLoaded", function () {
+        const togglePassword = document.getElementById("togglePassword");
+        const passwordInput = document.getElementById("password");
+
+        togglePassword.addEventListener("click", function () {
+            if (passwordInput.type === "password") {
+                passwordInput.type = "text";
+                togglePassword.innerHTML = '<i class="bx bx-hide"></i>';
+            } else {
+                passwordInput.type = "password";
+                togglePassword.innerHTML = '<i class="bx bx-show"></i>';
+            }
+        });
+    });
+</script>
+
+<!-- jQuery -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    if (window.jQuery) {
+        console.log("jQuery is loaded");
+    } else {
+        console.log("jQuery is NOT loaded");
+    }
+</script>
+
+<!-- Vendor Scripts -->
+<script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+<script src="~/admin/assets/js/vendor.js" defer></script>
+<script src="~/admin/assets/js/app.js"></script>
+<script src="~/admin/assets/vendor/jsvectormap/js/jsvectormap.min.js"></script>
+<script src="~/admin/assets/vendor/jsvectormap/maps/world-merc.js"></script>
+<script src="~/admin/assets/vendor/jsvectormap/maps/world.js"></script>
