@@ -42,6 +42,8 @@ namespace TingStore.Client.Areas.User.Controllers
                 Categories = (List<Models.Categories.CategoryResponse>)categories,
                 Products = productList // gáng danh sách products vào Products
             };
+            // Set ViewBag.categoryList for the form
+            ViewBag.categoryList = categories.Select(c => c.Name).ToList();
 
             // fetch rate and count review
             var averageRatings = new Dictionary<string, double>();

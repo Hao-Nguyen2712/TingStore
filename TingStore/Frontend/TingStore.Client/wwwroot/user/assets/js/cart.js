@@ -2,55 +2,64 @@
 
     loadCart();
 
-    $("#addToCartForm").click(function (event) {
-        event.preventDefault();
+    $(document).ready(function () {
+        loadCart();
 
-        var productId = $(this).data("product-id");
-        var productName = $(this).data("product-name");
-        var price = $(this).data("price");
-        var productImage = $(this).data("product-image");
+        $(".add-to-cart-btn").click(function (event) {
+            event.preventDefault();
 
-        var formData = {
-            ProductId: productId,
-            ProductName: productName,
-            Price: price,
-            ProductImage: productImage,
-            Quantity: 1
-        };
+            var productId = $(this).data("product-id");
+            var productName = $(this).data("product-name");
+            var price = parseFloat($(this).data("price"));
+            var productImage = $(this).data("product-image");
 
-
-        var cartRequest = {
-            Id: 1, // Lấy ID user từ session hoặc cookie nếu cần
-            Items: [formData]
-        };
-
-        console.log("Cart Request:", JSON.stringify(cartRequest));
-
-        $.ajax({
-            url: "http://localhost:5004/api/Cart/CreateCart",
-            type: "POST",
-            contentType: "application/json",
-            data: JSON.stringify(cartRequest),
-
-            success: function (response) {
-                if (response.success) {
-                    showSuccessAlert("Add to Cart Successfull");
-                    setTimeout(loadCart, 500);
-                }
-                else {
-                    showSuccessAlert("Add to Cart Failed");
-                 }
-            },
-            error: function (xhr) {
-                console.log("Error when adding to cart:", xhr);
-                console.log("Status:", status);
-                console.log("Error:", error);
-                console.log("Response Text:", xhr.responseText);
-                showErrorAlert("Error when adding to cart!");
-               
+            if (isNaN(price)) {
+                showErrorAlert("Invalid price value!");
+                return;
             }
-        });
 
+            var formData = {
+                ProductId: productId,
+                ProductName: productName,
+                Price: price,
+                ProductImage: productImage,
+                Quantity: 1
+            };
+
+            var cartRequest = {
+                Id: 1, // Lấy ID user từ session hoặc cookie nếu cần
+                Items: [formData]
+            };
+
+            console.log("Cart Request:", JSON.stringify(cartRequest));
+
+            $.ajax({
+                url: "http://localhost:5001/apigateway/Cart/CreateCart",
+                type: "POST",
+                contentType: "application/json",
+                data: JSON.stringify(cartRequest),
+                success: function (response) {
+                    if (response.success) {
+                        showSuccessAlert("Add to Cart Successful");
+                        setTimeout(loadCart, 500);
+                    } else {
+                        showErrorAlert(response.message || "Add to Cart Failed");
+                    }
+                },
+                error: function (xhr, status, error) {
+                    console.log("Error when adding to cart:", xhr);
+                    console.log("Status:", status);
+                    console.log("Error:", error);
+                    console.log("Response Text:", xhr.responseText);
+
+                    let errorMessage = "Error when adding to cart!";
+                    if (xhr.responseJSON && xhr.responseJSON.message) {
+                        errorMessage = xhr.responseJSON.message;
+                    }
+                    showErrorAlert(errorMessage);
+                }
+            });
+        });
     });
 
 
@@ -141,7 +150,7 @@
 
 function loadCart() {
     $.ajax({
-        url: "http://localhost:5004/api/Cart/1",
+        url: "http://localhost:5001/apigateway/Cart/1",
         type: "GET",
         dataType: "json",
         success: function (response) {
@@ -188,8 +197,8 @@ function loadCart() {
 
            
             $(".price-total span:last").text(`Tổng cộng: ${formatCurrencyVND(totalPrice)}`);
-            $(".cart-button h6").text(`${formatCurrencyVND(totalPrice)}`); // Cập nhật giá tiền trên icon giỏ hàng
-            $("h6:contains('Shopping Cart')").text(`Shopping Cart (${totalItems})`); // Cập nhật số lượng giỏ hàng trên giao diện
+            $(".cart-button h6").text(`${formatCurrencyVND(totalPrice)}`); 
+            $("h6:contains('Shopping Cart')").text(`Shopping Cart (${totalItems})`);
         },
         error: function () {
             console.log("Lỗi khi gọi API giỏ hàng!");
