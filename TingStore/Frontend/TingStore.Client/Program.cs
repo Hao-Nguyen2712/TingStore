@@ -47,6 +47,7 @@ builder.Services.AddHttpClient("ApiGateway", client =>
 {
     client.BaseAddress = new Uri("http://localhost:5001/"); // API Gateway
     client.DefaultRequestHeaders.Add("Accept", "application/json");
+    client.Timeout = TimeSpan.FromMinutes(2);
 });
 
 var app = builder.Build();
