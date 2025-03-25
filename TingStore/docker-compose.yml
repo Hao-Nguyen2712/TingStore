@@ -123,6 +123,21 @@ services:
     networks:
       - app-network
 
+  identity.provider-container:
+    image: ${DOCKER_REGISTRY-}identityproviderservice
+    container_name: identity.provider-container
+    build:
+      context: .
+      dockerfile: Backend/Infrastructure/Identity.Provider/Dockerfile
+    ports:
+      - "5188:80"
+    depends_on:
+      - sqlserver-container
+    restart: unless-stopped
+    networks:
+      - app-network
+
+
   rabitmq-container:
     image: rabbitmq:3-management
     container_name: rabitmq-container
