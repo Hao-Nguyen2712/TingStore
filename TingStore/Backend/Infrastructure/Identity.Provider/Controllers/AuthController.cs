@@ -109,7 +109,7 @@ namespace Identity.Provider.Controllers
                     Address = "Please confirm your address",
                     IsActive = true
                 }; 
-                var response = await client.PostAsJsonAsync("http://localhost:5001/apigateway/users/CreateUser", requestContent);
+                var response = await client.PostAsJsonAsync("http://apigateway-container:80/apigateway/users/CreateUser", requestContent);
               
                 return Ok(new
                 {
