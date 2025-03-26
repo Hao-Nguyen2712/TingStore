@@ -9,6 +9,7 @@ using TingStore.Client.Areas.User.Models.Cart;
 using TingStore.Client.Areas.User.Models.Products;
 using TingStore.Client.Areas.User.Services.Cart;
 using TingStore.Client.Areas.User.Services.Categories;
+using TingStore.Client.Areas.User.Services.JWT;
 using TingStore.Client.Areas.User.Services.Products;
 using TingStore.Client.Areas.User.Services.Reviews;
 
@@ -23,13 +24,15 @@ namespace TingStore.Client.Areas.User.Controllers
         private readonly IReviewProductService _reviewProductService;
         private readonly ICartService _cartService;
         private readonly ICategoryUserService _categoryService;
+        private readonly JwtService _jwtService;
 
-        public ProductController(IProductService productService, IReviewProductService reviewProductService, ICartService cartService, ICategoryUserService categoryService)
+        public ProductController(IProductService productService, IReviewProductService reviewProductService, ICartService cartService, ICategoryUserService categoryService, JwtService jwtService)
         {
             _productService = productService;
             _reviewProductService = reviewProductService;
             _cartService = cartService;
             _categoryService = categoryService;
+            _jwtService = jwtService;
         }
 
         public async Task<IActionResult> Shop(int pageIndex = 1, int pageSize = 12, string brandId = null, string sort = null, string search = null)
@@ -199,22 +202,65 @@ namespace TingStore.Client.Areas.User.Controllers
         [HttpPost]
         public async Task<IActionResult> AddCart([FromBody] CartItem item)
         {
-            item.Quantity = 1;
-            var idUser = 1; // Lấy từ context sau khi đã đăng nhập
-
-            CartRequest cartRequest = new()
+            try
             {
-                Id = idUser,
-                Items = new List<CartItem> { item }
-            };
+                // Lấy token từ cookie
+                string token = Request.Cookies["acessToken"];
+                if (string.IsNullOrEmpty(token))
+                {
+                    return Json(new
+                    {
+                        success = false,
+                        message = "No JWT token found. Please log in."
+                    });
+                }
 
-            var result = await _cartService.AddToCart(cartRequest);
+                // Decode token để lấy userId từ claim
+                var claimsPrincipal = _jwtService.DecodeJwt(token);
+                if (claimsPrincipal == null || !claimsPrincipal.Identity.IsAuthenticated)
+                {
+                    return Json(new
+                    {
+                        success = false,
+                        message = "Invalid JWT token. Please log in again."
+                    });
+                }
 
-            return Json(new
+                var userIdClaim = claimsPrincipal.FindFirst("UserID")?.Value;
+                if (string.IsNullOrEmpty(userIdClaim) || !int.TryParse(userIdClaim, out int userId))
+                {
+                    return Json(new
+                    {
+                        success = false,
+                        message = "Invalid or missing user ID in token."
+                    });
+                }
+
+                // Gán userId vào CartRequest
+                item.Quantity = 1;
+                CartRequest cartRequest = new()
+                {
+                    Id = userId, // Sử dụng userId từ token
+                    Items = new List<CartItem> { item }
+                };
+
+                // Gọi service để thêm vào giỏ hàng
+                var result = await _cartService.AddToCart(cartRequest);
+
+                return Json(new
+                {
+                    success = result,
+                    message = result ? "Add to cart successfully" : "Add to cart failed"
+                });
+            }
+            catch (Exception ex)
             {
-                success = result,
-                message = result ? "Add to cart successfully" : "Add to cart failed"
-            });
+                return Json(new
+                {
+                    success = false,
+                    message = $"Error adding to cart: {ex.Message}"
+                });
+            }
         }
 
 
