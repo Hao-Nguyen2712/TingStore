@@ -26,7 +26,19 @@
                 }
             ],
             "UpstreamPathTemplate": "/apigateway/category/{everything}",
-            "UpstreamHttpMethod": [ "GET", "POST", "PUT", "DELETE" ],
+            "UpstreamHttpMethod": [ "GET" ]
+        },
+        {
+            "DownstreamPathTemplate": "/api/category/{everything}",
+            "DownstreamScheme": "http",
+            "DownstreamHostAndPorts": [
+                {
+                    "Host": "category-container",
+                    "Port": 80
+                }
+            ],
+            "UpstreamPathTemplate": "/apigateway/category/{everything}",
+            "UpstreamHttpMethod": [ "POST", "PUT", "DELETE" ],
             "AuthenticationOptions": {
                 "AuthenticationProviderKey": "Bearer",
                 "AllowedScopes": []
@@ -58,11 +70,36 @@
                 }
             ],
             "UpstreamPathTemplate": "/apigateway/product/{everything}",
-            "UpstreamHttpMethod": [ "GET", "POST", "PUT", "DELETE" ],
+            "UpstreamHttpMethod": [ "GET" ]
+        },
+        {
+            "DownstreamPathTemplate": "/api/product/{everything}",
+            "DownstreamScheme": "http",
+            "DownstreamHostAndPorts": [
+                {
+                    "Host": "product-container",
+                    "Port": 80
+                }
+            ],
+            "UpstreamPathTemplate": "/apigateway/product/{everything}",
+            "UpstreamHttpMethod": [ "POST", "PUT", "DELETE" ],
             "AuthenticationOptions": {
                 "AuthenticationProviderKey": "Bearer",
                 "AllowedScopes": []
             }
+        },
+        // Review: GET công khai, các method khác yêu cầu xác thực
+        {
+            "DownstreamPathTemplate": "/api/review/{everything}",
+            "DownstreamScheme": "http",
+            "DownstreamHostAndPorts": [
+                {
+                    "Host": "product-container",
+                    "Port": 80
+                }
+            ],
+            "UpstreamPathTemplate": "/apigateway/review/{everything}",
+            "UpstreamHttpMethod": [ "GET" ]
         },
         {
             "DownstreamPathTemplate": "/api/review/{everything}",
@@ -74,25 +111,24 @@
                 }
             ],
             "UpstreamPathTemplate": "/apigateway/review/{everything}",
-            "UpstreamHttpMethod": [ "GET", "POST", "PUT", "DELETE" ],
+            "UpstreamHttpMethod": [ "POST", "PUT", "DELETE" ],
             "AuthenticationOptions": {
                 "AuthenticationProviderKey": "Bearer",
                 "AllowedScopes": []
             }
         },
-        {
-            "DownstreamPathTemplate": "/api/users/CreateUser",
-            "DownstreamScheme": "http",
-            "DownstreamHostAndPorts": [
-                {
-                    "Host": "user-container",
-                    "Port": 80
-                }
-            ],
-            "UpstreamPathTemplate": "/apigateway/users/CreateUser",
-            "UpstreamHttpMethod": [ "POST" ]
-            // cấu hình gateway không cần xác thực dành riêng cho identity provider
-        },
+        //{
+        //    "DownstreamPathTemplate": "/api/users/CreateUser",
+        //    "DownstreamScheme": "http",
+        //    "DownstreamHostAndPorts": [
+        //        {
+        //            "Host": "user-container",
+        //            "Port": 80
+        //        }
+        //    ],
+        //    "UpstreamPathTemplate": "/apigateway/users/CreateUser",
+        //    "UpstreamHttpMethod": [ "POST" ]
+        //},
         {
             "DownstreamPathTemplate": "/api/users/{everything}",
             "DownstreamScheme": "http",
@@ -104,10 +140,20 @@
             ],
             "UpstreamPathTemplate": "/apigateway/users/{everything}",
             "UpstreamHttpMethod": [ "GET", "POST", "PUT", "DELETE" ],
-            "AuthenticationOptions": {
-                "AuthenticationProviderKey": "Bearer",
-                "AllowedScopes": []
-            }
+           
+        },
+        // Discount: GET công khai, các method khác yêu cầu xác thực
+        {
+            "DownstreamPathTemplate": "/api/discount/{everything}",
+            "DownstreamScheme": "http",
+            "DownstreamHostAndPorts": [
+                {
+                    "Host": "discount-container",
+                    "Port": 80
+                }
+            ],
+            "UpstreamPathTemplate": "/apigateway/discount/{everything}",
+            "UpstreamHttpMethod": [ "GET" ]
         },
         {
             "DownstreamPathTemplate": "/api/discount/{everything}",
@@ -119,7 +165,7 @@
                 }
             ],
             "UpstreamPathTemplate": "/apigateway/discount/{everything}",
-            "UpstreamHttpMethod": [ "GET", "POST", "PUT", "DELETE" ],
+            "UpstreamHttpMethod": [ "POST", "PUT", "DELETE" ],
             "AuthenticationOptions": {
                 "AuthenticationProviderKey": "Bearer",
                 "AllowedScopes": []
